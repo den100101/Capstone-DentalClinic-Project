@@ -1,0 +1,148 @@
+@import url(./global.css);
+
+.orthodontics-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem;
+  background-color: white;
+  padding: 5rem 20rem;
+  border-radius: 2rem;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.ortho-header {
+  font-size: 2rem;
+}
+.orthodontics-contents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20rem;
+}
+.ortho-img {
+  width: 100%;
+  max-width: 50rem;
+  border-radius: 2rem;
+}
+
+.orthodontics-services ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+.orthodontics-services h1 {
+  font-size: 2rem;
+}
+.orthodontics-services ul li {
+  list-style: disc;
+  font-size: 2rem;
+}
+
+.about-orthodontics {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.about-ortho-header {
+  font-size: 2rem;
+  font-weight: 600;
+}
+.about-ortho-p {
+  font-size: 2rem;
+  width: 100rem;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1500px) {
+  html {
+    font-size: 50%;
+  }
+}
+
+@media (max-width: 1300px) {
+  html {
+    font-size: 45%;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 40%;
+  }
+  .orthodontics-container {
+    padding: 5rem 10rem;
+  }
+}
+
+@media (max-width: 780px) {
+  html {
+    font-size: 40%;
+  }
+  .orthodontics-container {
+    padding: 5rem 8rem;
+  }
+  .orthodontics-services ul {
+    gap: 0rem;
+  }
+
+  .orthodontics-contents {
+    gap: 10rem;
+  }
+
+  .about-ortho-p {
+    font-size: 2rem;
+    width: 80rem;
+  }
+}
+
+@media (max-width: 650px) {
+  html {
+    font-size: 30%;
+  }
+  .orthodontics-container {
+    padding: 5rem 5rem;
+  }
+  .orthodontics-services ul {
+    gap: 0rem;
+  }
+
+  .orthodontics-contents {
+    gap: 8rem;
+  }
+
+  .about-ortho-p {
+    font-size: 2rem;
+    width: 60rem;
+  }
+}
+
+@media (max-width: 500px) {
+  html {
+    font-size: 30%;
+  }
+  .orthodontics-container {
+    padding: 5rem 1rem;
+  }
+  .about-ortho-p {
+    font-size: 2rem;
+    width: 70rem;
+  }
+  .orthodontics-services ul li {
+    list-style: disc;
+    font-size: 1.5rem;
+  }
+}

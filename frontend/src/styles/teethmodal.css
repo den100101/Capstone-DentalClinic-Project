@@ -1,0 +1,97 @@
+@import url(./global.css);
+
+.teeth-modal-background {
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.teeth-modal-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 5rem 10rem 2rem 10rem;
+  border-radius: 2rem;
+}
+.teeth-modal-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.teeth-modal-header h1 {
+  font-size: 2rem;
+}
+
+.teeth-record-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.tooth-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.tooth-inputs label {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.tooth-inputs input {
+  font-size: 1.5rem;
+  width: 300px;
+  border-radius: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+.teeth-button-modal-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.teeth-buttons {
+  font-size: 1.5rem;
+  padding: 0.5rem 3rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  width: 200px;
+  transition: 0.5s;
+}
+
+.teeth-buttons:hover {
+  transform: scale(1.1);
+}
+
+.teeth-buttons.add {
+  background-color: rgb(199, 8, 8);
+  color: aliceblue;
+}
+
+.teeth-buttons.close {
+  background-color: white;
+  border: 1px solid rgb(199, 8, 8);
+  color: rgb(199, 8, 8);
+}

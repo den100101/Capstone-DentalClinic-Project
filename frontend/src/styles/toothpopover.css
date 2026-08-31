@@ -1,0 +1,97 @@
+.tooth-wrapper {
+  position: relative;
+}
+
+.tooth-popover {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 240px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  border: 1px solid #e5e7eb;
+  z-index: 999;
+  animation: popoverFade 0.2s ease;
+}
+
+.tooth-popover h4 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: #1f2937;
+}
+
+.popover-info {
+  margin-bottom: 15px;
+}
+
+.popover-info p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #4b5563;
+  word-break: break-word;
+}
+
+.popover-info strong {
+  color: #111827;
+}
+
+.popover-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.popover-buttons button {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.update-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.update-btn:hover {
+  background: #1d4ed8;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* Small arrow */
+.tooth-popover::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+@keyframes popoverFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -90%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}

@@ -1,0 +1,186 @@
+@import url(./global.css);
+
+.login-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100vh;
+  width: 100vw;
+  z-index: 10000;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 5rem;
+  border-radius: 2rem;
+  background-color: white;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.login-swiss-logo {
+  width: 100%;
+  max-width: 8rem;
+}
+
+.login-header-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.login-header {
+  font-size: 2rem;
+}
+.login-header-p {
+  font-size: 1.8rem;
+  width: 50rem;
+  text-align: center;
+}
+
+.login-input-section {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 1rem;
+}
+
+.input-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.login-labels {
+  font-size: 2rem;
+}
+.login-input {
+  width: 400px;
+  font-size: 2rem;
+  padding: 0.5rem 4rem;
+  border-radius: 1rem;
+}
+
+.input-icon {
+  width: 100%;
+  max-width: 2rem;
+  position: absolute;
+  left: 3%;
+  top: 60%;
+  transform: translateY(-10%);
+}
+
+.showpass-icon {
+  width: 100%;
+  max-width: 2rem;
+  position: absolute;
+  left: 90%;
+  top: 85%;
+  transform: translateY(-90%);
+  cursor: pointer;
+}
+
+.login-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 4rem auto;
+}
+.login-message {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 2rem;
+}
+.modal-login-button {
+  font-size: 1.5rem;
+  padding: 1rem 8rem;
+  color: white;
+  background-color: rgb(199, 8, 8);
+  border: 1px solid rgb(199, 8, 8);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.close-login-button {
+  font-size: 1.5rem;
+  padding: 1rem 8rem;
+  color: rgb(199, 8, 8);
+  background-color: rgb(255, 254, 254);
+  border: 1px solid rgb(199, 8, 8);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.modal-login-button:hover,
+.close-login-button:hover {
+  transform: scale(1.1);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1500px) {
+  html {
+    font-size: 50%;
+  }
+}
+
+@media (max-width: 1300px) {
+  html {
+    font-size: 45%;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 40%;
+  }
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 35%;
+  }
+  .login-input {
+    width: 300px;
+    font-size: 2rem;
+    padding: 0.5rem 4rem;
+    border-radius: 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 35%;
+  }
+  .login-input {
+    width: 200px;
+    font-size: 2rem;
+    padding: 0.5rem 4rem;
+    border-radius: 1rem;
+  }
+}

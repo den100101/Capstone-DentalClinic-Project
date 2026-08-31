@@ -1,0 +1,200 @@
+/* =========================================
+   DENTAL CHART
+========================================= */
+
+.teeth-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.teeth-chart h2 {
+  font-size: 1.1rem;
+  margin: 0 0 6px;
+}
+
+/* =========================================
+   TOOTH ROW
+========================================= */
+
+.teeth-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.gap {
+  width: 20px;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   TOOTH
+========================================= */
+
+.tooth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+
+  transition: transform 0.2s ease;
+
+  padding: 0;
+
+  flex-shrink: 0;
+}
+
+.tooth:hover {
+  transform: scale(1.08);
+}
+
+/* =========================================
+   TOOTH NUMBER
+========================================= */
+
+.tooth-number {
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+/* =========================================
+   TOOTH IMAGE
+========================================= */
+
+.tooth-image {
+  width: 31px;
+  height: auto;
+}
+
+.tooth-image.red {
+  background-color: rgb(199, 8, 8);
+
+  padding: 4px;
+
+  border-radius: 50%;
+}
+
+/* =========================================
+   POPOVER
+========================================= */
+
+.tooth-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooth-popover {
+  position: absolute;
+
+  top: 105%;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: white;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  padding: 8px;
+
+  min-width: 140px;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+  z-index: 100;
+}
+
+/* =========================================
+   POPOVER BUTTONS
+========================================= */
+
+.popover-buttons {
+  display: flex;
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.update-btn,
+.delete-btn {
+  flex: 1;
+
+  padding: 7px 0;
+
+  border: none;
+  border-radius: 7px;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+/* UPDATE */
+
+.update-btn {
+  background: #2563eb;
+  color: #fff;
+}
+
+.update-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.update-btn:active {
+  transform: translateY(0);
+}
+
+/* DELETE */
+
+.delete-btn {
+  background: #dc2626;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   SMALL SCREEN
+========================================= */
+
+@media (max-width: 900px) {
+  .teeth-row {
+    gap: 3px;
+  }
+
+  .gap {
+    width: 12px;
+  }
+
+  .tooth-image {
+    width: 27px;
+  }
+
+  .tooth-number {
+    font-size: 0.58rem;
+  }
+}

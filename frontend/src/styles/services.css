@@ -1,0 +1,115 @@
+@import url("./global.css");
+
+.services-container {
+  background-color: rgb(199, 8, 8);
+  display: flex;
+  margin-top: 100px;
+  padding: 10rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  width: 100%;
+}
+
+.services-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.services-header-1 {
+  color: white;
+  font-size: 2rem;
+}
+.services-header-2 {
+  color: rgb(189, 190, 190);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.service-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-buttons {
+  border: 1px solid white;
+  width: 200px;
+  height: 40px;
+  background-color: rgb(199, 8, 8);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2rem;
+}
+
+.service-buttons.active {
+  background-color: white;
+  color: rgb(96, 94, 231);
+}
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 53%;
+  }
+  .service-buttons-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .services-container {
+    background-color: rgb(199, 8, 8);
+    display: flex;
+    margin-top: 80px;
+    padding: 10rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 850px) {
+  html {
+    font-size: 45%;
+  }
+  .services-buttons-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .service-buttons {
+    width: 150px;
+    height: 30px;
+  }
+}
+@media (max-width: 500px) {
+  html {
+    font-size: 40%;
+  }
+  .services-container {
+    background-color: rgb(199, 8, 8);
+    display: flex;
+    margin-top: 50px;
+    padding: 10rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    width: 100%;
+  }
+  .service-buttons {
+    width: 100px;
+  }
+}

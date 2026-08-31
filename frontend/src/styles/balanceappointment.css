@@ -1,0 +1,233 @@
+/* =========================================
+   MODIFIER CONTAINER
+========================================= */
+
+.modifier-container {
+  width: 100%;
+
+  padding: 16px 18px;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border: 1px solid #dfe3e8;
+
+  border-radius: 9px;
+
+  min-width: 0;
+}
+
+.modifier-container h2 {
+  margin: 0 0 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #172033;
+}
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.modifier-inputs {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+}
+
+.modifier-inputs > div,
+.modifier-input-single {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  min-width: 0;
+}
+
+.modifier-container label {
+  font-size: 10px;
+
+  font-weight: 600;
+
+  color: #475467;
+}
+
+.modifier-container input,
+.modifier-container select {
+  width: 100%;
+
+  height: 36px;
+
+  box-sizing: border-box;
+
+  padding: 0 10px;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 6px;
+
+  background: #fff;
+
+  font-size: 11px;
+
+  color: #344054;
+
+  outline: none;
+}
+
+.modifier-container input:focus,
+.modifier-container select:focus {
+  border-color: #2374d8;
+
+  box-shadow: 0 0 0 2px rgba(35, 116, 216, 0.08);
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.modifier-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-top: 12px;
+
+  padding-top: 10px;
+
+  border-top: 1px solid #eaecf0;
+}
+
+.modifier-actions button {
+  height: 30px;
+
+  padding: 0 14px;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+/* CANCEL */
+
+.modifier-actions button:first-child {
+  background: #fff;
+
+  border: 1px solid #d0d5dd;
+
+  color: #475467;
+}
+
+.modifier-actions button:first-child:hover {
+  background: #f8fafc;
+}
+
+/* UPDATE */
+
+.modifier-actions button:last-child {
+  background: #2374d8;
+
+  border: 1px solid #2374d8;
+
+  color: #fff;
+}
+
+.modifier-actions button:last-child:hover {
+  background: #1d63b8;
+}
+
+.modifier-actions button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+/* =========================================
+   PAYMENT SUMMARY
+========================================= */
+
+.payment-summary {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 10px 12px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 7px;
+}
+
+.payment-summary > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.payment-summary span {
+  font-size: 10px;
+
+  color: #667085;
+}
+
+.payment-summary strong {
+  font-size: 14px;
+
+  color: #172033;
+}
+
+/* =========================================
+   PAID BUTTON
+========================================= */
+
+.modifier-container .modifier-actions button:last-child:disabled {
+  background: #98a2b3;
+
+  border-color: #98a2b3;
+}
+
+/* =========================================
+   PAYMENT STATUS
+========================================= */
+
+.payment-status-paid {
+  color: #16a34a;
+}
+
+.payment-status-unpaid {
+  color: #dc2626;
+}
+
+/* =========================================
+   MEDIUM SCREEN
+========================================= */
+
+@media (max-width: 900px) {
+  .modifier-inputs {
+    grid-template-columns: 1fr;
+  }
+}

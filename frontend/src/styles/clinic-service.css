@@ -1,0 +1,167 @@
+@import url(./clinic-service.css);
+
+.service-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5rem;
+  padding: 5rem;
+}
+
+.service-cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  width: 600px;
+  padding-bottom: 4rem;
+  background-color: white;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.service-image-container {
+  height: 200px;
+  width: 100px;
+}
+
+.service-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-card-header {
+  font-size: 1.2rem;
+  padding: 1rem 5rem;
+}
+
+.service-card-p {
+  font-size: 1.5rem;
+  padding: 1rem 5rem;
+  color: rgb(102, 102, 102);
+}
+
+.service-card-button {
+  background-color: white;
+  border: none;
+  font-size: 1.5rem;
+  padding: 1rem 2.3rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: rgb(96, 94, 231);
+}
+
+.service-card-button:hover {
+  text-decoration: underline;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1350px) {
+  .service-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 500px;
+    padding-bottom: 4rem;
+    background-color: white;
+  }
+}
+
+@media (max-width: 1150px) {
+  .service-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 350px;
+    padding-bottom: 4rem;
+    background-color: white;
+  }
+}
+
+@media (max-width: 850px) {
+  .service-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 300px;
+    padding-bottom: 4rem;
+    background-color: white;
+  }
+}
+
+@media (max-width: 700px) {
+  .service-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 200px;
+    padding-bottom: 4rem;
+    background-color: white;
+  }
+  .service-card-header {
+    font-size: 1.2rem;
+    padding: 1rem 3rem;
+  }
+  .service-card-p {
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+    color: rgb(102, 102, 102);
+  }
+  .service-card-button {
+    background-color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: rgb(96, 94, 231);
+  }
+}
+
+@media (max-width: 520px) {
+  .service-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 3rem;
+  }
+
+  .service-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 170px;
+    padding-bottom: 4rem;
+    background-color: white;
+  }
+  .service-card-header {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+  .service-card-p {
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    color: rgb(102, 102, 102);
+  }
+  .service-card-button {
+    background-color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 1rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: rgb(96, 94, 231);
+  }
+}

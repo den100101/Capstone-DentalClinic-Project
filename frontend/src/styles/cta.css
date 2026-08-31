@@ -1,0 +1,98 @@
+@import url(./global.css);
+
+.cta-container {
+  padding: 15rem;
+  background-color: rgb(243, 244, 245);
+  border-top: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.cta-header {
+  font-size: 3rem;
+}
+
+.cta-p {
+  font-size: 2rem;
+  color: rgb(85, 86, 87);
+  text-align: center;
+  width: 80rem;
+}
+
+.cta-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10rem;
+  margin-top: 2rem;
+}
+
+.cta-book-button,
+.cta-learn-button {
+  font-size: 2rem;
+  padding: 1rem 5rem;
+  font-weight: 600;
+  border: 1px solid rgb(199, 8, 8);
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.cta-book-button {
+  background-color: rgb(199, 8, 8);
+  color: white;
+}
+
+.cta-learn-button {
+  color: rgb(199, 8, 8);
+}
+.a.cta-book-button:hover,
+.a.cta-learn-button:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 1000px) {
+  .cta-header {
+    font-size: 2.5rem;
+  }
+  .cta-p {
+    font-size: 1.5rem;
+  }
+  .cta-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+  }
+  .cta-book-button,
+  .cta-learn-button {
+    font-size: 1.5rem;
+    padding: 1rem 5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .cta-header {
+    font-size: 2rem;
+    text-align: center;
+  }
+  .cta-p {
+    font-size: 2rem;
+    color: rgb(85, 86, 87);
+    text-align: center;
+    width: 40rem;
+  }
+  .cta-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+  }
+  .cta-book-button,
+  .cta-learn-button {
+    font-size: 1.5rem;
+    padding: 1rem 5rem;
+    font-weight: 600;
+    border: 1px solid rgb(199, 8, 8);
+  }
+}

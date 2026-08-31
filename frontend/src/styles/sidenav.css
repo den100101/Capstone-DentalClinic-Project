@@ -1,0 +1,126 @@
+@import url(./global.css);
+
+.admin-panel-side-nav {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.admin-panel-side-nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 10rem 5rem;
+  background-color: rgb(199, 8, 8);
+  width: 375px;
+  height: 100vh;
+}
+
+.admin-panel-side-nav.slide {
+  transform: translateX(-100%);
+}
+.side-nav-links {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 2rem;
+  padding: 2rem 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.side-nav-links:hover,
+.side-nav-links.active {
+  border-bottom: 5px solid white;
+  transform: scale(1.1);
+}
+
+.side-bar-burger.active {
+  top: 6%;
+}
+
+.side-bar-burger {
+  display: none;
+  width: 100%;
+  max-width: 5rem;
+}
+
+.side-nav-icons {
+  width: 100%;
+  max-width: 3rem;
+}
+
+.side-nav-links.logout {
+  margin-top: 220px;
+}
+
+@media (max-width: 1500px) {
+  html {
+    font-size: 55%;
+  }
+
+  .admin-panel-side-nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 10rem 5rem;
+    background-color: rgb(163, 160, 160);
+    width: 325px;
+    height: 100vh;
+  }
+  .side-nav-links:hover,
+  .side-nav-links.active {
+    background-color: white;
+    border-radius: 2rem;
+    padding: 2rem 2rem;
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 1300px) {
+  html {
+    font-size: 50%;
+  }
+
+  .admin-panel-side-nav ul {
+    width: 305px;
+  }
+  .side-nav-links:hover,
+  .side-nav-links.active {
+    background-color: white;
+    border-radius: 2rem;
+    padding: 2rem 2rem;
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 45%;
+  }
+
+  .admin-panel-side-nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .admin-panel-side-nav ul {
+    width: 100%;
+    padding-top: 16rem;
+  }
+
+  .side-bar-burger {
+    display: block;
+    position: fixed;
+    transform: translateY(50px);
+    top: 5rem;
+    left: 2rem;
+    width: 4rem;
+    z-index: 1001;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 2rem;
+    padding: 1rem;
+  }
+}

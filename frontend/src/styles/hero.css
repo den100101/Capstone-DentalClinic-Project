@@ -1,0 +1,147 @@
+@import url(./global.css);
+
+.hero-container {
+  height: 100vh;
+  background-image: url(/Images/Frontpage.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.hero-background-blur {
+  background-color: rgba(0, 0, 0, 0.6);
+  height: 100vh;
+}
+
+.hero-description-container {
+  position: absolute;
+  top: 23%;
+  left: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  z-index: 0;
+  animation: fadeUp 0.8s ease forwards;
+}
+.hero-header {
+  font-size: 1.8rem;
+  background-color: rgb(199, 8, 8);
+  padding: 1rem 4rem;
+  width: 27rem;
+  color: white;
+  border-radius: 2rem;
+}
+.hero-header-statement {
+  color: white;
+  font-size: 4rem;
+  width: 70rem;
+}
+.red {
+  color: rgb(199, 8, 8);
+}
+
+.hero-p {
+  font-size: 2.5rem;
+  color: aliceblue;
+  width: 70rem;
+}
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.hero-appointment-button,
+.hero-learn-button {
+  padding: 1.4rem 6rem;
+  font-size: 1.8rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.hero-appointment-button:hover,
+.hero-learn-button:hover {
+  transform: scale(1.1);
+}
+
+.hero-appointment-button {
+  background-color: rgb(199, 8, 8);
+  color: white;
+  border: 1px solid rgb(199, 8, 8);
+}
+
+.hero-learn-button {
+  background-color: white;
+  color: rgb(199, 8, 8);
+  border: 1px solid rgb(199, 8, 8);
+}
+
+.hero-appointment-button:hover,
+.hero-learn-button:hover {
+  transform: scale(1.1);
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 1500px) {
+  html {
+    font-size: 58%;
+  }
+}
+
+@media (max-width: 1350px) {
+  html {
+    font-size: 56%;
+  }
+}
+@media (max-width: 1000px) {
+  html {
+    font-size: 50%;
+  }
+}
+@media (max-width: 700px) {
+  html {
+    font-size: 45%;
+  }
+  .hero-header-statement {
+    color: white;
+    font-size: 4rem;
+    width: 60rem;
+  }
+
+  .hero-p {
+    font-size: 2.5rem;
+    color: aliceblue;
+    width: 50rem;
+  }
+}
+@media (max-width: 500px) {
+  html {
+    font-size: 40%;
+  }
+  .hero-header-statement {
+    color: white;
+    font-size: 3.5rem;
+    width: 50rem;
+  }
+
+  .hero-p {
+    font-size: 2rem;
+    color: aliceblue;
+    width: 40rem;
+  }
+  .hero-appointment-button,
+  .hero-learn-button {
+    font-size: 1.5rem;
+  }
+}

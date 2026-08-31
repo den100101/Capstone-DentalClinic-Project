@@ -1,0 +1,275 @@
+@import url(./appointment.css);
+
+.appointment-container {
+  margin-top: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10rem;
+  background-color: rgb(199, 8, 8);
+}
+
+.appointment-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5rem;
+  background-color: white;
+  border-radius: 2rem;
+  padding: 5rem;
+  animation: fadeUp 0.8s ease forwards;
+}
+.clinic-brand {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.swiss-brand-logo {
+  width: 100%;
+  max-width: 50px;
+}
+.clinic-brand-name {
+  font-size: 1.5rem;
+  color: rgb(199, 8, 8);
+}
+.appointment-desc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+.appointment-desc-header {
+  font-size: 2rem;
+}
+.appointment-desc-p {
+  font-size: 2rem;
+  width: 80rem;
+}
+.appointment-form {
+  display: flex;
+  gap: 3rem;
+}
+.left-form,
+.right-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.customer-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.grouped-inputs {
+  display: flex;
+  gap: 2rem;
+}
+
+.labels {
+  font-size: 1.5rem;
+}
+
+.inputs {
+  background-color: rgb(248, 247, 247);
+  border: 1px solid rgb(221, 221, 221);
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 400px;
+}
+.inputs.short {
+  width: 200px;
+}
+
+.submit-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 50px;
+}
+.data-regulation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.verified-logo {
+  width: 100%;
+  max-width: 20px;
+}
+.privacy-consent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.3rem;
+}
+
+.terms-policy-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.terms,
+.private {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.terms:hover,
+.private:hover {
+  text-decoration: underline;
+  color: rgb(61, 93, 236);
+}
+
+.submit-button {
+  font-size: 2rem;
+  padding: 1rem 6rem;
+  border-radius: 1rem;
+  border: none;
+  color: white;
+  background-color: rgb(4, 124, 223);
+  cursor: pointer;
+  transition: 0.5s;
+}
+.submit-button:hover {
+  transform: scale(1.1);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translate(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1500px) {
+  html {
+    font-size: 50%;
+  }
+  .appointment-desc-p {
+    font-size: 2rem;
+    width: 100rem;
+  }
+}
+
+@media (max-width: 1300px) {
+  html {
+    font-size: 45%;
+  }
+  .appointment-desc-p {
+    font-size: 2rem;
+    width: 110rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 45%;
+  }
+  .appointment-desc-p {
+    font-size: 2rem;
+    width: 80rem;
+  }
+
+  .inputs {
+    background-color: rgb(248, 247, 247);
+    border: 1px solid rgb(221, 221, 221);
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 300px;
+  }
+  .inputs.short {
+    width: 130px;
+  }
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 40%;
+  }
+  .appointment-desc-p {
+    font-size: 2rem;
+    width: 70rem;
+  }
+
+  .inputs {
+    background-color: rgb(248, 247, 247);
+    border: 1px solid rgb(221, 221, 221);
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 200px;
+  }
+  .inputs.short {
+    width: 130px;
+  }
+}
+
+@media (max-width: 560px) {
+  html {
+    font-size: 35%;
+  }
+  .appointment-container {
+    margin-top: 60px;
+  }
+  .appointment-desc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+  .appointment-desc-header {
+    font-size: 2rem;
+    text-align: center;
+  }
+  .appointment-desc-p {
+    font-size: 2rem;
+    text-align: center;
+    width: 30rem;
+  }
+  .appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .inputs {
+    background-color: rgb(248, 247, 247);
+    border: 1px solid rgb(221, 221, 221);
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 250px;
+  }
+  .inputs.short {
+    width: 120px;
+  }
+  .submit-section {
+    gap: 0rem;
+  }
+  .submit-button {
+    font-size: 2rem;
+    padding: 1rem 4rem;
+    border-radius: 1rem;
+    border: none;
+    color: white;
+    background-color: rgb(4, 124, 223);
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  .data-encrypt {
+    font-size: 1.3rem;
+    width: 20rem;
+  }
+}

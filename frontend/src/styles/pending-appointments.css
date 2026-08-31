@@ -1,0 +1,70 @@
+@import url(./global.css);
+
+.pending-appointment-table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pending-appointment-table {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.pending-appointment-table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.pending-appointment-table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.pending-appointment-table thead {
+  background-color: rgb(199, 8, 8);
+  font-size: 2rem;
+  color: white;
+  column-span: all;
+}
+
+.pending-appointment-table th,
+.pending-appointment-table td {
+  padding: 2rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.pending-appointment-table {
+  font-size: 2rem;
+}
+
+.pending-appointments-buttons-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.pending-appointment-buttons {
+  padding: 0.5rem 1rem;
+  font-size: 1.4rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.pending-appointment-buttons:hover {
+  transform: scale(1.1);
+}
+
+.pending-appointment-buttons.confirm {
+  background-color: #04a311;
+  color: white;
+}
+
+.pending-appointment-buttons.decline,
+.pending-appointment-buttons.delete {
+  background-color: rgb(199, 8, 8);
+  color: white;
+}

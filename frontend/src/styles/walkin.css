@@ -1,0 +1,95 @@
+@import url(../styles/global.css);
+.walkin-modal-background {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.walkin-modal-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  padding: 4rem 5rem;
+  border-radius: 2rem;
+}
+.walkin-modal-inputs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+.walkin-modal-header {
+  color: rgb(199, 8, 8);
+  font-size: 1.5rem;
+}
+.walkin-label {
+  font-size: 1.5rem;
+}
+.walkin-inputs {
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+.walkin-modal-left-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.walkin-left-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.walkin-modal-right-inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.walkin-right-inputs-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+.walkin-right-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.walkin-modal-container-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.walkin-buttons {
+  padding: 0.5rem 4rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.walkin-buttons.submit {
+  background-color: rgb(199, 8, 8);
+  color: white;
+  border: 1px solid rgb(199, 8, 8);
+}
+.walkin-buttons.close {
+  background-color: white;
+  color: rgb(199, 8, 8);
+  border: 1px solid rgb(199, 8, 8);
+}
+.walkin-buttons:hover {
+  transform: scale(1.1);
+}

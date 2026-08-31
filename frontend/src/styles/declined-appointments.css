@@ -1,0 +1,57 @@
+@import url(./global.css);
+
+.declined-table-container {
+  display: flex;
+  flex-direction: column;
+  flex: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.declined-table {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.declined-table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.declined-table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.declined-table tr {
+  font-size: 2rem;
+}
+
+.declined-table th {
+  font-size: 2rem;
+  background-color: rgb(199, 8, 8);
+  color: white;
+  column-span: all;
+}
+
+.declined-table th,
+.declined-table td {
+  padding: 2rem;
+  font-size: 2rem;
+  column-span: all;
+}
+
+.declined-appointment-button {
+  background-color: rgb(199, 8, 8);
+  color: white;
+  font-size: 1.4rem;
+  padding: 0.5rem 2rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.declined-appointment-button:hover {
+  transform: scale(1.1);
+}

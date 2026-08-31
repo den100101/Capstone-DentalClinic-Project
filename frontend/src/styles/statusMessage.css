@@ -1,0 +1,49 @@
+@import url(./global.css);
+
+.status-message-background {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-message-container {
+  background-color: white;
+  border-radius: 2rem;
+  padding: 3rem 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+}
+
+.swiss-status-logo {
+  width: 100%;
+  max-width: 15rem;
+}
+
+.status-message-text {
+  font-size: 1.5rem;
+}
+
+.status-button {
+  background-color: white;
+  border: 1px solid rgb(199, 8, 8);
+  color: rgb(199, 8, 8);
+  font-size: 1.5rem;
+  padding: 1rem 5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.status-button:hover {
+  transform: scale(1.1);
+}

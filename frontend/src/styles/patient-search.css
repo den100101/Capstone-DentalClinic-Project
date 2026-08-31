@@ -1,0 +1,83 @@
+@import url(./global.css);
+
+.patients-container {
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.patients-list-container {
+  width: 320px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.search-patients-list {
+  padding: 2rem;
+  border-bottom: 1px solid #ececec;
+}
+
+.search-patients-list h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-patient-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  padding: 0.8rem 1rem;
+}
+
+.search-patient-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.search-patients-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.4rem;
+  background: transparent;
+}
+
+.patients-list-wrapper {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.patients-list {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f1f1f1;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.patients-list:hover {
+  background: #f8fafc;
+}
+
+.patients-list h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.patient-record {
+  flex: 1;
+  min-height: 700px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 3rem;
+}

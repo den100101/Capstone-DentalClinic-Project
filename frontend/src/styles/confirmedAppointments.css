@@ -1,0 +1,99 @@
+@import url(./global.css);
+
+.confirmed-table-container {
+  display: flex;
+  flex-direction: column;
+  flex: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmed-table {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.confirmed-table tr {
+  font-size: 2rem;
+}
+
+.confirmed-table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.confirmed-table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.confirmed-table th {
+  font-size: 2rem;
+  background-color: rgb(199, 8, 8);
+  color: white;
+  column-span: all;
+}
+
+.confirmed-table th,
+.confirmed-table td {
+  padding: 2rem;
+  font-size: 2rem;
+  column-span: all;
+}
+
+.confirmed-appointment-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.confirmed-appointment-buttons {
+  font-size: 1.1rem;
+  padding: 0.5rem 2rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.confirmed-appointment-buttons.send {
+  background-color: #04a311;
+  color: white;
+}
+
+.confirmed-appointment-buttons.delete {
+  background-color: rgb(199, 8, 8);
+  color: white;
+}
+
+.confirmed-appointment-buttons:hover {
+  transform: scale(1.1);
+}
+
+.pagination {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  border: 1px solid #ddd;
+  padding: 2rem;
+  background-color: rgb(199, 8, 8);
+}
+
+.pagination-button {
+  font-size: 1.5rem;
+  padding: 0.5rem 3rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.pagination-pages {
+  font-size: 1.5rem;
+  color: white;
+}

@@ -1,0 +1,201 @@
+@import url(./global.css);
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10rem;
+  padding: 10rem;
+  background-color: black;
+}
+
+.footer-clinic-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.clinic-info-continer {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+.clinic-name {
+  color: rgb(199, 8, 8);
+}
+.clinic-info {
+  font-size: 1.5rem;
+  width: 40rem;
+  color: white;
+  cursor: pointer;
+}
+.clinic-info:hover {
+  text-decoration: underline;
+}
+.footer-info-logo {
+  width: 100%;
+  max-width: 5rem;
+}
+
+.footer-swiss-logo {
+  width: 100%;
+  max-width: 10rem;
+}
+
+.footer-link-header {
+  font-size: 1.5rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 3.8rem;
+  color: white;
+}
+
+.footer-link {
+  font-size: 2rem;
+  cursor: pointer;
+}
+.footer-link-a {
+  color: white;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+.footer-clinic-sched {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+.clinic-sched {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+.clinic-sched-header {
+  font-size: 3rem;
+  color: white;
+}
+.sched-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10rem;
+  font-size: 2rem;
+  color: white;
+}
+.sched-container.sunday {
+  color: rgb(199, 8, 8);
+}
+
+.clinic-socials {
+  display: flex;
+  gap: 5rem;
+}
+
+.social-logo {
+  width: 100%;
+  max-width: 5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1500px) {
+  html {
+    font-size: 53%;
+  }
+}
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 50%;
+  }
+  .sched-container {
+    gap: 5rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 40%;
+  }
+  .footer-container {
+    justify-content: center;
+    gap: 8rem;
+  }
+  .clinic-info {
+    width: 20rem;
+  }
+  .sched-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 35%;
+  }
+  .footer-container {
+    justify-content: center;
+    gap: 8rem;
+  }
+  .clinic-info {
+    width: 20rem;
+  }
+  .sched-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  html {
+    font-size: 40%;
+  }
+  .footer-container {
+    justify-content: center;
+    gap: 4rem;
+    padding: 10rem 2rem;
+  }
+  .footer-info-logo {
+    max-width: 3rem;
+  }
+  .footer-swiss-logo {
+    max-width: 5rem;
+  }
+  .clinic-info-continer {
+    gap: 1rem;
+  }
+  .footer-links p {
+    font-size: 1.3rem;
+  }
+  .clinic-socials {
+    gap: 3rem;
+  }
+  .social-logo {
+    max-width: 3rem;
+  }
+
+  .clinic-info {
+    width: 10rem;
+    font-size: 1.3rem;
+  }
+
+  .clinic-sched-header {
+    font-size: 2rem;
+  }
+  .footer-link-header {
+    font-size: 1.4rem;
+  }
+  .sched-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-size: 1.3rem;
+  }
+}
