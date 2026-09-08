@@ -1,0 +1,332 @@
+@import url(./global.css);
+
+.report-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  z-index: 9999;
+}
+
+.report-modal {
+  width: 900px;
+  max-width: 100%;
+
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+}
+
+/* HEADER */
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  border-bottom: 1px solid #ddd;
+
+  padding-bottom: 18px;
+}
+
+.report-header h2 {
+  margin: 0;
+
+  font-size: 26px;
+}
+
+.report-header p {
+  margin-top: 6px;
+
+  color: #777;
+}
+
+.report-close {
+  border: none;
+  background: transparent;
+
+  font-size: 32px;
+
+  cursor: pointer;
+
+  color: #555;
+}
+
+/* OPTIONS */
+
+.report-options {
+  display: flex;
+
+  gap: 15px;
+
+  align-items: flex-end;
+
+  margin: 25px 0;
+}
+
+.report-input-group {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.report-input-group label {
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.report-input-group select,
+.report-input-group input {
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+
+  background: white;
+
+  box-sizing: border-box;
+}
+.generate-btn {
+  height: 42px;
+  padding: 0 20px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: rgb(199, 8, 8);
+  color: white;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.generate-btn:hover {
+  background: rgb(170, 7, 7);
+}
+.generate-btn:hover {
+  opacity: 0.9;
+}
+
+/* REPORT */
+
+.generated-report {
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  padding: 28px;
+
+  background: #fff;
+}
+
+.report-title {
+  text-align: center;
+
+  border-bottom: 1px solid #ddd;
+
+  padding-bottom: 20px;
+
+  margin-bottom: 25px;
+}
+
+.report-title h1 {
+  margin: 0;
+
+  font-size: 25px;
+}
+
+.report-title p {
+  margin-top: 7px;
+
+  color: #777;
+}
+
+/* SECTIONS */
+
+.report-section {
+  margin-bottom: 25px;
+}
+
+.report-section h3 {
+  margin-bottom: 12px;
+
+  font-size: 18px;
+}
+
+.report-section p {
+  color: #444;
+
+  line-height: 1.7;
+
+  margin-bottom: 12px;
+}
+
+/* STATISTICS */
+
+.report-statistics {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 12px;
+
+  margin: 25px 0;
+}
+
+.report-stat {
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  padding: 16px;
+}
+
+.report-stat span {
+  display: block;
+
+  font-size: 13px;
+
+  color: #777;
+
+  margin-bottom: 7px;
+}
+
+.report-stat strong {
+  font-size: 20px;
+}
+
+/* TABLE */
+
+.report-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.report-table th,
+.report-table td {
+  padding: 12px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #ddd;
+}
+
+.report-table th {
+  background: #f5f5f5;
+
+  font-size: 14px;
+}
+
+.report-table td {
+  font-size: 14px;
+}
+
+.no-report-data {
+  color: #777;
+}
+
+/* FOOTER */
+
+.report-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  border-top: 1px solid #ddd;
+
+  padding-top: 18px;
+
+  margin-top: 20px;
+}
+
+.report-footer span {
+  color: #777;
+
+  font-size: 13px;
+}
+.print-btn {
+  border: none;
+  border-radius: 7px;
+
+  padding: 11px 20px;
+
+  background: rgb(199, 8, 8);
+  color: white;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.print-btn:hover {
+  background: rgb(170, 7, 7);
+}
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+  .report-options {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .report-statistics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+/* PRINT */
+
+@media print {
+
+  body * {
+    visibility: hidden;
+  }
+
+  .generated-report,
+  .generated-report * {
+    visibility: visible;
+  }
+
+  .generated-report {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+
+    border: none;
+  }
+
+  .report-footer .print-btn {
+    display: none;
+  }
+
+}

@@ -3,12 +3,15 @@ import "../styles/dashboard.css";
 import "../styles/dashboard-cards.css";
 import MonthlyRevenueChart from "./revenue";
 import Walkin from "./walkin";
+import GenerateReport from "./generatereport";
+
 function Dashboard() {
   const API_URL = import.meta.env.VITE_API_URL;
   const [openWalkinModal, setOpenWalkinModal] = useState(false);
   const [todaysAppointments, setTodaysAppointments] = useState([]);
   const [todaysAppointmentsCount, setTodaysAppointmentsCount] = useState(0);
   const [pendingAppointmentsCount, setPendingAppointmentsCount] = useState(0);
+  const [openReportModal, setOpenReportModal] = useState(false);
 
   async function GetTodaysAppointment() {
     const response = await fetch(`${API_URL}/get_todays_appointments`, {
@@ -58,7 +61,10 @@ function Dashboard() {
             </div>
           </div>
           <div className="dashboard-header-buttons">
-            <div className="dashboard-buttons generate">
+           <div
+              className="dashboard-buttons generate"
+              onClick={() => setOpenReportModal(true)}
+            >
               <div>
                 <img
                   src="/Images/report.png"
@@ -66,6 +72,7 @@ function Dashboard() {
                   className="dashboard-icons"
                 />
               </div>
+
               <div>
                 <h1>Generate Report</h1>
               </div>
@@ -184,6 +191,16 @@ function Dashboard() {
         </div>
       </div>
       {openWalkinModal && <Walkin closeModal={setOpenWalkinModal} />}
+
+      {openReportModal && (
+        <GenerateReport
+          closeModal={() => setOpenReportModal(false)}
+          monthlyRevenue={24000}
+          todaysAppointmentsCount={todaysAppointmentsCount}
+          pendingAppointmentsCount={pendingAppointmentsCount}
+          todaysAppointments={todaysAppointments}
+        />
+      )}
     </>
   );
 }
