@@ -64,14 +64,13 @@ function Admin({ setIsLoggedin }) {
           </div>
         </div>
         <div className="dashboard-nav-input-section">
-          <div>
+          <div className="search-container">
             <img
               src="/Images/search.png"
               alt="search-icon"
               className="search-icon"
             />
-          </div>
-          <div className="search-container">
+
             <input
               type="text"
               placeholder="Search patients"
@@ -79,6 +78,7 @@ function Admin({ setIsLoggedin }) {
               value={search}
               onChange={(e) => searchPatients(e.target.value)}
             />
+
             {showDropdown && (
               <div className="search-dropdown">
                 {results.map((patient) => (
@@ -86,7 +86,11 @@ function Admin({ setIsLoggedin }) {
                     key={patient.id}
                     className="search-item"
                     onClick={() => {
-                      console.log("Admin selected:", patient.patient_name);
+                      console.log(
+                        "Admin selected:",
+                        patient.patient_name
+                      );
+
                       setSearch(patient.patient_name);
                       setSelectedPatient(patient.patient_name);
                       setShowDropdown(false);
