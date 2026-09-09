@@ -1,4 +1,6 @@
 import Footer from "./components/footer.jsx";
+import TermsModal from "./components/termsmodal.jsx";
+import PrivacyModal from "./components/privacymodal.jsx";
 import "./styles/appointment.css";
 import ModalStatus from "./components/modalStatus.jsx";
 import { useState, useEffect } from "react";
@@ -35,6 +37,9 @@ function Appointment() {
 
   const [appointmentStatus, setAppointmentStatus] = useState("");
   const [openStatus, setOpenStatus] = useState(false);
+
+  const [openTerms, setOpenTerms] = useState(false);
+  const [openPrivacy, setOpenPrivacy] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
   const [takenTimes, setTakenTimes] = useState([]);
@@ -366,8 +371,21 @@ function Appointment() {
                 </div>
               </div>
               <div className="terms-policy-container">
-                <div className="terms">Terms of use</div>
-                <div className="private">Privacy & Policy</div>
+                <button
+                  type="button"
+                  className="terms"
+                  onClick={() => setOpenTerms(true)}
+                >
+                  Terms of Use
+                </button>
+
+                <button
+                  type="button"
+                  className="private"
+                  onClick={() => setOpenPrivacy(true)}
+                >
+                  Privacy Policy
+                </button>
               </div>
             </form>
           </div>
@@ -380,6 +398,8 @@ function Appointment() {
           closeStatus={setOpenStatus}
         />
       )}
+      <TermsModal isOpen={openTerms} onClose={() => setOpenTerms(false)} />
+      <PrivacyModal isOpen={openPrivacy} onClose={() => setOpenPrivacy(false)} />
       <Footer />
     </>
   );

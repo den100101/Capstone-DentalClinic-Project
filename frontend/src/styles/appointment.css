@@ -111,23 +111,54 @@
 }
 
 .terms-policy-container {
-  margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+
+  gap: 18px;
+
+  margin-top: 18px;
 }
 
 .terms,
 .private {
-  font-size: 1.3rem;
+  border: none;
+
+  background: transparent;
+
+  color: rgb(199, 8, 8);
+
+  font-size: 13px;
+  font-weight: 500;
+
   cursor: pointer;
+
+  padding: 0;
+
+  transition: color 0.2s ease;
 }
 
 .terms:hover,
 .private:hover {
+  color: rgb(165, 6, 6);
+
   text-decoration: underline;
-  color: rgb(61, 93, 236);
+}
+
+.terms:focus,
+.private:focus {
+  outline: none;
+}
+
+
+.terms::after {
+  content: "|";
+
+  color: #bdbdbd;
+
+  margin-left: 18px;
+
+  text-decoration: none;
 }
 
 .submit-button {
