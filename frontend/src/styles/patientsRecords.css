@@ -1,86 +1,104 @@
-@import url(./global.css);
+@import url("./global.css");
 
 .patient-record-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  gap: 3rem;
+  width: 100%;
+  min-width: 0;
+  gap: 1.5rem;
+  box-sizing: border-box;
 }
+
 .patient-record-header {
-  padding: 1rem 2rem;
-  border-radius: 2rem;
+  width: 100%;
+  padding: 0.25rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
+
 .patient-record-header h1 {
-  font-size: 2rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 8px;
+  margin: 0 0 0.35rem 0;
 }
+
 .patient-details {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 0.7rem;
   flex-wrap: wrap;
   color: #6b7280;
-  font-size: 1.5rem;
+  font-size: 0.85rem;
   font-weight: 500;
 }
 
 .patient-status-cards-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  gap: 1.25rem;
+  box-sizing: border-box;
 }
 
 .patient-status-cards {
-  padding: 1rem 5rem 1rem 2rem;
-  border: 1px solid black;
-  border-radius: 1rem;
+  min-width: 0;
+  min-height: 105px;
+  padding: 1rem;
+  border-radius: 0.75rem;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 5rem;
+  gap: 0.75rem;
+  box-sizing: border-box;
   cursor: pointer;
-  transition: 0.5s;
+  transition: transform 0.2s ease;
 }
 
 .patient-status-cards:hover {
-  transform: scale(1.1);
+  transform: translateY(-2px);
 }
 
 .status-cards-content {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.35rem;
 }
 
 .primary-card-header {
-  font-size: 1.5rem;
-  font-weight: 550;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
+
 .card-highlight {
-  font-size: 2rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .card-support-detail {
-  font-size: 1.3rem;
+  font-size: 0.78rem;
   font-weight: 450;
   color: rgb(57, 57, 58);
+  line-height: 1.2;
 }
 
+
 .patient-status-icon-container {
-  width: 50px;
-  height: 50px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .patient-record-icons {
@@ -100,7 +118,7 @@
 
 .patient-status-icon-container.next-appointment {
   background-color: rgb(4, 208, 235);
-  padding: 10px;
+  padding: 8px;
   border-radius: 50%;
 }
 
@@ -115,7 +133,7 @@
 
 .patient-status-icon-container.balance {
   background-color: rgb(252, 0, 0);
-  padding: 10px;
+  padding: 8px;
   border-radius: 50%;
 }
 
@@ -130,53 +148,71 @@
 
 .patient-status-icon-container.dental-status {
   background-color: rgb(4, 129, 42);
-  padding: 10px;
+  padding: 8px;
   border-radius: 50%;
 }
+
 .patient-records-nav-container {
   display: flex;
-  gap: 5rem;
-  border-bottom: 1px solid black;
+  align-items: flex-end;
+  gap: 2.5rem;
+  width: 100%;
+  border-bottom: 1px solid #d1d5db;
+  box-sizing: border-box;
 }
 
 .patient-record-nav {
   cursor: pointer;
+  padding-bottom: 0.65rem;
+  white-space: nowrap;
+}
+
+.patient-record-nav h1 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
 }
 
 .patient-record-nav.active {
-  border-bottom: 4px solid rgb(199, 8, 8);
-  padding-bottom: 2rem;
+  border-bottom: 3px solid rgb(199, 8, 8);
 }
 
 .patient-medical-records-container {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 6rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 1fr);
+  gap: 2rem;
+  width: 100%;
   align-items: start;
-  margin-top: 3rem;
+  margin-top: 0.5rem;
+  box-sizing: border-box;
 }
 
 .tooth-records-table-container {
-  margin-top: 2rem;
+  width: 100%;
+  min-width: 0;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: 0.75rem;
+  padding: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .tooth-records-table-container h2 {
-  font-size: 1.8rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1rem 0;
 }
 
 .tooth-records-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   overflow: hidden;
-  border-radius: 0.8rem;
+  border-radius: 0.5rem;
 }
 
 .tooth-records-table thead {
@@ -185,21 +221,22 @@
 }
 
 .tooth-records-table th {
-  padding: 1rem;
+  padding: 0.65rem;
   text-align: left;
-  font-size: 1.3rem;
+  font-size: 0.78rem;
   font-weight: 600;
 }
 
 .tooth-records-table td {
-  padding: 1rem;
-  font-size: 1.2rem;
+  padding: 0.65rem;
+  font-size: 0.75rem;
   border-bottom: 1px solid #e5e7eb;
   color: #374151;
+  overflow-wrap: anywhere;
 }
 
 .tooth-records-table tbody tr {
-  transition: background-color 0.25s ease;
+  transition: background-color 0.2s ease;
 }
 
 .tooth-records-table tbody tr:hover {
@@ -219,5 +256,321 @@
   text-align: center;
   color: #6b7280;
   font-style: italic;
-  padding: 2rem;
+  padding: 1.5rem;
+}
+
+.modifier-container {
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.modifier-container h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.modifier-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.modifier-inputs > div {
+  min-width: 0;
+}
+
+.modifier-inputs label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.modifier-inputs input,
+.modifier-inputs select {
+  width: 100%;
+  height: 40px;
+  padding: 0 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.modifier-inputs input:focus,
+.modifier-inputs select:focus {
+  border-color: rgb(199, 8, 8);
+}
+
+.modifier-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.modifier-actions button {
+  min-width: 85px;
+  height: 38px;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.modifier-actions button:first-child {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.modifier-actions button:first-child:hover {
+  background: #e5e7eb;
+}
+
+.modifier-actions button:last-child {
+  background: rgb(199, 8, 8);
+  color: white;
+}
+
+.modifier-actions button:last-child:hover {
+  background: rgb(170, 7, 7);
+}
+
+.modifier-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.payment-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.payment-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.payment-summary span {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.payment-summary strong {
+  font-size: 1rem;
+  color: #111827;
+}
+
+@media (max-width: 1199px) {
+
+  .patient-record-container {
+    gap: 1.25rem;
+  }
+
+  .patient-status-cards-container {
+    gap: 1rem;
+  }
+
+  .patient-status-cards {
+    padding: 0.9rem;
+  }
+
+  .primary-card-header {
+    font-size: 0.88rem;
+  }
+
+  .card-highlight {
+    font-size: 1.15rem;
+  }
+
+  .card-support-detail {
+    font-size: 0.72rem;
+  }
+
+  .patient-medical-records-container {
+    gap: 1.25rem;
+    grid-template-columns: minmax(0, 1.1fr) minmax(240px, 1fr);
+  }
+}
+
+@media (max-width: 1023px) {
+
+  .patient-record-container {
+    gap: 1rem;
+  }
+
+  .patient-record-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .patient-details {
+    font-size: 0.78rem;
+  }
+
+  .patient-status-cards-container {
+    gap: 0.75rem;
+  }
+
+  .patient-status-cards {
+    min-height: 95px;
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .primary-card-header {
+    font-size: 0.8rem;
+  }
+
+  .card-highlight {
+    font-size: 1rem;
+  }
+
+  .card-support-detail {
+    font-size: 0.68rem;
+  }
+
+  .patient-status-icon-container {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  .patient-records-nav-container {
+    gap: 1.5rem;
+  }
+
+  .patient-record-nav h1 {
+    font-size: 0.9rem;
+  }
+
+  .patient-medical-records-container {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .tooth-records-table-container {
+    order: 2;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .patient-record-container {
+    gap: 1rem;
+  }
+
+  .patient-record-header {
+    padding: 0;
+  }
+
+  .patient-record-header h1 {
+    font-size: 1.15rem;
+  }
+
+  .patient-details {
+    font-size: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .patient-status-cards-container {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .patient-status-cards {
+    min-height: 90px;
+  }
+
+  .patient-records-nav-container {
+    gap: 1rem;
+    overflow-x: auto;
+  }
+
+  .patient-record-nav {
+    flex-shrink: 0;
+  }
+
+  .patient-medical-records-container {
+    grid-template-columns: 1fr;
+  }
+
+  .modifier-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .modifier-actions {
+    justify-content: stretch;
+  }
+
+  .modifier-actions button {
+    flex: 1;
+  }
+
+  .tooth-records-table-container {
+    overflow-x: auto;
+  }
+
+  .tooth-records-table {
+    min-width: 500px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .patient-record-container {
+    gap: 0.75rem;
+  }
+
+  .patient-record-header h1 {
+    font-size: 1.05rem;
+  }
+
+  .patient-details {
+    font-size: 0.7rem;
+  }
+
+  .patient-status-cards {
+    min-height: 85px;
+    padding: 0.7rem;
+  }
+
+  .card-highlight {
+    font-size: 0.95rem;
+  }
+
+  .patient-records-nav-container {
+    gap: 0.75rem;
+  }
+
+  .patient-record-nav h1 {
+    font-size: 0.82rem;
+  }
+
+  .modifier-container {
+    padding: 1rem;
+  }
 }
