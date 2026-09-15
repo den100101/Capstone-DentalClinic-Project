@@ -79,13 +79,19 @@ function Footer() {
             </Link>
           </div>
           <div className="footer-link">
-            <p>Article</p>
+            <Link to={"/article"} className="footer-link-a">
+              <p>Article</p>
+            </Link>
           </div>
           <div className="footer-link">
-            <p>Contact us</p>
+            <Link to={"/contactus"} className="footer-link-a">
+              <p>Contact us</p>
+            </Link>
           </div>
           <div className="footer-link">
-            <p>Book Appointment</p>
+            <Link to={"/appointment"} className="footer-link-a">
+              <p>Book Appointment</p>
+            </Link>
           </div>
         </div>
         {/* CLINIC SCHEDULE */}
