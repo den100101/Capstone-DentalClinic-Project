@@ -44,6 +44,8 @@ function Appointment() {
   const today = new Date().toISOString().split("T")[0];
   const [takenTimes, setTakenTimes] = useState([]);
 
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -123,6 +125,10 @@ function Appointment() {
 
     getTakenTimes();
   }, [appointmentDate]);
+
+  useEffect(() => {
+    setOpenPrivacy(true);
+  }, []);
 
   return (
     <>
@@ -352,16 +358,14 @@ function Appointment() {
               </div>
               <div className="submit-section">
                 <div className="data-regulation-container">
-                  <div>
-                    <img
-                      src="/Images/verified.png"
-                      alt="verified-img"
-                      className="verified-logo"
-                    />
-                  </div>
                   <div className="data-encrypt">
                     <div className="privacy-consent">
-                      <input type="checkbox" id="privacy" required />
+                      {privacyAgreed ? (
+                        <input type="checkbox" id="privacy" required checked />
+                      ) : (
+                        <input type="checkbox" id="privacy" required />
+                      )}
+
                       <label htmlFor="privacy">
                         I agree to the Privacy Policy.
                       </label>
@@ -406,6 +410,8 @@ function Appointment() {
       <PrivacyModal
         isOpen={openPrivacy}
         onClose={() => setOpenPrivacy(false)}
+        agreed={privacyAgreed}
+        setAgreed={setPrivacyAgreed}
       />
       <Footer />
     </>

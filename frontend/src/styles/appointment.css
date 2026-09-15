@@ -98,10 +98,7 @@
   align-items: center;
   gap: 2rem;
 }
-.verified-logo {
-  width: 100%;
-  max-width: 20px;
-}
+
 .privacy-consent {
   display: flex;
   justify-content: center;
@@ -149,7 +146,6 @@
 .private:focus {
   outline: none;
 }
-
 
 .terms::after {
   content: "|";

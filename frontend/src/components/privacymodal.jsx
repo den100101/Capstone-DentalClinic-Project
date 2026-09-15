@@ -1,56 +1,71 @@
 import "../styles/legal-modal.css";
+import { useState } from "react";
 
-function PrivacyModal({ isOpen, onClose }) {
+function PrivacyModal({ isOpen, onClose, agreed, setAgreed }) {
+  const [showPrivacyWarning, setShowPrivacyWarning] = useState(false);
+
   if (!isOpen) return null;
+
+  function handleAgree() {
+    if (!agreed) {
+      setShowPrivacyWarning(true);
+      return;
+    }
+
+    setAgreed(true);
+    setShowPrivacyWarning(false);
+    onClose();
+  }
+
+  function handleCheckboxChange(e) {
+    const checked = e.target.checked;
+
+    setAgreed(checked);
+
+    if (checked) {
+      setShowPrivacyWarning(false);
+    }
+  }
 
   return (
     <div className="legal-overlay" onClick={onClose}>
-      <div
-        className="legal-modal"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="legal-modal" onClick={(e) => e.stopPropagation()}>
         <div className="legal-modal-header">
           <div>
             <span className="legal-label">SWISS DENTAL CLINIC</span>
             <h2>Privacy Policy</h2>
           </div>
 
-          <button
-            type="button"
-            className="legal-close"
-            onClick={onClose}
-          >
+          <button type="button" className="legal-close" onClick={onClose}>
             ×
           </button>
         </div>
 
         <div className="legal-modal-body">
-          <p className="legal-date">
-            Last updated: September 2026
-          </p>
+          <p className="legal-date">Last updated: September 2026</p>
 
           <section>
             <h3>1. Information We Collect</h3>
             <p>
-              When you submit an appointment request, Swiss Dental Clinic
-              may collect information necessary to process your request
-              and provide dental services.
+              When you submit an appointment request, Swiss Dental Clinic may
+              collect information necessary to process your request and provide
+              dental services.
             </p>
 
             <p>
-              This may include your name, email address, birthdate, age,
-              gender, contact number, address, weight, height, appointment
-              date, appointment time, and reason for your visit.
+              This may include your name, email address, birthdate, age, gender,
+              contact number, address, weight, height, appointment date,
+              appointment time, and reason for your visit.
             </p>
           </section>
 
           <section>
             <h3>2. How We Use Your Information</h3>
             <p>
-              The information you provide may be used to process and
-              manage appointments, communicate with you regarding your
-              appointment, maintain patient records, and support the
-              delivery of dental services.
+              The information you provide may be used to process and manage
+              appointments, communicate with you regarding your appointment,
+              maintain patient records, and support the delivery of dental
+              services.
             </p>
           </section>
 
@@ -58,9 +73,8 @@ function PrivacyModal({ isOpen, onClose }) {
             <h3>3. Patient Records</h3>
             <p>
               Information related to patients and dental services may be
-              maintained as part of the clinic's patient records.
-              Access to these records should be limited to authorized
-              clinic personnel.
+              maintained as part of the clinic's patient records. Access to
+              these records should be limited to authorized clinic personnel.
             </p>
           </section>
 
@@ -68,8 +82,8 @@ function PrivacyModal({ isOpen, onClose }) {
             <h3>4. Information Security</h3>
             <p>
               Swiss Dental Clinic takes reasonable measures to protect
-              information stored in the system against unauthorized
-              access, modification, disclosure, or destruction.
+              information stored in the system against unauthorized access,
+              modification, disclosure, or destruction.
             </p>
           </section>
 
@@ -86,55 +100,74 @@ function PrivacyModal({ isOpen, onClose }) {
           <section>
             <h3>6. Data Retention</h3>
             <p>
-              Patient and appointment information may be retained for as
-              long as necessary to support clinic operations, maintain
-              appropriate records, and fulfill applicable requirements.
+              Patient and appointment information may be retained for as long as
+              necessary to support clinic operations, maintain appropriate
+              records, and fulfill applicable requirements.
             </p>
           </section>
 
           <section>
             <h3>7. User Rights</h3>
             <p>
-              Users may contact Swiss Dental Clinic regarding concerns
-              about the personal information associated with their
-              appointment or patient record.
+              Users may contact Swiss Dental Clinic regarding concerns about the
+              personal information associated with their appointment or patient
+              record.
             </p>
           </section>
 
           <section>
             <h3>8. Cookies and Sessions</h3>
             <p>
-              The system may use sessions and similar technologies to
-              maintain authentication, improve security, and provide
-              access to protected features.
+              The system may use sessions and similar technologies to maintain
+              authentication, improve security, and provide access to protected
+              features.
             </p>
           </section>
 
           <section>
             <h3>9. Changes to This Privacy Policy</h3>
             <p>
-              This Privacy Policy may be updated when necessary. Changes
-              will be reflected in the updated version of this policy.
+              This Privacy Policy may be updated when necessary. Changes will be
+              reflected in the updated version of this policy.
             </p>
           </section>
 
           <section>
             <h3>10. Contact Us</h3>
             <p>
-              If you have questions or concerns about this Privacy Policy
-              or how your information is handled, please contact Swiss
-              Dental Clinic through its official contact channels.
+              If you have questions or concerns about this Privacy Policy or how
+              your information is handled, please contact Swiss Dental Clinic
+              through its official contact channels.
             </p>
           </section>
         </div>
 
+        <div className="privacy-consent">
+          <input
+            type="checkbox"
+            id="privacy-modal-agreement"
+            checked={agreed}
+            onChange={handleCheckboxChange}
+          />
+
+          <label htmlFor="privacy-modal-agreement">
+            I agree to the Privacy Policy
+          </label>
+        </div>
+
         <div className="legal-modal-footer">
+          {showPrivacyWarning && (
+            <div className="privacy-warning">
+              Please check the box to agree to the Privacy Policy.
+            </div>
+          )}
+
           <button
             type="button"
             className="legal-primary-button"
-            onClick={onClose}
+            onClick={handleAgree}
           >
-            I Understand
+            I Agree
           </button>
         </div>
       </div>
@@ -143,4 +176,3 @@ function PrivacyModal({ isOpen, onClose }) {
 }
 
 export default PrivacyModal;
-
