@@ -7,6 +7,8 @@ from datetime import datetime, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Message
+import re
+
 load_dotenv()
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -84,6 +86,13 @@ def new_patients():
     ):
         return jsonify({"message" : "missing fields"})
     
+    contact_num = str(data["contact_num"]).strip()
+
+   
+    if not re.fullmatch(r"\+?[\d\s\-()]+", contact_num):
+        print("INVALID CONTACT NUMBER")
+        return jsonify({"message": "contact num contains invalid characters"}), 400
+    
     try:
 
         existing_patient = Patient.query.filter_by(
@@ -96,17 +105,19 @@ def new_patients():
             return jsonify({
                 "message": "You already have an appointment."
             }), 409
+            
         new_patient = Patient(
             name = data["name"],
             email = data["email"],
             birthdate = data["birthdate"],
             age = data["age"],
             gender = data["gender"],
-            contact_num = data["contact_num"],
+            contact_num = contact_num,
             address= data["address"],
             weight = data["weight"],
             height = data["height"]
         )
+    
 
         db.session.add(new_patient)
         db.session.commit()

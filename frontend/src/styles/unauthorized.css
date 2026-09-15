@@ -1,0 +1,45 @@
+.unauthorized {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  background: rgb(199, 8, 8);
+}
+
+.unauthorized h1 {
+  margin: 0;
+  font-size: 120px;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+
+.unauthorized h2 {
+  margin: 15px 0 10px;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+}
+
+.unauthorized p {
+  margin: 0;
+  font-size: 17px;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .unauthorized h1 {
+    font-size: 90px;
+  }
+
+  .unauthorized h2 {
+    font-size: 26px;
+  }
+
+  .unauthorized p {
+    font-size: 15px;
+  }
+}

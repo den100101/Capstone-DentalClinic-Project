@@ -8,6 +8,7 @@ import Article from "./article";
 import ContactUs from "./contactus";
 import Appointment from "./appointment";
 import Admin from "./admin";
+import Unauthorized from "./components/unauthorized";
 
 function App() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -21,6 +22,7 @@ function App() {
     });
 
     const data = await response.json();
+
     if (data.logged_in) {
       setIsLoggedin(true);
     } else {
@@ -45,9 +47,16 @@ function App() {
         <Route path="/article" element={<Article />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/appointment" element={<Appointment />} />
+
         <Route
           path="/admin"
-          element={<Admin setIsLoggedin={setIsLoggedin} />}
+          element={
+            isLoggedin ? (
+              <Admin setIsLoggedin={setIsLoggedin} />
+            ) : (
+              <Unauthorized />
+            )
+          }
         />
       </Routes>
     </>

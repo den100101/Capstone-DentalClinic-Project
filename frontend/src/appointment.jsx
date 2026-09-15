@@ -66,11 +66,13 @@ function Appointment() {
         }),
       });
 
-      if (!patientResponse.ok) {
-        throw new Error("You already have an appointment.");
-      }
-
       const patientData = await patientResponse.json();
+
+      if (!patientResponse.ok) {
+        setAppointmentStatus(
+          patientData.message || "Failed to create appointment!",
+        );
+      }
 
       const appointmentResponse = await fetch(`${API_URL}/new_appointment`, {
         method: "POST",
@@ -86,9 +88,11 @@ function Appointment() {
         }),
       });
 
+      const appointmentData = await appointmentResponse.json();
+
       if (!appointmentResponse.ok) {
         setOpenStatus(true);
-        setAppointmentStatus("You already have an existing appointment.");
+        setAppointmentStatus(appointmentData.message);
       }
       setOpenStatus(true);
       setAppointmentStatus("Appointment submitted successfully!");
@@ -172,7 +176,7 @@ function Appointment() {
                       Email Address:
                     </label>
                     <input
-                      type="text"
+                      type="email"
                       name="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -399,7 +403,10 @@ function Appointment() {
         />
       )}
       <TermsModal isOpen={openTerms} onClose={() => setOpenTerms(false)} />
-      <PrivacyModal isOpen={openPrivacy} onClose={() => setOpenPrivacy(false)} />
+      <PrivacyModal
+        isOpen={openPrivacy}
+        onClose={() => setOpenPrivacy(false)}
+      />
       <Footer />
     </>
   );
