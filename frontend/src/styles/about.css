@@ -1,20 +1,35 @@
 @import url(./global.css);
 
+/* =========================================
+   ABOUT SECTION
+========================================= */
+
 .about-section-container {
-  position: absolute;
-  top: 10%;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 10rem;
 }
 
+/* =========================================
+   ABOUT HEADER
+========================================= */
+
 .about-section-header {
+  width: 100%;
   font-size: 2.5rem;
   text-align: center;
   padding: 2rem;
-  width: 100vw;
   background-color: rgb(199, 8, 8);
   color: white;
 }
 
+/* =========================================
+   DENTIST SECTION
+========================================= */
+
 .about-dentist-container {
+  width: 100%;
   padding: 3rem;
   display: flex;
   flex-direction: column;
@@ -30,6 +45,7 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  text-align: center;
 }
 
 .about-dentist-header1 {
@@ -42,21 +58,21 @@
   font-weight: 100;
 }
 
+/* =========================================
+   DENTIST CARD
+========================================= */
+
 .about-dentist-card-container {
   display: flex;
-}
-
-.about-dentist-content {
-  padding: 5rem 4rem;
-  background-color: rgb(199, 8, 8);
-  border-top-right-radius: 2rem;
-  border-bottom-right-radius: 2rem;
+  max-width: 1200px;
 }
 
 .dentist-image-container {
   width: 400px;
   height: 550px;
+  flex-shrink: 0;
 }
+
 .dentist-pic {
   width: 100%;
   height: 100%;
@@ -64,7 +80,14 @@
   border-top-left-radius: 2rem;
   border-bottom-left-radius: 2rem;
 }
+
 .about-dentist-content {
+  flex: 1;
+  padding: 5rem 4rem;
+  background-color: rgb(199, 8, 8);
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -90,7 +113,7 @@
 
 .about-card-buttons {
   display: flex;
-  margin-top: 2rem;
+  margin-top: 3rem;
   gap: 2rem;
 }
 
@@ -114,12 +137,19 @@
   color: rgb(199, 8, 8);
 }
 
+/* =========================================
+   FEATURE SECTION
+========================================= */
+
 .about-feature-container {
+  width: 100%;
   background-color: rgb(199, 8, 8);
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   gap: 8rem;
   padding: 5rem;
   margin-top: 10rem;
@@ -128,54 +158,73 @@
 .swiss-way {
   color: white;
 }
-.why-header {
-  font-size: 1.8rem;
-  width: 70rem;
-}
-.view-header {
-  color: white;
-  cursor: pointer;
-  align-self: flex-end;
-}
-.view-header-link {
-  color: white;
-}
-.view-header-link:hover {
-  text-decoration: underline;
-}
+
 .about-feature-header {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
+
 .about-feature-header2 {
-  display: flex;
-  gap: 30rem;
-}
-.about-feature-cards-container {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-}
-.about-feature-cards-container {
-  display: flex;
-  justify-content: center;
   align-items: center;
   gap: 3rem;
 }
 
+.why-header {
+  font-size: 1.8rem;
+}
+
+.view-header {
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.view-header-link {
+  color: white;
+}
+
+.view-header-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   FEATURE CARDS
+========================================= */
+
+.about-feature-cards-container {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 3rem;
+}
+
 .feature-cards {
+  width: 100%;
+  min-width: 0;
+
   background-color: white;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   gap: 3rem;
   padding: 5rem 2rem;
+
   border-radius: 2rem;
+
   animation: fadeUp 0.8s ease forwards;
 }
 
 .about-feature-p {
-  width: 25rem;
+  width: 100%;
   font-size: 1.3rem;
   color: rgb(131, 132, 133);
 }
@@ -187,232 +236,298 @@
   background-color: rgb(255, 184, 184);
   border-radius: 1rem;
 }
+
 .about-feature-logo {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
+/* =========================================
+   ANIMATION
+========================================= */
+
 @keyframes fadeUp {
   from {
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+/* =========================================
+   1300px
+========================================= */
+
 @media (max-width: 1300px) {
-  .why-header {
-    font-size: 1.8rem;
-    width: 50rem;
+  .about-dentist-card-container {
+    max-width: 1000px;
   }
-  .about-feature-header2 {
-    display: flex;
-    gap: 10rem;
+
+  .dentist-image-container {
+    width: 350px;
+    height: 500px;
   }
+
+  .about-dentist-content {
+    padding: 4rem 3rem;
+  }
+
+  .content-header2 {
+    font-size: 2.2rem;
+  }
+
+  .dentist-statement {
+    font-size: 1.4rem;
+  }
+
   .about-feature-cards-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* =========================================
+   1000px
+========================================= */
 
 @media (max-width: 1000px) {
   html {
     font-size: 45%;
   }
 
+  .about-dentist-card-container {
+    max-width: 850px;
+  }
+
   .dentist-image-container {
-    width: 350px;
+    width: 320px;
     height: 450px;
   }
+
+  .about-dentist-content {
+    padding: 3rem;
+  }
+
+  .about-feature-container {
+    padding: 5rem 3rem;
+  }
 }
+
+/* =========================================
+   700px
+========================================= */
 
 @media (max-width: 700px) {
   html {
     font-size: 45%;
   }
-  .dentist-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-top-left-radius: 2rem;
-    border-top-right-radius: 2rem;
-    border-bottom-left-radius: 0rem;
+
+  .about-section-container {
+    padding-top: 8rem;
   }
 
-  .about-dentist-content {
-    padding: 5rem 4rem;
-    background-color: rgb(199, 8, 8);
-    border-top-right-radius: 0rem;
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
+  .about-section-header {
+    font-size: 2rem;
+  }
+
+  .about-dentist-container {
+    padding: 3rem 2rem;
+    gap: 4rem;
+  }
+
+  .about-dentist-header1 {
+    font-size: 2.2rem;
+  }
+
+  .about-dentist-header2 {
+    font-size: 1.2rem;
+  }
+
+  /* Dentist card */
+  .about-dentist-card-container {
+    width: 100%;
+    max-width: 500px;
+
+    display: flex;
+    flex-direction: column;
   }
 
   .dentist-image-container {
-    width: 500px;
-    height: 600px;
+    width: 100%;
+    height: 500px;
   }
-  .about-dentist-card-container {
-    display: flex;
-    flex-direction: column;
+
+  .dentist-pic {
+    border-radius: 2rem 2rem 0 0;
+  }
+
+  .about-dentist-content {
+    width: 100%;
+    padding: 4rem 3rem;
+
+    border-radius: 0 0 2rem 2rem;
+
+    align-items: center;
+    text-align: center;
+  }
+
+  .content-header2 {
+    width: 100%;
+    font-size: 2.2rem;
+  }
+
+  .dentist-statement {
+    width: 100%;
+    font-size: 1.4rem;
   }
 
   .about-card-buttons {
-    display: flex;
+    width: 100%;
     flex-direction: column;
-    margin-top: 2rem;
-    gap: 2rem;
-  }
-  .about-dentist-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
+    gap: 1.5rem;
   }
 
   .about-view-button,
   .about-learn-button {
     width: 100%;
-    padding: 1rem 10rem;
-    border: none;
-    border-radius: 2rem;
-    font-size: 1.5rem;
-    background-color: white;
-    cursor: pointer;
-    transition: 0.5s;
+    padding: 1.2rem 2rem;
   }
 
-  .about-feature-img-container {
-    width: 50px;
-    height: 50px;
-    padding: 10px;
-    background-color: rgb(255, 184, 184);
-    border-radius: 1rem;
+  /* Feature section */
+  .about-feature-container {
+    width: 100%;
+    gap: 5rem;
+    padding: 5rem 2rem;
+    margin-top: 6rem;
   }
 
-  .about-dentist-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+  .about-feature-header {
+    width: 100%;
+    text-align: center;
   }
-  .dentist-statement {
-    color: white;
-    font-size: 1.5rem;
-    width: 60rem;
-    margin-top: 1rem;
-  }
-  .why-header {
-    font-size: 1.5rem;
-    width: 30rem;
-  }
+
   .about-feature-header2 {
-    display: flex;
-    gap: 10rem;
+    width: 100%;
+    flex-direction: column;
+    gap: 2rem;
   }
+
+  .why-header {
+    width: 100%;
+    font-size: 1.5rem;
+  }
+
+  .view-header {
+    align-self: center;
+  }
+
+  /* One card per row */
   .about-feature-cards-container {
+    width: 100%;
+    max-width: 500px;
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+
+    gap: 2rem;
+  }
+
+  .feature-cards {
+    width: 100%;
+    padding: 4rem 2rem;
+  }
+
+  .about-feature-p {
+    width: 100%;
   }
 }
+
+/* =========================================
+   550px
+========================================= */
 
 @media (max-width: 550px) {
   html {
     font-size: 40%;
   }
-  .dentist-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-top-left-radius: 2rem;
-    border-top-right-radius: 2rem;
-    border-bottom-left-radius: 0rem;
+
+  .about-section-header {
+    font-size: 1.8rem;
+    padding: 1.8rem;
   }
 
-  .about-dentist-content {
-    padding: 5rem 4rem;
-    background-color: rgb(199, 8, 8);
-    border-top-right-radius: 0rem;
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
+  .about-dentist-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .about-dentist-header1 {
+    font-size: 2rem;
+  }
+
+  .about-dentist-header2 {
+    font-size: 1.1rem;
+  }
+
+  .about-dentist-card-container {
+    max-width: 330px;
   }
 
   .dentist-image-container {
-    width: 330px;
+    width: 100%;
     height: 400px;
   }
-  .about-dentist-card-container {
-    display: flex;
-    flex-direction: column;
+
+  .about-dentist-content {
+    padding: 4rem 2rem;
   }
 
-  .about-card-buttons {
-    display: flex;
-    flex-direction: column;
-    margin-top: 2rem;
-    gap: 2rem;
+  .content-header2 {
+    font-size: 2rem;
   }
-  .about-dentist-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
+
+  .dentist-statement {
+    font-size: 1.3rem;
   }
 
   .about-view-button,
   .about-learn-button {
-    width: 100%;
-    padding: 1rem 10rem;
-    border: none;
-    border-radius: 2rem;
-    font-size: 1.5rem;
-    background-color: white;
-    cursor: pointer;
-    transition: 0.5s;
+    font-size: 1.4rem;
+    padding: 1.2rem 2rem;
   }
 
-  .about-dentist-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+  .about-feature-container {
+    width: 100%;
+    padding: 4rem 1.5rem;
+    gap: 4rem;
   }
-  .dentist-statement {
-    color: white;
-    font-size: 1.5rem;
-    width: 40rem;
-    margin-top: 1rem;
-  }
+
   .why-header {
     font-size: 1.3rem;
-    width: 20rem;
   }
-  .about-feature-header2 {
-    display: flex;
-    gap: 10rem;
-  }
-  .about-feature-p {
-    width: 20rem;
-    font-size: 1.3rem;
-    color: rgb(131, 132, 133);
-  }
+
   .about-feature-cards-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-  .about-feature-container {
-    background-color: rgb(199, 8, 8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5rem;
-    padding: 5rem 2rem;
+
+  .feature-cards {
+    width: 100%;
+    padding: 3rem 2rem;
+    gap: 2rem;
+  }
+
+  .about-feature-img-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .about-feature-p {
+    width: 100%;
+    font-size: 1.3rem;
   }
 }

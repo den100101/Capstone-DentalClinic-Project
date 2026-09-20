@@ -61,7 +61,9 @@ function About() {
                   </button>
                 </div>
                 <div>
-                  <button className="about-learn-button">Learn More</button>
+                  <button className="about-learn-button">
+                    <Link to="/article">Learn More</Link>
+                  </button>
                 </div>
               </div>
             </div>

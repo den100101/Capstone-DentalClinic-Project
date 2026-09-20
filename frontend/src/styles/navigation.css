@@ -5,104 +5,172 @@
   top: 0;
   left: 0;
   width: 100%;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 1rem 4rem;
   background-color: white;
   z-index: 2000;
 }
 
-.burger-bar {
-  width: 100%;
-  max-width: 6rem;
-  display: none;
+.navs {
+  display: flex;
+  align-items: center;
 }
+
+.burger-bar {
+  width: 4rem;
+  display: none;
+  cursor: pointer;
+  z-index: 3000;
+}
+
 .swiss-logo {
-  width: 100%;
-  max-width: 8rem;
-  position: absolute;
-  top: 10%;
-  transform: translatey(10%);
+  width: 8rem;
+
+  position: static;
+  top: 50%;
   left: 50%;
+
+  transform: none;
 }
 
 .navs ul {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  font-size: 2rem;
+
+  gap: 1.5rem;
+  font-size: 1.8rem;
+
   padding: 3rem 1rem;
 }
 
-.navs ul li {
-  cursor: pointer;
-  transition: 0.5s;
-  padding: 0.4rem 2rem;
+.nav-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.navs ul li:hover {
+.navs ul li a {
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 0.5rem 1rem;
+}
+
+.navs ul li a:hover {
   background-color: rgb(199, 8, 8);
   color: white;
-  padding: 0.4rem 2rem;
   border-radius: 2rem;
+  padding: 0.5rem 1rem;
 }
+
 .mobile-link-a {
   color: white;
 }
 
 .right-buttons {
+  margin-left: auto;
+
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: center;
   gap: 2rem;
 }
 
 .book-button,
 .login-button {
   font-size: 1.5rem;
+
   padding: 1rem 3.5rem;
+
   border: none;
   background-color: rgb(199, 8, 8);
   color: white;
+
   border-radius: 2rem;
   cursor: pointer;
+
   transition: 0.5s;
+
+  white-space: nowrap;
 }
 
 .book-button:hover,
 .login-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
+
+/* =========================================
+   MOBILE NAV
+========================================= */
 
 .mobile-nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 120px;
+  width: 100%;
   height: 100vh;
   background-color: rgb(199, 8, 8);
   color: white;
   font-size: 2rem;
+
   transform: translateX(-100%);
   opacity: 0;
+
   transition:
     transform 0.4s ease,
     opacity 0.4s ease;
-  z-index: 1000;
+
+  z-index: 2500;
+}
+
+.mobile-nav.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.mobile-nav ul {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3rem;
+
+  padding: 10rem 3rem;
 }
 
 .mobile-nav ul li {
+  padding: 1rem 2rem;
+
+  cursor: pointer;
+  border-radius: 2rem;
+
   transition: 0.5s;
-  z-index: 1000;
 }
+
 .mobile-nav ul li:hover {
   background-color: white;
   color: rgb(199, 8, 8);
-  padding: 1rem 2rem;
-  border-radius: 2rem;
 }
+
+.mobile-nav ul li a {
+  color: white;
+}
+
+.mobile-nav ul li:hover a {
+  color: rgb(199, 8, 8);
+}
+
+/* =========================================
+   1500px
+========================================= */
 
 @media (max-width: 1500px) {
   html {
@@ -110,37 +178,25 @@
   }
 
   .navs ul {
-    gap: 3rem;
+    gap: 1rem;
+  }
+
+  .navs ul li {
+    padding: 0.4rem 1.5rem;
   }
 }
+
+/* =========================================
+   1350px
+========================================= */
 
 @media (max-width: 1350px) {
   html {
     font-size: 56%;
   }
+
   .nav-container {
-    padding: 3rem;
-  }
-
-  .mobile-nav.active {
-    transform: translateX(0);
-    opacity: 1;
-    z-index: 1000;
-  }
-
-  .burger-bar.active {
-    position: absolute;
-    top: 4%;
-    left: 100%;
-    z-index: 1000;
-  }
-
-  .mobile-nav.active ul {
-    display: flex;
-    flex-direction: column;
-    gap: 5rem;
-    padding: 8rem;
-    z-index: 1000;
+    padding: 2rem 3rem;
   }
 
   .navs ul {
@@ -149,49 +205,125 @@
 
   .burger-bar {
     display: block;
-    width: 4rem;
   }
 }
+
+/* =========================================
+   1100px
+========================================= */
+
+@media (max-width: 1100px) {
+  .nav-container {
+    padding: 1.5rem 2rem;
+  }
+
+  .right-buttons {
+    gap: 1rem;
+  }
+
+  .book-button,
+  .login-button {
+    font-size: 1.4rem;
+    padding: 0.9rem 2.5rem;
+  }
+
+  .swiss-logo {
+    width: 7rem;
+  }
+}
+
+/* =========================================
+   1000px
+========================================= */
 
 @media (max-width: 1000px) {
   html {
     font-size: 50%;
   }
+
+  .nav-container {
+    padding: 1.5rem 2rem;
+  }
+
+  .burger-bar {
+    width: 3.5rem;
+  }
+
+  .swiss-logo {
+    width: 6.5rem;
+  }
+
+  .book-button,
+  .login-button {
+    font-size: 1.3rem;
+    padding: 0.8rem 2rem;
+  }
 }
+
+/* =========================================
+   700px
+========================================= */
 
 @media (max-width: 700px) {
   html {
     font-size: 45%;
   }
+
+  .nav-container {
+    padding: 1.5rem;
+  }
+
   .swiss-logo {
-    left: 45%;
+    width: 6rem;
   }
-  .mobile-nav {
-    width: 150px;
+
+  .burger-bar {
+    width: 3.2rem;
   }
-  .mobile-nav.active ul {
-    padding: 8rem 4rem;
+
+  .right-buttons {
+    gap: 0.8rem;
+  }
+
+  .book-button,
+  .login-button {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .mobile-nav ul {
+    padding: 9rem 2rem;
   }
 }
+
+/* =========================================
+   500px
+========================================= */
 
 @media (max-width: 500px) {
   html {
     font-size: 40%;
   }
-  .swiss-logo {
-    left: 45%;
+
+  .nav-container {
+    padding: 1.2rem 1.5rem;
   }
 
-  .book-button {
-    font-size: 1.5rem;
-    padding: 1rem 2rem;
+  .swiss-logo {
+    width: 5.5rem;
   }
-  .mobile-nav {
-    width: 120px;
-    z-index: 1000;
+
+  .burger-bar {
+    width: 3rem;
   }
-  .mobile-nav.active ul {
-    padding: 8rem 4rem;
-    z-index: 1000;
+
+  .book-button,
+  .login-button {
+    font-size: 1.1rem;
+    padding: 0.7rem 1.2rem;
+  }
+  .mobile-nav ul {
+    padding: 8rem 1.5rem;
+    gap: 1.5rem;
   }
 }

@@ -8,41 +8,58 @@ function Navigation({ isLoggedin, setIsLoggedin }) {
   const [loginModal, setLoginModal] = useState(false);
 
   const location = useLocation();
+
+  function closeNav() {
+    setNavOpen(false);
+  }
+
   return (
     <>
       <div className="nav-container">
+        {/* LEFT SIDE */}
         <div className="navs">
+          {/* Desktop Navigation */}
           <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
+
             <li>
               <Link to="/about">About</Link>
             </li>
+
             <li>
               <Link to="/services">Services</Link>
             </li>
+
             <li>
               <Link to="/article">Article</Link>
             </li>
-            <Link to="/contactus">Contact Us</Link>
+
+            <li>
+              <Link to="/contactus">Contact Us</Link>
+            </li>
           </ul>
+
+          {/* Mobile Burger */}
           <img
             src="/Images/burger-bar.png"
-            alt=""
+            alt="Open navigation menu"
             className="burger-bar"
             onClick={() => setNavOpen(!navOpen)}
           />
         </div>
 
+        {/* LOGO */}
         <div className="nav-logo">
           <img
             src="/Images/SwissLogo.png"
-            alt="swiss-logo"
+            alt="Swiss Dental Clinic"
             className="swiss-logo"
           />
         </div>
 
+        {/* RIGHT SIDE */}
         <div className="right-buttons">
           {location.pathname !== "/appointment" && (
             <Link to="/appointment" className="book-button">
@@ -56,50 +73,56 @@ function Navigation({ isLoggedin, setIsLoggedin }) {
                 Dashboard
               </Link>
             ) : (
-              <Link
-                to="/appointment"
-                onClick={() => setLoginModal(true)}
+              <button
                 className="login-button"
+                onClick={() => setLoginModal(true)}
               >
                 Login
-              </Link>
+              </button>
             ))}
         </div>
 
+        {/* MOBILE NAVIGATION */}
         <div className={`mobile-nav ${navOpen ? "active" : ""}`}>
           <ul>
-            <img
-              src="/Images/burger-bar.png"
-              alt=""
-              className="burger-bar active"
-              onClick={() => setNavOpen(!navOpen)}
-            />
             <li>
-              <Link to="/" className="mobile-link-a">
+              <Link to="/" className="mobile-link-a" onClick={closeNav}>
                 Home
               </Link>
             </li>
+
             <li>
-              <Link to="/about" className="mobile-link-a">
+              <Link to="/about" className="mobile-link-a" onClick={closeNav}>
                 About
               </Link>
             </li>
+
             <li>
-              <Link to="/services" className="mobile-link-a">
+              <Link to="/services" className="mobile-link-a" onClick={closeNav}>
                 Services
               </Link>
             </li>
+
             <li>
-              <Link to="/article" className="mobile-link-a">
+              <Link to="/article" className="mobile-link-a" onClick={closeNav}>
                 Article
               </Link>
             </li>
-            <Link to="/contactus" className="mobile-link-a">
-              Contact Us
-            </Link>
+
+            <li>
+              <Link
+                to="/contactus"
+                className="mobile-link-a"
+                onClick={closeNav}
+              >
+                Contact Us
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
+
+      {/* LOGIN MODAL */}
       {loginModal && (
         <Login closeModal={setLoginModal} setIsLoggedin={setIsLoggedin} />
       )}
