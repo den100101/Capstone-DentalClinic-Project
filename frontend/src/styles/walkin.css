@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999999;
 }
 .walkin-modal-container {
   background-color: white;
@@ -19,6 +20,7 @@
   gap: 5rem;
   padding: 4rem 5rem;
   border-radius: 2rem;
+  z-index: 99999;
 }
 .walkin-modal-inputs-container {
   display: flex;
@@ -92,4 +94,134 @@
 }
 .walkin-buttons:hover {
   transform: scale(1.1);
+}
+
+@media (max-width: 900px) {
+  .walkin-modal-background {
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  .walkin-modal-container {
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    padding: 3rem;
+    gap: 3rem;
+    box-sizing: border-box;
+    overflow-y: scroll;
+  }
+
+  .walkin-modal-inputs-container {
+    width: 100%;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .walkin-modal-left-inputs,
+  .walkin-modal-right-inputs {
+    width: 100%;
+  }
+
+  .walkin-left-inputs,
+  .walkin-right-inputs {
+    width: 100%;
+  }
+
+  .walkin-modal-right-inputs {
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .walkin-right-inputs-container {
+    width: 100%;
+  }
+
+  .walkin-inputs {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 600px) {
+  .walkin-modal-background {
+    padding: 1rem;
+  }
+
+  .walkin-modal-container {
+    width: 95%;
+    max-height: 92vh;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .walkin-modal-inputs-container {
+    gap: 1.5rem;
+  }
+
+  .walkin-modal-left-inputs,
+  .walkin-modal-right-inputs,
+  .walkin-right-inputs-container {
+    width: 100%;
+  }
+
+  .walkin-modal-right-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .walkin-right-inputs-container {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .walkin-inputs {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .walkin-label {
+    font-size: 1.4rem;
+  }
+
+  .walkin-inputs {
+    font-size: 1.4rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .walkin-modal-container-buttons {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .walkin-buttons {
+    flex: 1;
+    padding: 0.8rem 2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .walkin-modal-container {
+    width: 96%;
+    padding: 1.5rem;
+  }
+
+  .walkin-modal-right-inputs {
+    flex-direction: column;
+  }
+
+  .walkin-right-inputs-container {
+    width: 100%;
+  }
+
+  .walkin-modal-container-buttons {
+    flex-direction: column;
+  }
+
+  .walkin-buttons {
+    width: 100%;
+  }
 }

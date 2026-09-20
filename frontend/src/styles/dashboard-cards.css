@@ -44,19 +44,9 @@
   font-weight: 700;
   color: #111827;
 }
-
 @media (max-width: 1750px) {
   .dashboard-cards-container {
     gap: 5rem;
-  }
-}
-
-@media (max-width: 1500px) {
-  html {
-    font-size: 55%;
-  }
-  .dashboard-cards {
-    padding: 2rem 8rem 2rem 2rem;
   }
 }
 
@@ -64,16 +54,28 @@
   html {
     font-size: 50%;
   }
+
   .dashboard-cards-container {
     gap: 3rem;
   }
-}
-@media (max-width: 1000px) {
-  html {
-    font-size: 45%;
+
+  .dashboard-cards {
+    width: 240px;
   }
+}
+
+@media (max-width: 1100px) {
   .dashboard-cards-container {
-    gap: 4rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .dashboard-cards {
+    width: auto;
+    height: 180px;
+    padding: 2rem;
   }
 }
 
@@ -81,8 +83,39 @@
   html {
     font-size: 40%;
   }
+
+  .dashboard-cards-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
   .dashboard-cards {
-    padding: 2rem 5rem 2rem 2rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 160px;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-cards-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  .dashboard-cards {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    box-sizing: border-box;
   }
 }
 
@@ -90,13 +123,22 @@
   html {
     font-size: 35%;
   }
-  .dashboard-cards {
-    padding: 2rem 5rem 2rem 2rem;
-  }
+
   .dashboard-cards-container {
-    gap: 2rem;
+    width: 100%;
+    gap: 1.5rem;
   }
+
   .dashboard-cards {
-    padding: 2rem 2rem 2rem 2rem;
+    width: 100%;
+    max-width: 340px;
+    min-width: 0;
+    height: 150px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .dashboard-number {
+    font-size: 2rem;
   }
 }

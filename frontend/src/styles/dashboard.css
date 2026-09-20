@@ -295,15 +295,21 @@
 
   .chart-card {
     width: 100%;
-    max-width: 900px;
+    max-width: none;
     height: 400px;
     flex: none;
   }
 
   .todays-appointment-container {
     width: 100%;
-    min-width: 600px;
+    min-width: 0;
     flex: none;
+
+    overflow-x: auto;
+  }
+
+  .todays-appointment-table {
+    min-width: 700px;
   }
 }
 
@@ -373,26 +379,141 @@
   }
 
   .todays-appointment-container {
-    min-width: 600px;
+    width: 100%;
+    min-width: 0;
   }
 
   .todays-appointment-table {
-    min-width: 600px;
+    min-width: 650px;
   }
 }
+@media (max-width: 700px) {
+  .todays-appointment-container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 15px;
+  }
 
+  .todays-appointment-table {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+  }
+
+  /* Hide desktop headers */
+  .todays-appointment-table thead {
+    display: none;
+  }
+
+  .todays-appointment-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  /* Each appointment becomes a card */
+  .todays-appointment-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+
+    width: 100%;
+    min-height: 70px;
+
+    padding: 1.2rem 1.4rem;
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #ececec;
+  }
+
+  .todays-appointment-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  /* Remove normal table-cell styling */
+  .todays-appointment-table td {
+    padding: 0;
+    border: none;
+    background: transparent;
+    white-space: nowrap;
+  }
+
+  /* Patient name */
+  .todays-appointment-table td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Time */
+  .todays-appointment-table td:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+
+    margin-top: 0.3rem;
+
+    font-size: 1.2rem;
+    color: #6b7280;
+  }
+
+  /* Treatment */
+  .todays-appointment-table td:nth-child(3) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+
+    align-self: center;
+
+    max-width: 120px;
+
+    font-size: 1.2rem;
+    font-weight: 600;
+
+    text-align: right;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Remove alternating row backgrounds */
+  .todays-appointment-table tbody tr:nth-child(even) td,
+  .todays-appointment-table tbody tr:hover td {
+    background: transparent;
+  }
+
+  /* No appointments message */
+  .todays-appointment-table .no-data {
+    display: block;
+    grid-column: 1 / -1;
+
+    padding: 3rem 1rem;
+
+    text-align: center;
+    color: #6b7280;
+  }
+}
 @media (max-width: 550px) {
   html {
     font-size: 35%;
   }
 
   .dashboard-container {
-    padding: 2rem 1.5rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 2rem 1rem;
     gap: 2.5rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .dashboard-header-container {
-    gap: 2rem;
+    width: 100%;
+    gap: 3rem;
   }
 
   .dashboard-header h1 {
@@ -401,11 +522,14 @@
 
   .dashboard-header-p {
     font-size: 1.4rem;
+    max-width: 350px;
   }
 
   .dashboard-header-buttons {
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
+    max-width: 330px;
   }
 
   .dashboard-buttons {
@@ -427,12 +551,20 @@
   }
 
   .chart-card {
+    width: 100%;
+    max-width: 100%;
+    height: 320px;
     padding: 1rem;
     border-radius: 15px;
+    box-sizing: border-box;
   }
 
   .todays-appointment-container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     border-radius: 15px;
+    overflow: hidden;
   }
 
   .table-title {
@@ -449,7 +581,8 @@
   }
 
   .todays-appointment-table {
-    min-width: 450px;
+    width: 100%;
+    min-width: 0;
   }
 
   .todays-appointment-table th {
@@ -460,5 +593,13 @@
   .todays-appointment-table td {
     padding: 14px;
     font-size: 1.4rem;
+  }
+
+  .todays-appointment-table .no-data {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3rem 1rem;
+    text-align: center;
+    white-space: normal;
   }
 }

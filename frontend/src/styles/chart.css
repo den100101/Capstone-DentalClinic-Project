@@ -11,3 +11,10 @@
     height: 350px;
   }
 }
+
+@media (max-width: 500px) {
+  .chart {
+    width: 300px;
+    height: 250px;
+  }
+}
