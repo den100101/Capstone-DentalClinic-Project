@@ -3,6 +3,7 @@ import "./styles/sidenav.css";
 import Dashboard from "./components/dashboard";
 import PatientAppointments from "./components/patientAppointments";
 import Patients from "./components/patients";
+import Notifications from "./components/notifications";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -86,10 +87,7 @@ function Admin({ setIsLoggedin }) {
                     key={patient.id}
                     className="search-item"
                     onClick={() => {
-                      console.log(
-                        "Admin selected:",
-                        patient.patient_name
-                      );
+                      console.log("Admin selected:", patient.patient_name);
 
                       setSearch(patient.patient_name);
                       setSelectedPatient(patient.patient_name);
@@ -105,13 +103,10 @@ function Admin({ setIsLoggedin }) {
           </div>
         </div>
         <div className="right-nav-section">
-          <div>
-            <img
-              src="/Images/notify.png"
-              alt="notif-icon"
-              className="notify-icon"
-            />
-          </div>
+          <Notifications
+            API_URL={API_URL}
+            setActiveComponent={setActiveComponent}
+          />
           <div className="nav-right-admin-section">
             <div className="admin-panel-header2">
               <h1>Admin Panel</h1>

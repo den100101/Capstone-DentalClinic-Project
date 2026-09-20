@@ -2,7 +2,7 @@ from flask import request, jsonify, session
 import os
 from dotenv import load_dotenv
 from config import app,db,mail
-from models import User,Patient,Appointment,ToothRecord,AppointmentBalance
+from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification
 from datetime import datetime, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -260,6 +260,17 @@ def new_appointment():
 
 
     db.session.add(new_appointment)
+    db.session.commit()
+    
+
+    notification = Notification(
+        message=f"{patient.name} requested an appointment.",
+        notification_type="appointment",
+    appointment_id=new_appointment.id,
+    is_read=False
+    )
+    
+    db.session.add(notification)
     db.session.commit()
 
     return jsonify({
@@ -676,6 +687,94 @@ def pay_next_appointment(patient_id):
     return jsonify({
         "message": "Next appointment marked as paid",
         "appointment_balance": appointment_balance.to_json()
+    }), 200
+
+# NOTIFICATION ROUTES
+
+@app.route("/get_notifications", methods=["GET"])
+def get_notifications():
+
+    notifications = Notification.query.order_by(
+        Notification.created_at.desc()
+    ).all()
+
+    unread_count = Notification.query.filter_by(
+        is_read=False
+    ).count()
+
+    return jsonify({
+        "notifications": [
+            notification.to_json()
+            for notification in notifications
+        ],
+        "unread_count": unread_count
+    }), 200
+    
+
+@app.route("/read_notification/<int:id>", methods=["PATCH"])
+def read_notification(id):
+
+    notification = db.session.get(Notification, id)
+
+    if not notification:
+        return jsonify({
+            "message": "Notification not found"
+        }), 404
+
+    notification.is_read = True
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Notification marked as read",
+        "notification": notification.to_json()
+    }), 200
+
+
+@app.route("/read_all_notifications", methods=["PATCH"])
+def read_all_notifications():
+
+    notifications = Notification.query.filter_by(
+        is_read=False
+    ).all()
+
+    for notification in notifications:
+        notification.is_read = True
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "All notifications marked as read"
+    }), 200
+    
+
+@app.route("/delete_notification/<int:id>", methods=["DELETE"])
+def delete_notification(id):
+
+    notification = db.session.get(Notification, id)
+
+    if not notification:
+        return jsonify({
+            "message": "Notification not found"
+        }), 404
+
+    db.session.delete(notification)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Notification deleted successfully"
+    }), 200
+    
+
+@app.route("/delete_all_notifications", methods=["DELETE"])
+def delete_all_notifications():
+
+    Notification.query.delete()
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "All notifications deleted successfully"
     }), 200
 
 

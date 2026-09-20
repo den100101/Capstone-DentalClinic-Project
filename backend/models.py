@@ -1,4 +1,5 @@
 from config import db
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -177,4 +178,36 @@ class AppointmentBalance(db.Model):
             "balance": self.balance,
             "next_balance": self.next_balance,
             "isPaid": self.isPaid
+        }
+        
+class Notification(db.Model):
+    __tablename__ = 'notifications'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(255), nullable=False)
+    notification_type = db.Column(db.String(50), nullable=False)
+    appointment_id = db.Column(
+        db.Integer,
+        db.ForeignKey("appointments.id"),
+        nullable=True
+    )
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow,
+        nullable = False
+    )
+    appointment = db.relationship(
+        "Appointment",
+        backref="notifications"
+    )
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "message": self.message,
+            "notification_type": self.notification_type,
+            "appointment_id": self.appointment_id,
+            "is_read": self.is_read,
+            "created_at": self.created_at.isoformat()
         }
