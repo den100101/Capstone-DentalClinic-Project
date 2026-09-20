@@ -304,7 +304,7 @@ function Appointment() {
                         name="height"
                         value={height}
                         onChange={(e) => setHeight(e.target.value)}
-                        placeholder="Height in ft"
+                        placeholder="Height in ft eg. 5.3"
                         required
                         className="inputs short"
                       />

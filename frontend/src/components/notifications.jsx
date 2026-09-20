@@ -38,24 +38,77 @@ function Notifications({ API_URL, setActiveComponent }) {
 
   async function handleNotificationClick(notification) {
     try {
-      await fetch(`${API_URL}/read_notification/${notification.id}`, {
-        method: "PATCH",
-        credentials: "include",
-      });
+      if (!notification.is_read) {
+        const response = await fetch(
+          `${API_URL}/read_notification/${notification.id}`,
+          {
+            method: "PATCH",
+            credentials: "include",
+          },
+        );
 
-      setNotifications((prev) =>
-        prev.map((item) =>
-          item.id === notification.id ? { ...item, is_read: true } : item,
-        ),
-      );
+        if (response.ok) {
+          setNotifications((prev) =>
+            prev.map((item) =>
+              item.id === notification.id ? { ...item, is_read: true } : item,
+            ),
+          );
 
-      setUnreadCount((prev) => Math.max(prev - 1, 0));
+          setUnreadCount((prev) => Math.max(prev - 1, 0));
+        }
+      }
     } catch (error) {
       console.error("Error marking notification as read:", error);
     }
 
     setActiveComponent("Appointments");
     setShowNotifications(false);
+  }
+
+  async function handleDeleteNotification(e, notificationId) {
+    e.stopPropagation();
+
+    try {
+      const response = await fetch(
+        `${API_URL}/delete_notification/${notificationId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
+
+      if (response.ok) {
+        const deletedNotification = notifications.find(
+          (notification) => notification.id === notificationId,
+        );
+
+        setNotifications((prev) =>
+          prev.filter((notification) => notification.id !== notificationId),
+        );
+
+        if (deletedNotification && !deletedNotification.is_read) {
+          setUnreadCount((prev) => Math.max(prev - 1, 0));
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+    }
+  }
+
+  async function handleDeleteAll() {
+    try {
+      const response = await fetch(`${API_URL}/delete_all_notifications`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setNotifications([]);
+        setUnreadCount(0);
+      }
+    } catch (error) {
+      console.error("Error deleting all notifications:", error);
+    }
   }
 
   async function handleReadAll() {
@@ -107,9 +160,13 @@ function Notifications({ API_URL, setActiveComponent }) {
             <span>{notifications.length} total</span>
           </div>
 
-          {unreadCount > 0 && (
-            <div className="notification-read-all">
-              <button onClick={handleReadAll}>Mark all as read</button>
+          {notifications.length > 0 && (
+            <div className="notification-actions">
+              {unreadCount > 0 && (
+                <button onClick={handleReadAll}>Mark all as read</button>
+              )}
+
+              <button onClick={handleDeleteAll}>Delete all</button>
             </div>
           )}
 
@@ -142,6 +199,15 @@ function Notifications({ API_URL, setActiveComponent }) {
                       {new Date(notification.created_at).toLocaleString()}
                     </span>
                   </div>
+
+                  <button
+                    className="notification-delete"
+                    onClick={(e) =>
+                      handleDeleteNotification(e, notification.id)
+                    }
+                  >
+                    Delete
+                  </button>
                 </div>
               ))
             )}
