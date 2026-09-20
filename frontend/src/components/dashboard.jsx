@@ -12,6 +12,7 @@ function Dashboard() {
   const [todaysAppointmentsCount, setTodaysAppointmentsCount] = useState(0);
   const [pendingAppointmentsCount, setPendingAppointmentsCount] = useState(0);
   const [openReportModal, setOpenReportModal] = useState(false);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
 
   async function GetTodaysAppointment() {
     const response = await fetch(`${API_URL}/get_todays_appointments`, {
@@ -40,9 +41,26 @@ function Dashboard() {
     setPendingAppointmentsCount(data.pending_count);
   }
 
+  async function GetMonthlyRevenue() {
+    const response = await fetch(`${API_URL}/get_monthly_revenue`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message);
+      return;
+    }
+
+    setMonthlyRevenue(data.monthly_revenue);
+  }
+
   useEffect(() => {
     GetTodaysAppointment();
     GetPendingAppointments();
+    GetMonthlyRevenue();
   }, []);
 
   return (
@@ -61,7 +79,7 @@ function Dashboard() {
             </div>
           </div>
           <div className="dashboard-header-buttons">
-           <div
+            <div
               className="dashboard-buttons generate"
               onClick={() => setOpenReportModal(true)}
             >
@@ -105,7 +123,7 @@ function Dashboard() {
               <h1>Monthly Revenue</h1>
             </div>
             <div>
-              <h2 className="dashboard-number">₱24,000</h2>
+              <h2 className="dashboard-number">{monthlyRevenue}</h2>
             </div>
           </div>
           <div className="dashboard-cards">
@@ -195,7 +213,7 @@ function Dashboard() {
       {openReportModal && (
         <GenerateReport
           closeModal={() => setOpenReportModal(false)}
-          monthlyRevenue={24000}
+          monthlyRevenue={monthlyRevenue}
           todaysAppointmentsCount={todaysAppointmentsCount}
           pendingAppointmentsCount={pendingAppointmentsCount}
           todaysAppointments={todaysAppointments}

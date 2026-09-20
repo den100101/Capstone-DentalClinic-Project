@@ -179,7 +179,24 @@ class AppointmentBalance(db.Model):
             "next_balance": self.next_balance,
             "isPaid": self.isPaid
         }
-        
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    payment_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    patient = db.relationship("Patient", backref="payments")
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "patient_id": self.patient_id,
+            "amount": self.amount,
+            "payment_date": self.payment_date.isoformat()
+        }
+            
+            
 class Notification(db.Model):
     __tablename__ = 'notifications'
     

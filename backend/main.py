@@ -2,7 +2,7 @@ from flask import request, jsonify, session
 import os
 from dotenv import load_dotenv
 from config import app,db,mail
-from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification
+from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification,Payment
 from datetime import datetime, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -677,9 +677,16 @@ def pay_next_appointment(patient_id):
         return jsonify({
             "message": "Main balance is lower than the next appointment balance"
         }), 400
+        
+    payment = Payment(
+        patient_id=patient_id,
+        amount=appointment_balance.next_balance
+    )
 
+    db.session.add(payment)
+
+    # Update appointment balance
     appointment_balance.balance -= appointment_balance.next_balance
-
     appointment_balance.isPaid = "paid"
 
     db.session.commit()
@@ -688,7 +695,33 @@ def pay_next_appointment(patient_id):
         "message": "Next appointment marked as paid",
         "appointment_balance": appointment_balance.to_json()
     }), 200
+    
+@app.route("/get_monthly_revenue", methods=["GET"])
+def get_monthly_revenue():
+    today = datetime.now()
 
+    start_of_month = datetime(today.year, today.month, 1)
+
+    if today.month == 12:
+        start_of_next_month = datetime(today.year + 1, 1, 1)
+    else:
+        start_of_next_month = datetime(
+            today.year,
+            today.month + 1,
+            1
+        )
+
+    revenue = db.session.query(
+        db.func.sum(Payment.amount)
+    ).filter(
+        Payment.payment_date >= start_of_month,
+        Payment.payment_date < start_of_next_month
+    ).scalar()
+
+    return jsonify({
+        "monthly_revenue": revenue or 0
+    }), 200
+    
 # NOTIFICATION ROUTES
 
 @app.route("/get_notifications", methods=["GET"])
