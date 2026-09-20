@@ -5,16 +5,20 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 6rem;
+  gap: 4rem;
   padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-header-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 40rem;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1800px;
 }
 
 .dashboard-header {
@@ -25,17 +29,22 @@
 
 .dashboard-header h1 {
   font-size: 3rem;
+  margin: 0;
 }
 
 .dashboard-header-p {
   font-size: 1.5rem;
 }
 
+.dashboard-header-p p {
+  margin: 0;
+}
+
 .dashboard-header-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .dashboard-buttons {
@@ -43,59 +52,67 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  transition: 0.5s;
+  transition: 0.3s ease;
+  white-space: nowrap;
 }
 
 .dashboard-buttons:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .dashboard-buttons.generate {
   border: 1px solid black;
-  padding: 0.5rem 2rem;
+  padding: 0.8rem 2rem;
   border-radius: 1rem;
   cursor: pointer;
 }
 
 .dashboard-buttons.add {
   border: 1px solid rgb(199, 8, 8);
-  padding: 0.5rem 2rem;
+  padding: 0.8rem 2rem;
   border-radius: 1rem;
   cursor: pointer;
 }
+
 .dashboard-buttons.add h1 {
   color: rgb(199, 8, 8);
 }
 
 .dashboard-buttons h1 {
   font-size: 1.5rem;
+  margin: 0;
 }
 
 .dashboard-icons {
   width: 100%;
   max-width: 2rem;
+  height: auto;
 }
 
 .dashboard-statistics {
   display: flex;
   align-items: flex-start;
-  gap: 3rem;
+  gap: 2rem;
   width: 100%;
 }
-
 .chart-card {
-  flex: 2;
+  flex: 0 0 55%;
+  max-width: 550px;
+  height: 420px;
   background: white;
   padding: 2rem;
   border-radius: 20px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
 .todays-appointment-container {
-  width: 100%;
+  flex: 1;
+  min-width: 600px;
   max-height: 400px;
   overflow-y: auto;
+  overflow-x: auto;
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -106,6 +123,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 1.5rem;
   background: white;
   border-bottom: 1px solid #ececec;
@@ -113,6 +131,7 @@
 
 .table-title h2 {
   font-size: 2rem;
+  margin: 0;
 }
 
 .table-title span {
@@ -120,23 +139,26 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 1.3rem;
+  white-space: nowrap;
 }
 
 .todays-appointment-table {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
 }
 
-.no-data{
-    text-align:center;
-    padding:4rem;
-    color:#6b7280;
-    font-weight:600;
+.no-data {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  font-weight: 600;
 }
 
 .todays-appointment-table thead {
   position: sticky;
   top: 0;
+  z-index: 2;
   background: rgb(199, 8, 8);
   color: white;
 }
@@ -146,6 +168,7 @@
   font-size: 2rem;
   text-align: left;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .todays-appointment-table td {
@@ -161,16 +184,25 @@
   transition: background 0.2s ease;
 }
 
-.todays-appointment-table tbody tr:hover {
-  background: #f8fafc;
+.todays-appointment-table tbody tr:hover td {
+  background: #eef2ff;
 }
 
 .todays-appointment-table tbody tr:last-child td {
   border-bottom: none;
 }
 
+.todays-appointment-table tbody tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+.todays-appointment-table tbody tr:nth-child(even):hover td {
+  background: #eef2ff;
+}
+
 .todays-appointment-container::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 .todays-appointment-container::-webkit-scrollbar-thumb {
@@ -182,17 +214,13 @@
   background: transparent;
 }
 
-.todays-appointment-table tbody tr:nth-child(even) {
-  background: #f8fafc;
-}
-
-.todays-appointment-table tbody tr:hover {
-  background: #eef2ff;
-}
-
 @media (max-width: 1750px) {
+  .dashboard-container {
+    gap: 3rem;
+  }
+
   .dashboard-header-container {
-    gap: 30rem;
+    max-width: 1600px;
   }
 }
 
@@ -200,49 +228,82 @@
   html {
     font-size: 55%;
   }
+
+  .dashboard-header-container {
+    gap: 2rem;
+  }
+
+  .dashboard-header-buttons {
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 1300px) {
   html {
     font-size: 50%;
   }
-  .dashboard-header-container {
-    gap: 30rem;
-  }
+
   .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6rem;
-    padding: 0rem;
+    gap: 3rem;
+    padding: 2rem;
   }
 
-  .dashboard-header p {
+  .dashboard-header-container {
+    gap: 2rem;
+  }
+
+  .dashboard-header-p p {
     width: 35rem;
   }
 
+  .dashboard-buttons {
+    gap: 0.8rem;
+  }
+
+  .dashboard-buttons.generate,
+  .dashboard-buttons.add {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .dashboard-buttons.generate h1,
+  .dashboard-buttons.add h1 {
+    font-size: 1.3rem;
+  }
+
+  .dashboard-statistics {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1100px) {
   .dashboard-header-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 5rem;
+    align-items: flex-start;
+  }
+
+  .dashboard-header-buttons {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .dashboard-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.8rem;
-    gap: 1rem;
-    transition: 0.5s;
+    justify-content: flex-start;
   }
-  .dashboard-buttons.generate h1 {
-    font-size: 1rem;
+
+  .dashboard-statistics {
+    flex-direction: column;
   }
-  .dashboard-buttons.add h1 {
-    font-size: 1rem;
+
+  .chart-card {
+    width: 100%;
+    max-width: 900px;
+    height: 400px;
+    flex: none;
+  }
+
+  .todays-appointment-container {
+    width: 100%;
+    min-width: 600px;
+    flex: none;
   }
 }
 
@@ -250,11 +311,13 @@
   html {
     font-size: 45%;
   }
+
   .dashboard-container {
-    padding: 7rem;
+    padding: 3rem;
   }
+
   .dashboard-header-container {
-    gap: 25rem;
+    gap: 2rem;
   }
 }
 
@@ -262,32 +325,140 @@
   html {
     font-size: 40%;
   }
+
   .dashboard-container {
-    padding: 8rem;
+    padding: 3rem 2rem;
   }
+
   .dashboard-header-container {
-    gap: 15rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+
+  .dashboard-header {
+    width: 100%;
+  }
+
+  .dashboard-header-p p {
+    width: 100%;
+  }
+
+  .dashboard-header-buttons {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .dashboard-buttons {
+    flex: 1;
+  }
+
+  .dashboard-buttons.generate,
+  .dashboard-buttons.add {
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .dashboard-statistics {
+    width: 100%;
+  }
+
+  .chart-card {
+    height: 350px;
+    padding: 1.5rem;
+  }
+
+  .table-title {
+    padding: 1.2rem;
+  }
+
+  .todays-appointment-container {
+    min-width: 600px;
+  }
+
+  .todays-appointment-table {
+    min-width: 600px;
   }
 }
 
 @media (max-width: 550px) {
   html {
-    font-size: 30%;
+    font-size: 35%;
   }
+
   .dashboard-container {
-    padding: 8rem 5rem;
+    padding: 2rem 1.5rem;
+    gap: 2.5rem;
   }
+
   .dashboard-header-container {
-    gap: 8rem;
+    gap: 2rem;
   }
-  .dashboard-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+  .dashboard-header h1 {
+    font-size: 2.8rem;
+  }
+
+  .dashboard-header-p {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-header-buttons {
+    flex-direction: column;
     gap: 1rem;
-    transition: 0.5s;
   }
+
+  .dashboard-buttons {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dashboard-buttons.generate,
+  .dashboard-buttons.add {
+    width: 100%;
+  }
+
   .dashboard-buttons h1 {
     font-size: 1.5rem;
+  }
+
+  .dashboard-icons {
+    max-width: 2rem;
+  }
+
+  .chart-card {
+    padding: 1rem;
+    border-radius: 15px;
+  }
+
+  .todays-appointment-container {
+    border-radius: 15px;
+  }
+
+  .table-title {
+    padding: 1rem;
+  }
+
+  .table-title h2 {
+    font-size: 1.7rem;
+  }
+
+  .table-title span {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .todays-appointment-table {
+    min-width: 450px;
+  }
+
+  .todays-appointment-table th {
+    padding: 14px;
+    font-size: 1.6rem;
+  }
+
+  .todays-appointment-table td {
+    padding: 14px;
+    font-size: 1.4rem;
   }
 }

@@ -1,5 +1,5 @@
 import "../styles/chart.css";
-
+import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,7 +25,46 @@ ChartJS.register(
 );
 
 function MonthlyRevenueChart() {
-  const data = {
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const [monthlyRevenue, setMonthlyRevenue] = useState(Array(12).fill(0));
+
+  async function GetMonthlyRevenue() {
+    try {
+      const response = await fetch(`${API_URL}/get_monthly_revenue`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      const revenue = Number(data.monthly_revenue) || 0;
+
+      const currentMonth = new Date().getMonth();
+
+      const revenueData = Array(12).fill(0);
+
+      revenueData[currentMonth] = revenue;
+
+      setMonthlyRevenue(revenueData);
+    } catch (error) {
+      console.error("Error fetching monthly revenue:", error);
+
+      // Keep chart data valid even if API fails
+      setMonthlyRevenue(Array(12).fill(0));
+    }
+  }
+
+  useEffect(() => {
+    GetMonthlyRevenue();
+  }, []);
+
+  const chartData = {
     labels: [
       "Jan",
       "Feb",
@@ -40,17 +79,20 @@ function MonthlyRevenueChart() {
       "Nov",
       "Dec",
     ],
+
     datasets: [
       {
         label: "Monthly Revenue",
-        data: [
-          12000, 18500, 22000, 19500, 27000, 31000, 29500, 34000, 38000, 42000,
-          46500, 51000,
-        ],
-        borderColor: "rgb(199,8,8)",
+        data: Array.isArray(monthlyRevenue)
+          ? monthlyRevenue
+          : Array(12).fill(0),
+
+        borderColor: "rgb(199, 8, 8)",
         backgroundColor: "rgba(126, 4, 4, 0.2)",
+
         fill: true,
         tension: 0.4,
+
         pointRadius: 4,
         pointHoverRadius: 6,
       },
@@ -60,20 +102,33 @@ function MonthlyRevenueChart() {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+
     plugins: {
       legend: {
         position: "top",
       },
+
       title: {
         display: true,
         text: "Monthly Revenue",
       },
     },
+
     scales: {
       y: {
         beginAtZero: true,
+        max: 50000,
+
         ticks: {
-          callback: (value) => `₱${value.toLocaleString()}`,
+          stepSize: 10000,
+
+          callback: (value) => {
+            if (value === 0) {
+              return "₱0k";
+            }
+
+            return `₱${value / 1000}k`;
+          },
         },
       },
     },
@@ -81,7 +136,7 @@ function MonthlyRevenueChart() {
 
   return (
     <div className="chart">
-      <Line data={data} options={options} />
+      <Line data={chartData} options={options} />
     </div>
   );
 }

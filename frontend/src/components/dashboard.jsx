@@ -42,19 +42,30 @@ function Dashboard() {
   }
 
   async function GetMonthlyRevenue() {
-    const response = await fetch(`${API_URL}/get_monthly_revenue`, {
-      method: "GET",
-      credentials: "include",
-    });
+    try {
+      const response = await fetch(`${API_URL}/get_monthly_revenue`, {
+        method: "GET",
+        credentials: "include",
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      alert(data.message);
-      return;
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      const revenue = Number(data.monthly_revenue) || 0;
+
+      const currentMonth = new Date().getMonth();
+
+      const revenueData = Array(12).fill(0);
+      revenueData[currentMonth] = revenue;
+
+      setMonthlyRevenue(revenueData);
+    } catch (error) {
+      console.error("Error fetching monthly revenue:", error);
     }
-
-    setMonthlyRevenue(data.monthly_revenue);
   }
 
   useEffect(() => {
@@ -123,7 +134,9 @@ function Dashboard() {
               <h1>Monthly Revenue</h1>
             </div>
             <div>
-              <h2 className="dashboard-number">{monthlyRevenue}</h2>
+              <h2 className="dashboard-number">
+                ₱{Number(monthlyRevenue[new Date().getMonth()]) || 0}
+              </h2>
             </div>
           </div>
           <div className="dashboard-cards">

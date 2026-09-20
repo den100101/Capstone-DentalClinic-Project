@@ -695,7 +695,7 @@ def pay_next_appointment(patient_id):
         "message": "Next appointment marked as paid",
         "appointment_balance": appointment_balance.to_json()
     }), 200
-    
+ 
 @app.route("/get_monthly_revenue", methods=["GET"])
 def get_monthly_revenue():
     today = datetime.now()
@@ -722,27 +722,8 @@ def get_monthly_revenue():
         "monthly_revenue": revenue or 0
     }), 200
     
-# NOTIFICATION ROUTES
-
-@app.route("/get_notifications", methods=["GET"])
-def get_notifications():
-
-    notifications = Notification.query.order_by(
-        Notification.created_at.desc()
-    ).all()
-
-    unread_count = Notification.query.filter_by(
-        is_read=False
-    ).count()
-
-    return jsonify({
-        "notifications": [
-            notification.to_json()
-            for notification in notifications
-        ],
-        "unread_count": unread_count
-    }), 200
     
+#NOTIFICATION ROUTES
 
 @app.route("/read_notification/<int:id>", methods=["PATCH"])
 def read_notification(id):
