@@ -36,39 +36,53 @@ function Patients() {
   return (
     <>
       <div className="patients-container">
-        <div className="patients-list-container">
-          <div className="search-patients-list">
-            <div className="search-patients-list-container">
-              <h1>Patient Directory</h1>
-            </div>
-            <div className="search-patient-container">
-              <img
-                src="/Images/search.png"
-                alt="search-img"
-                className="search-patient-icon"
-              />
-              <input
-                type="text"
-                placeholder="Search Patient"
-                className="search-patients-input"
-              />
-            </div>
-          </div>
-          <div className="patients-list-wrapper">
-            {patients.map((patient) => (
-              <div
-                key={patient.id}
-                className="patients-list"
-                onClick={() => setSelectedPatients(patient)}
-              >
-                <h1>{patient.name}</h1>
+        {!selectedPatients ? (
+          <div className="patients-list-container">
+            <div className="search-patients-list">
+              <div className="search-patients-list-container">
+                <h1>Patient Directory</h1>
               </div>
-            ))}
+
+              <div className="search-patient-container">
+                <img
+                  src="/Images/search.png"
+                  alt="search-img"
+                  className="search-patient-icon"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Search Patient"
+                  className="search-patients-input"
+                />
+              </div>
+            </div>
+
+            <div className="patients-list-wrapper">
+              {patients.map((patient) => (
+                <div
+                  key={patient.id}
+                  className="patients-list"
+                  onClick={() => setSelectedPatients(patient)}
+                >
+                  <h1>{patient.name}</h1>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="patient-record-container">
-          {selectedPatients && <PatientRecord patient={selectedPatients} />}
-        </div>
+        ) : (
+          <div className="patient-record-container">
+            <button
+              type="button"
+              className="patient-back-button"
+              onClick={() => setSelectedPatients(null)}
+            >
+              ← Back to Patients
+            </button>
+
+            <PatientRecord patient={selectedPatients} />
+          </div>
+        )}
       </div>
     </>
   );

@@ -724,7 +724,6 @@ def get_monthly_revenue():
     
     
 #NOTIFICATION ROUTES
-
 @app.route("/read_notification/<int:id>", methods=["PATCH"])
 def read_notification(id):
 

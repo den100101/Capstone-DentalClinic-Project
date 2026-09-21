@@ -242,7 +242,9 @@ function About() {
             </div>
             <div>
               <button className="expertise-button">
-                Book a Consultation with Dr.Borras
+                <Link to="/appointment" className="expertise-button">
+                  Book a Consultation with Dr.Borras
+                </Link>
               </button>
             </div>
           </div>
@@ -265,7 +267,9 @@ function About() {
             </div>
           </div>
           <div>
-            <button className="about-cta-button">Book now</button>
+            <button className="about-cta-button">
+              <Link to="/appointment">Book now</Link>
+            </button>
           </div>
         </div>
         <Footer />
