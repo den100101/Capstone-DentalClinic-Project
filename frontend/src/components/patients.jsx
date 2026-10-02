@@ -71,7 +71,7 @@ function Patients() {
             </div>
           </div>
         ) : (
-          <div className="patient-record-container">
+          <div className="patient-record-page">
             <button
               type="button"
               className="patient-back-button"

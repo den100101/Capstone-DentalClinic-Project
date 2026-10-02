@@ -1,0 +1,259 @@
+@import url(../styles/global.css);
+
+/* MAIN CONTAINER */
+.patient-appointment-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* BOTH SECTIONS */
+.appointment-history-section,
+.next-appointment-history-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.appointment-history-section h2,
+.next-appointment-history-section h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* APPOINTMENT HISTORY TABLE */
+.appointment-history-table-container {
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.appointment-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.appointment-history-table th {
+  padding: 0.8rem;
+  text-align: left;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.appointment-history-table td {
+  padding: 0.8rem;
+  font-size: 1.5rem;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  overflow-wrap: anywhere;
+}
+
+/* COLUMN WIDTHS */
+.appointment-history-table th:nth-child(1),
+.appointment-history-table td:nth-child(1) {
+  width: 18%;
+}
+
+.appointment-history-table th:nth-child(2),
+.appointment-history-table td:nth-child(2) {
+  width: 17%;
+}
+
+.appointment-history-table th:nth-child(3),
+.appointment-history-table td:nth-child(3) {
+  width: 25%;
+}
+
+.appointment-history-table th:nth-child(4),
+.appointment-history-table td:nth-child(4) {
+  width: 20%;
+}
+
+.appointment-history-table th:nth-child(5),
+.appointment-history-table td:nth-child(5) {
+  width: 20%;
+}
+
+/* NO HISTORY */
+.no-appointment-history {
+  text-align: center;
+  color: #6b7280;
+  padding: 1.5rem !important;
+}
+
+/* STATUS */
+.appointment-history-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* CONFIRMED */
+.appointment-history-status.confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* PENDING */
+.appointment-history-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* DECLINED */
+.appointment-history-status.declined {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* NEXT APPOINTMENT FORM */
+.next-appointment-history-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.next-appointment-history-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.next-appointment-history-field label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.next-appointment-history-field input,
+.next-appointment-history-field select {
+  width: 100%;
+  height: 42px;
+  padding: 0 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 1.3rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.next-appointment-history-field input:focus,
+.next-appointment-history-field select:focus {
+  border-color: rgb(199, 8, 8);
+  box-shadow: 0 0 0 2px rgba(199, 8, 8, 0.1);
+}
+
+/* BUTTONS */
+.next-appointment-history-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.next-appointment-history-actions button {
+  border: none;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* CANCEL */
+.next-appointment-history-cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.next-appointment-history-cancel:hover {
+  background: #d1d5db;
+}
+
+/* UPDATE */
+.next-appointment-history-update {
+  background: rgb(199, 8, 8);
+  color: #ffffff;
+}
+
+.next-appointment-history-update:hover {
+  background: rgb(160, 6, 6);
+}
+
+.next-appointment-history-actions button:active {
+  transform: scale(0.97);
+}
+
+.next-appointment-history-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* TABLET */
+@media (max-width: 767px) {
+  .appointment-history-section,
+  .next-appointment-history-section {
+    padding: 1rem;
+  }
+
+  .appointment-history-table {
+    min-width: 650px;
+  }
+
+  .appointment-history-table-container {
+    overflow-x: auto;
+  }
+
+  .next-appointment-history-form {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .next-appointment-history-actions {
+    justify-content: stretch;
+  }
+
+  .next-appointment-history-actions button {
+    flex: 1;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+  .appointment-history-section,
+  .next-appointment-history-section {
+    padding: 0.85rem;
+  }
+
+  .appointment-history-section h2,
+  .next-appointment-history-section h2 {
+    font-size: 1rem;
+  }
+
+  .next-appointment-history-actions {
+    flex-direction: column;
+  }
+
+  .next-appointment-history-actions button {
+    width: 100%;
+  }
+}

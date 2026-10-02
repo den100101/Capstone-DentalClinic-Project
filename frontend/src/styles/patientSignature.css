@@ -1,0 +1,128 @@
+@import url("./global.css");
+
+.patient-signature-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  z-index: 9999999;
+}
+
+.patient-signature-modal {
+  width: min(750px, 100%);
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.patient-signature-modal h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+  color: #1f2937;
+}
+
+.patient-signature-modal p {
+  margin: 0 0 1.25rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.patient-signature-canvas-container {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.patient-signature-canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 250px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.patient-signature-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.patient-signature-actions button {
+  height: 40px;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.patient-signature-clear {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.patient-signature-clear:hover {
+  background: #e5e7eb;
+}
+
+.patient-signature-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  margin-right: 0.5rem;
+}
+
+.patient-signature-cancel:hover {
+  background: #e5e7eb;
+}
+
+.patient-signature-save {
+  background: rgb(199, 8, 8);
+  color: white;
+}
+
+.patient-signature-save:hover {
+  background: rgb(160, 6, 6);
+}
+
+@media (max-width: 767px) {
+  .patient-signature-modal {
+    padding: 1rem;
+  }
+
+  .patient-signature-canvas-container canvas {
+    height: 200px;
+  }
+
+  .patient-signature-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .patient-signature-actions > div {
+    display: flex;
+    width: 100%;
+  }
+
+  .patient-signature-actions button {
+    flex: 1;
+  }
+
+  .patient-signature-cancel {
+    margin-right: 0.5rem;
+  }
+}

@@ -1,0 +1,152 @@
+@import url("./global.css");
+
+/* MAIN CONTAINER */
+
+.patient-budget-container {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* BUDGET */
+
+.patient-budget-section {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.patient-budget-section h2 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111;
+}
+
+/* MAIN BALANCE */
+
+.patient-budget-main-balance {
+  width: 100%;
+  min-width: 0;
+}
+
+.patient-budget-main-balance h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.patient-budget-edit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.patient-budget-edit span {
+  flex-shrink: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.patient-budget-edit input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 42px;
+  padding: 0 0.75rem;
+  border: 1px solid #cfd4da;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #222;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.patient-budget-edit input:focus {
+  border-color: rgb(199, 8, 8);
+}
+
+.patient-budget-edit button {
+  flex-shrink: 0;
+  height: 42px;
+  border: none;
+  background: rgb(199, 8, 8);
+  color: white;
+  padding: 0 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.patient-budget-edit button:hover {
+  background: rgb(160, 6, 6);
+}
+
+.patient-budget-edit button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* TOTAL PAID / REMAINING */
+
+.patient-budget-summary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
+}
+
+.patient-budget-summary-item {
+  min-width: 0;
+}
+
+.patient-budget-summary-item h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.patient-budget-summary-item p {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
+}
+
+/* MOBILE */
+
+@media (max-width: 767px) {
+  .patient-budget-summary {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .patient-budget-edit {
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-budget-section h2 {
+    font-size: 1.05rem;
+  }
+
+  .patient-budget-edit input {
+    height: 40px;
+  }
+
+  .patient-budget-edit button {
+    height: 40px;
+  }
+}

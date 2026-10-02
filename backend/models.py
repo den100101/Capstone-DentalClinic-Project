@@ -146,6 +146,12 @@ class AppointmentBalance(db.Model):
         default=0.0,
         nullable=False
     )
+    
+    estimated_treatment_cost = db.Column(
+    db.Float,
+    default=0.0,
+    nullable=False
+        )
 
     isPaid = db.Column(
         db.String(20),
@@ -177,6 +183,7 @@ class AppointmentBalance(db.Model):
             ),
             "balance": self.balance,
             "next_balance": self.next_balance,
+            "estimated_treatment_cost": self.estimated_treatment_cost,
             "isPaid": self.isPaid
         }
 
@@ -228,3 +235,19 @@ class Notification(db.Model):
             "is_read": self.is_read,
             "created_at": self.created_at.isoformat()
         }
+        
+        
+class PatientSignature(db.Model):
+    __tablename__ = "patient_signatures"
+
+    id = db.Column(db.Integer, primary_key=True)
+    patient_id = db.Column(
+        db.Integer,
+        db.ForeignKey("patients.id"),
+        nullable=False
+    )
+    signature = db.Column(db.Text, nullable=False)
+    signed_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )

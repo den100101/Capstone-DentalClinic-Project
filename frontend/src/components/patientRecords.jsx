@@ -1,18 +1,35 @@
 import "../styles/patientsRecords.css";
 import { useState, useEffect } from "react";
 import TeethChart from "./teethchart";
+import PatientAppointmentHistory from "./PatientAppointmentHistory";
+import PatientBudget from "./PatientBudget";
+import PatientSignature from "./PatientSignature";
 import "../styles/balanceappointment.css";
 
 function PatientRecord({ patient }) {
   const API_URL = import.meta.env.VITE_API_URL;
+
   const [selectedNav, setSelectedNav] = useState("Medical");
   const [toothRecords, setToothRecords] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [appointmentBalance, setAppointmentBalance] = useState(null);
+  const [showSignature, setShowSignature] = useState(false);
+  const [savingSignature, setSavingSignature] = useState(false);
+
+  const [budget, setBudget] = useState({
+    balance: 0,
+    total_paid: 0,
+    remaining: 0,
+    payments: [],
+  });
+
   const [nextDate, setNextDate] = useState("");
   const [nextTime, setNextTime] = useState("");
   const [nextBalance, setNextBalance] = useState("");
   const [mainBalance, setMainBalance] = useState("");
+
   const [loadingBalance, setLoadingBalance] = useState(false);
+  const [loadingBudget, setLoadingBudget] = useState(false);
   const [updating, setUpdating] = useState(false);
 
   const timeSlots = [
@@ -50,6 +67,32 @@ function PatientRecord({ patient }) {
     }
   }
 
+  async function getAppointments() {
+    if (!patient) return;
+
+    try {
+      const response = await fetch(
+        `${API_URL}/get_appointments?patient=${encodeURIComponent(
+          patient.name,
+        )}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setAppointments(data.appointments || []);
+      } else {
+        setAppointments([]);
+      }
+    } catch (error) {
+      console.log(error);
+      setAppointments([]);
+    }
+  }
+
   async function getAppointmentBalance() {
     if (!patient) return;
 
@@ -70,10 +113,8 @@ function PatientRecord({ patient }) {
 
         setMainBalance(data.balance ?? "");
         setNextBalance(data.next_balance ?? "");
-
         setNextDate(data.next_appointment_date ?? "");
 
-        // Convert API time to select value
         if (data.next_appointment_time) {
           const matchingTime = timeSlots.find(
             (time) => time.label === data.next_appointment_time,
@@ -84,7 +125,6 @@ function PatientRecord({ patient }) {
           setNextTime("");
         }
       } else if (response.status === 404) {
-        // No balance record yet
         setAppointmentBalance(null);
         setMainBalance("");
         setNextBalance("");
@@ -98,9 +138,36 @@ function PatientRecord({ patient }) {
     }
   }
 
+  async function getPatientBudget() {
+    if (!patient) return;
+
+    setLoadingBudget(true);
+
+    try {
+      const response = await fetch(
+        `${API_URL}/get_patient_budget/${patient.id}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setBudget(data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingBudget(false);
+    }
+  }
+
   useEffect(() => {
     getToothRecords();
+    getAppointments();
     getAppointmentBalance();
+    getPatientBudget();
   }, [patient]);
 
   async function updateMainBalance() {
@@ -116,13 +183,10 @@ function PatientRecord({ patient }) {
         `${API_URL}/update_main_balance/${patient.id}`,
         {
           method: "PATCH",
-
           headers: {
             "Content-Type": "application/json",
           },
-
           credentials: "include",
-
           body: JSON.stringify({
             balance: Number(mainBalance),
           }),
@@ -133,8 +197,9 @@ function PatientRecord({ patient }) {
 
       if (response.ok) {
         setAppointmentBalance(data.appointment_balance);
-
         setMainBalance(data.appointment_balance.balance);
+
+        await getPatientBudget();
 
         alert("Main balance updated successfully.");
       } else {
@@ -171,13 +236,10 @@ function PatientRecord({ patient }) {
         `${API_URL}/update_next_appointment/${patient.id}`,
         {
           method: "PATCH",
-
           headers: {
             "Content-Type": "application/json",
           },
-
           credentials: "include",
-
           body: JSON.stringify({
             next_appointment_date: nextDate,
             next_appointment_time: nextTime,
@@ -192,7 +254,6 @@ function PatientRecord({ patient }) {
         setAppointmentBalance(data.appointment_balance);
 
         setNextDate(data.appointment_balance.next_appointment_date);
-
         setNextBalance(data.appointment_balance.next_balance);
 
         alert("Next appointment updated successfully.");
@@ -233,7 +294,6 @@ function PatientRecord({ patient }) {
         `${API_URL}/pay_next_appointment/${patient.id}`,
         {
           method: "PATCH",
-
           credentials: "include",
         },
       );
@@ -242,8 +302,9 @@ function PatientRecord({ patient }) {
 
       if (response.ok) {
         setAppointmentBalance(data.appointment_balance);
-
         setMainBalance(data.appointment_balance.balance);
+
+        await getPatientBudget();
 
         alert("Next appointment payment recorded successfully.");
       } else {
@@ -280,10 +341,6 @@ function PatientRecord({ patient }) {
     setNextBalance(appointmentBalance.next_balance ?? "");
   }
 
-  function cancelMainBalance() {
-    setMainBalance(appointmentBalance?.balance ?? "");
-  }
-
   function formatAppointmentDate(date) {
     if (!date) {
       return "No appointment";
@@ -298,9 +355,67 @@ function PatientRecord({ patient }) {
     });
   }
 
+  function formatCurrency(amount) {
+    return `₱${Number(amount || 0).toLocaleString("en-PH", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  }
+
+  function formatPaymentDate(date) {
+    if (!date) return "—";
+
+    return new Date(date).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
+  async function handleSaveSignature(signature) {
+    if (!patient?.id) return;
+
+    setSavingSignature(true);
+
+    try {
+      const response = await fetch(
+        `${API_URL}/save_patient_signature/${patient.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            signature,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Failed to save signature.");
+        return;
+      }
+
+      setShowSignature(false);
+
+      // Continue with payment after signature is saved
+      await payNextAppointment();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save signature.");
+    } finally {
+      setSavingSignature(false);
+    }
+  }
+
   return (
     <>
+      {/* PATIENT RECORD */}
       <div className="patient-record-container">
+        {/* PATIENT HEADER */}
         <div className="patient-record-header">
           <h1>{patient.name}</h1>
 
@@ -311,76 +426,88 @@ function PatientRecord({ patient }) {
           </div>
         </div>
 
-        <div className="patient-status-cards-container">
-          <div className="patient-status-cards next-appointment">
-            <div className="status-cards-content">
-              <div className="primary-card-header">Next Appointment</div>
+        {/* STATUS CARDS */}
+        {selectedNav === "Medical" && (
+          <div className="patient-status-cards-container">
+            {/* NEXT APPOINTMENT CARD */}
+            <div className="patient-status-cards next-appointment">
+              <div className="status-cards-content">
+                <div className="primary-card-header">Next Appointment</div>
 
-              <div className="card-highlight">
-                {loadingBalance
-                  ? "Loading..."
-                  : formatAppointmentDate(
-                      appointmentBalance?.next_appointment_date,
-                    )}
+                <div className="card-highlight">
+                  {loadingBalance
+                    ? "Loading..."
+                    : formatAppointmentDate(
+                        appointmentBalance?.next_appointment_date,
+                      )}
+                </div>
+
+                <div className="card-support-detail">
+                  {appointmentBalance?.next_appointment_time || "No time set"}
+                </div>
               </div>
 
-              <div className="card-support-detail">
-                {appointmentBalance?.next_appointment_time || "No time set"}
+              <div className="patient-status-icon-container next-appointment">
+                <img
+                  src="/Images/schedule-blue.png"
+                  alt="patient-card-icons"
+                  className="patient-record-icons"
+                />
               </div>
             </div>
 
-            <div className="patient-status-icon-container next-appointment">
-              <img
-                src="/Images/schedule-blue.png"
-                alt="patient-card-icons"
-                className="patient-record-icons"
-              />
+            {/* BALANCE CARD */}
+            <div className="patient-status-cards balance">
+              <div className="status-cards-content">
+                <div className="primary-card-header">Balance Due</div>
+
+                <div className="card-highlight">
+                  {loadingBalance
+                    ? "Loading..."
+                    : `₱${Number(
+                        appointmentBalance?.balance ?? 0,
+                      ).toLocaleString()}`}
+                </div>
+
+                <div className="card-support-detail">
+                  Next payment: ₱
+                  {Number(
+                    appointmentBalance?.next_balance ?? 0,
+                  ).toLocaleString()}
+                </div>
+              </div>
+
+              <div className="patient-status-icon-container balance">
+                <img
+                  src="/Images/warning-danger.png"
+                  alt="patient-card-icons"
+                  className="patient-record-icons"
+                />
+              </div>
+            </div>
+
+            {/* DENTAL STATUS CARD */}
+            <div className="patient-status-cards dental-status">
+              <div className="status-cards-content">
+                <div className="primary-card-header">Dental Status</div>
+
+                <div className="card-highlight">Good</div>
+
+                <div className="card-support-detail">No urgent treatments</div>
+              </div>
+
+              <div className="patient-status-icon-container">
+                <img
+                  src="/Images/dental-filling.png"
+                  alt="patient-card-icons"
+                  className="patient-record-icons"
+                />
+              </div>
             </div>
           </div>
-          <div className="patient-status-cards balance">
-            <div className="status-cards-content">
-              <div className="primary-card-header">Balance Due</div>
+        )}
 
-              <div className="card-highlight">
-                {loadingBalance
-                  ? "Loading..."
-                  : `₱${Number(
-                      appointmentBalance?.balance ?? 0,
-                    ).toLocaleString()}`}
-              </div>
-
-              <div className="card-support-detail">
-                Next payment: ₱
-                {Number(appointmentBalance?.next_balance ?? 0).toLocaleString()}
-              </div>
-            </div>
-
-            <div className="patient-status-icon-container balance">
-              <img
-                src="/Images/warning-danger.png"
-                alt="patient-card-icons"
-                className="patient-record-icons"
-              />
-            </div>
-          </div>
-          <div className="patient-status-cards dental-status">
-            <div className="status-cards-content">
-              <div className="primary-card-header">Dental Status</div>
-
-              <div className="card-highlight">Good</div>
-
-              <div className="card-support-detail">No urgent treatments</div>
-            </div>
-
-            <div className="patient-status-icon-container">
-              <img
-                src="/Images/dental-filling.png"
-                alt="patient-card-icons"
-                className="patient-record-icons"
-              />
-            </div>
-          </div>
-        </div>
+        {/* NAVIGATION */}
         <div className="patient-records-nav-container">
           <div
             className={
@@ -403,191 +530,189 @@ function PatientRecord({ patient }) {
           >
             <h1>Appointment History</h1>
           </div>
+
+          <div
+            className={
+              selectedNav === "Balances"
+                ? "patient-record-nav active"
+                : "patient-record-nav"
+            }
+            onClick={() => setSelectedNav("Balances")}
+          >
+            <h1>Balances</h1>
+          </div>
         </div>
-        <div className="patient-medical-records-container">
-          <TeethChart
-            selectedPatient={patient}
-            toothRecords={toothRecords}
-            refreshRecords={getToothRecords}
-          />
 
-          <div className="tooth-records-table-container">
-            <h2>Dental Records</h2>
+        {/* MEDICAL HISTORY */}
+        {selectedNav === "Medical" && (
+          <div className="patient-medical-records-container">
+            <TeethChart
+              selectedPatient={patient}
+              toothRecords={toothRecords}
+              refreshRecords={getToothRecords}
+            />
 
-            <table className="tooth-records-table">
-              <thead>
-                <tr>
-                  <th>Tooth</th>
-                  <th>Condition</th>
-                  <th>Treatment</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
+            <div className="tooth-records-table-container">
+              <h2>Dental Records</h2>
 
-              <tbody>
-                {toothRecords.length > 0 ? (
-                  toothRecords.map((record) => (
-                    <tr key={record.id}>
-                      <td>{record.tooth_number}</td>
-
-                      <td>{record.condition}</td>
-
-                      <td>{record.treatment}</td>
-
-                      <td>{record.notes}</td>
-                    </tr>
-                  ))
-                ) : (
+              <table className="tooth-records-table">
+                <thead>
                   <tr>
-                    <td colSpan="4">No dental records found.</td>
+                    <th>Tooth</th>
+                    <th>Condition</th>
+                    <th>Treatment</th>
+                    <th>Notes</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                </thead>
 
-        <div className="modifier-container">
-          <h2>Next Appointment</h2>
-
-          <div className="modifier-inputs">
-            <div>
-              <label htmlFor="nextDate">Date</label>
-
-              <input
-                type="date"
-                id="nextDate"
-                value={nextDate}
-                onChange={(e) => setNextDate(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="nextTime">Time</label>
-
-              <select
-                id="nextTime"
-                value={nextTime}
-                onChange={(e) => setNextTime(e.target.value)}
-              >
-                <option value="">Select a Time</option>
-
-                {timeSlots.map((time) => (
-                  <option key={time.value} value={time.value}>
-                    {time.label}
-                  </option>
-                ))}
-              </select>
+                <tbody>
+                  {toothRecords.length > 0 ? (
+                    toothRecords.map((record) => (
+                      <tr key={record.id}>
+                        <td>{record.tooth_number}</td>
+                        <td>{record.condition}</td>
+                        <td>{record.treatment}</td>
+                        <td>{record.notes}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4">No dental records found.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-
-          <div className="modifier-actions">
-            <button
-              type="button"
-              onClick={cancelNextAppointment}
-              disabled={updating}
-            >
-              Cancel
-            </button>
-
-            <button
-              type="button"
-              onClick={updateNextAppointment}
-              disabled={updating}
-            >
-              {updating ? "Updating..." : "Update"}
-            </button>
-          </div>
-        </div>
-        <div className="modifier-container">
-          <h2>Balance Due</h2>
-          <div className="modifier-inputs">
-            <div>
-              <label htmlFor="mainBalance">Main Balance Due</label>
-
-              <input
-                type="number"
-                id="mainBalance"
-                value={mainBalance}
-                onChange={(e) => setMainBalance(e.target.value)}
-                placeholder="Enter balance"
-                min="0"
-              />
-            </div>
-            <div>
-              <label htmlFor="nextBalance">Next Appointment Balance</label>
-
-              <input
-                type="number"
-                id="nextBalance"
-                value={nextBalance}
-                onChange={(e) => setNextBalance(e.target.value)}
-                placeholder="Enter amount"
-                min="0"
-              />
-            </div>
-          </div>
-
-          <div className="modifier-actions">
-            <button
-              type="button"
-              onClick={cancelMainBalance}
-              disabled={updating}
-            >
-              Cancel
-            </button>
-
-            <button
-              type="button"
-              onClick={updateMainBalance}
-              disabled={updating}
-            >
-              {updating ? "Updating..." : "Update"}
-            </button>
-          </div>
-        </div>
-        <div className="modifier-container">
-          <h2>Next Appointment Payment</h2>
-
-          <div className="payment-summary">
-            <div>
-              <span>Amount Due</span>
-
-              <strong>
-                ₱
-                {Number(appointmentBalance?.next_balance ?? 0).toLocaleString()}
-              </strong>
-            </div>
-
-            <div>
-              <span>Payment Status</span>
-
-              <strong>
-                {appointmentBalance?.isPaid === "paid" ? "Paid" : "Unpaid"}
-              </strong>
-            </div>
-          </div>
-
-          <div className="modifier-actions">
-            <button
-              type="button"
-              onClick={payNextAppointment}
-              disabled={
-                updating ||
-                !appointmentBalance ||
-                appointmentBalance.isPaid === "paid" ||
-                Number(appointmentBalance.next_balance) <= 0
-              }
-            >
-              {appointmentBalance?.isPaid === "paid"
-                ? "Paid ✓"
-                : updating
-                  ? "Processing..."
-                  : "Mark as Paid"}
-            </button>
-          </div>
-        </div>
+        )}
       </div>
+
+      {/* APPOINTMENT HISTORY */}
+      {selectedNav === "History" && (
+        <PatientAppointmentHistory
+          patient={patient}
+          appointments={appointments}
+          appointmentBalance={appointmentBalance}
+          timeSlots={timeSlots}
+          updateNextAppointment={updateNextAppointment}
+          cancelNextAppointment={cancelNextAppointment}
+          updating={updating}
+          nextDate={nextDate}
+          setNextDate={setNextDate}
+          nextTime={nextTime}
+          setNextTime={setNextTime}
+        />
+      )}
+
+      {/* BALANCES */}
+      {selectedNav === "Balances" && (
+        <div className="patient-balances-container">
+          {/* LEFT - BUDGET */}
+          <div className="patient-balances-left">
+            <PatientBudget
+              patient={patient}
+              API_URL={API_URL}
+              budget={budget}
+              mainBalance={mainBalance}
+              setMainBalance={setMainBalance}
+              updating={updating}
+              updateMainBalance={updateMainBalance}
+              loading={loadingBudget}
+            />
+          </div>
+
+          {/* CENTER - PAYMENT HISTORY */}
+          <div className="patient-balances-center">
+            <h2>Payment History</h2>
+
+            {loadingBudget ? (
+              <p className="patient-no-payments">Loading payment history...</p>
+            ) : budget.payments.length > 0 ? (
+              <div className="patient-payment-history-table-wrapper">
+                <table className="patient-payment-history-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {budget.payments.map((payment) => (
+                      <tr key={payment.id}>
+                        <td>{formatPaymentDate(payment.payment_date)}</td>
+
+                        <td>{formatCurrency(payment.amount)}</td>
+
+                        <td>
+                          <span className="patient-payment-paid">Paid</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="patient-no-payments">No payment history found.</p>
+            )}
+          </div>
+
+          {/* RIGHT - NEXT APPOINTMENT PAYMENT */}
+          <div className="patient-balances-right">
+            <div className="modifier-container">
+              <h2>Next Appointment Payment</h2>
+
+              <div className="payment-summary">
+                <div>
+                  <span>Amount Due</span>
+
+                  <strong>
+                    ₱
+                    {Number(
+                      appointmentBalance?.next_balance ?? 0,
+                    ).toLocaleString()}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Payment Status</span>
+
+                  <strong>
+                    {appointmentBalance?.isPaid === "paid" ? "Paid" : "Unpaid"}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="modifier-actions">
+                <button
+                  type="button"
+                  onClick={() => setShowSignature(true)}
+                  disabled={
+                    updating ||
+                    savingSignature ||
+                    !appointmentBalance ||
+                    appointmentBalance.isPaid === "paid" ||
+                    Number(appointmentBalance.next_balance) <= 0
+                  }
+                >
+                  {appointmentBalance?.isPaid === "paid"
+                    ? "Paid ✓"
+                    : updating || savingSignature
+                      ? "Processing..."
+                      : "Mark as Paid"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showSignature && (
+        <PatientSignature
+          onSave={handleSaveSignature}
+          onCancel={() => setShowSignature(false)}
+        />
+      )}
     </>
   );
 }

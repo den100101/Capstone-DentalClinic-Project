@@ -120,6 +120,7 @@
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  gap: 2rem;
   padding: 2rem;
   box-sizing: border-box;
 }

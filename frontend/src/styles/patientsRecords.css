@@ -9,6 +9,113 @@
   box-sizing: border-box;
 }
 
+.patient-balances-container {
+  margin-top: 2rem;
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5rem;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.patient-balances-left,
+.patient-balances-center,
+.patient-balances-right {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.patient-balances-center {
+  display: flex;
+  flex-direction: column;
+}
+
+.patient-balances-center h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.patient-payment-history-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.patient-payment-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.patient-payment-history-table th {
+  padding: 0.75rem;
+  text-align: left;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.patient-payment-history-table td {
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  overflow-wrap: anywhere;
+}
+
+.patient-payment-history-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.patient-payment-history-table th:nth-child(1),
+.patient-payment-history-table td:nth-child(1) {
+  width: 42%;
+}
+
+.patient-payment-history-table th:nth-child(2),
+.patient-payment-history-table td:nth-child(2) {
+  width: 30%;
+}
+
+.patient-payment-history-table th:nth-child(3),
+.patient-payment-history-table td:nth-child(3) {
+  width: 28%;
+}
+
+.patient-payment-paid {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  border-radius: 20px;
+  background: #d9f7e3;
+  color: #218838;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.patient-no-payments {
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #777;
+  text-align: center;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+}
+
 .patient-record-header {
   width: 100%;
   padding: 0.25rem 1rem;
@@ -91,7 +198,6 @@
   color: rgb(57, 57, 58);
   line-height: 1.2;
 }
-
 
 .patient-status-icon-container {
   width: 38px;
@@ -180,10 +286,10 @@
 
 .patient-medical-records-container {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 1fr);
+  grid-template-columns: 1fr;
   gap: 2rem;
   width: 100%;
-  align-items: start;
+  align-items: stretch;
   margin-top: 0.5rem;
   box-sizing: border-box;
 }
@@ -216,20 +322,20 @@
 }
 
 .tooth-records-table thead {
-  background: #2563eb;
+  background: rgb(199, 8, 8);
   color: white;
 }
 
 .tooth-records-table th {
-  padding: 0.65rem;
+  padding: 0.75rem;
   text-align: left;
-  font-size: 0.78rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
 .tooth-records-table td {
-  padding: 0.65rem;
-  font-size: 0.75rem;
+  padding: 0.75rem;
+  font-size: 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   color: #374151;
   overflow-wrap: anywhere;
@@ -249,7 +355,7 @@
 
 .tooth-records-table td:first-child {
   font-weight: 700;
-  color: #2563eb;
+  color: rgb(199, 8, 8);
 }
 
 .tooth-records-table td[colspan] {
@@ -381,7 +487,6 @@
 }
 
 @media (max-width: 1199px) {
-
   .patient-record-container {
     gap: 1.25rem;
   }
@@ -408,12 +513,11 @@
 
   .patient-medical-records-container {
     gap: 1.25rem;
-    grid-template-columns: minmax(0, 1.1fr) minmax(240px, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 1023px) {
-
   .patient-record-container {
     gap: 1rem;
   }
@@ -466,14 +570,23 @@
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+  .patient-balances-container {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 
-  .tooth-records-table-container {
-    order: 2;
+  .patient-balances-left,
+  .patient-balances-center,
+  .patient-balances-right {
+    width: 100%;
+  }
+
+  .patient-payment-history-table {
+    min-width: 450px;
   }
 }
 
 @media (max-width: 767px) {
-
   .patient-record-container {
     gap: 1rem;
   }
@@ -538,9 +651,7 @@
   }
 }
 
-
 @media (max-width: 480px) {
-
   .patient-record-container {
     gap: 0.75rem;
   }

@@ -2,7 +2,7 @@ from flask import request, jsonify, session
 import os
 from dotenv import load_dotenv
 from config import app,db,mail
-from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification,Payment
+from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification,Payment,PatientSignature
 from datetime import datetime, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -577,6 +577,113 @@ def update_main_balance(patient_id):
         "message": "Main balance updated successfully",
         "appointment_balance": appointment_balance.to_json()
     }), 200
+    
+
+
+@app.route("/update_estimated_treatment_cost/<int:patient_id>", methods=["PATCH"])
+def update_estimated_treatment_cost(patient_id):
+
+    data = request.get_json()
+
+    if not data or "estimated_treatment_cost" not in data:
+        return jsonify({
+            "message": "Estimated treatment cost is required"
+        }), 400
+
+    try:
+        estimated_treatment_cost = float(
+            data["estimated_treatment_cost"]
+        )
+
+        if estimated_treatment_cost < 0:
+            return jsonify({
+                "message": "Estimated treatment cost cannot be negative"
+            }), 400
+
+    except (ValueError, TypeError):
+        return jsonify({
+            "message": "Invalid estimated treatment cost"
+        }), 400
+
+    appointment_balance = AppointmentBalance.query.filter_by(
+        patient_id=patient_id
+    ).first()
+
+    if not appointment_balance:
+        appointment_balance = AppointmentBalance(
+            patient_id=patient_id,
+            balance=0.0,
+            next_balance=0.0,
+            estimated_treatment_cost=estimated_treatment_cost,
+            isPaid="unpaid"
+        )
+
+        db.session.add(appointment_balance)
+
+    else:
+        appointment_balance.estimated_treatment_cost = estimated_treatment_cost
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Estimated treatment cost updated successfully",
+        "appointment_balance": appointment_balance.to_json()
+    }), 200
+    
+    
+@app.route("/get_patient_budget/<int:patient_id>", methods=["GET"])
+def get_patient_budget(patient_id):
+
+    patient = db.session.get(Patient, patient_id)
+
+    if not patient:
+        return jsonify({
+            "message": "Patient not found"
+        }), 404
+
+    appointment_balance = AppointmentBalance.query.filter_by(
+        patient_id=patient_id
+    ).first()
+
+    if not appointment_balance:
+        return jsonify({
+            "balance": 0,
+            "total_paid": 0,
+            "remaining": 0,
+            "payments": []
+        }), 200
+
+    payments = Payment.query.filter_by(
+        patient_id=patient_id
+    ).order_by(
+        Payment.payment_date.desc()
+    ).all()
+
+    total_paid = sum(
+        payment.amount for payment in payments
+    )
+
+    balance = appointment_balance.balance
+
+    remaining = balance - total_paid
+
+    if remaining < 0:
+        remaining = 0
+
+    return jsonify({
+        "balance": balance,
+        "total_paid": total_paid,
+        "remaining": remaining,
+        "payments": [
+            {
+                "id": payment.id,
+                "amount": payment.amount,
+                "payment_date": payment.payment_date.isoformat()
+            }
+            for payment in payments
+        ]
+    }), 200
+    
 
 @app.route("/update_next_appointment/<int:patient_id>", methods=["PATCH"])
 def update_next_appointment(patient_id):
@@ -721,6 +828,39 @@ def get_monthly_revenue():
     return jsonify({
         "monthly_revenue": revenue or 0
     }), 200
+    
+    
+@app.route("/save_patient_signature/<int:patient_id>", methods=["POST"])
+def save_patient_signature(patient_id):
+
+    patient = db.session.get(Patient, patient_id)
+
+    if not patient:
+        return jsonify({
+            "message": "Patient not found"
+        }), 404
+
+    data = request.get_json()
+
+    signature = data.get("signature")
+
+    if not signature:
+        return jsonify({
+            "message": "Signature is required"
+        }), 400
+
+    new_signature = PatientSignature(
+        patient_id=patient_id,
+        signature=signature
+    )
+
+    db.session.add(new_signature)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Signature saved successfully",
+        "signature_id": new_signature.id
+    }), 201
     
     
 #NOTIFICATION ROUTES

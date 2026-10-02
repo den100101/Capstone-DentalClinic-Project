@@ -30,7 +30,6 @@
   flex-shrink: 0;
 }
 
-
 .tooth {
   display: flex;
   flex-direction: column;
@@ -48,9 +47,8 @@
   transform: scale(1.08);
 }
 
-
 .tooth-number {
-  font-size: 0.55rem;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1;
 }
@@ -65,7 +63,6 @@
   padding: 4px;
   border-radius: 50%;
 }
-
 
 .tooth-wrapper {
   position: relative;
@@ -86,7 +83,6 @@
   z-index: 100;
 }
 
-
 .popover-buttons {
   display: flex;
   gap: 8px;
@@ -104,7 +100,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 
 .update-btn {
   background: #2563eb;
@@ -133,7 +128,6 @@
 .delete-btn:active {
   transform: translateY(0);
 }
-
 
 @media (max-width: 1199px) {
   .teeth-row {
