@@ -1,9 +1,12 @@
 import Footer from "./components/footer";
+import CredentialsModal from "./components/view-credentials";
 import { Link } from "react-router-dom";
 import "./styles/about.css";
 import "./styles/expertise.css";
+import { useState } from "react";
 
 function About() {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <>
       <div className="about-section-container">
@@ -56,7 +59,10 @@ function About() {
               </div>
               <div className="about-card-buttons">
                 <div>
-                  <button className="about-view-button">
+                  <button
+                    className="about-view-button"
+                    onClick={() => setOpenModal(true)}
+                  >
                     View Credentials
                   </button>
                 </div>
@@ -274,6 +280,7 @@ function About() {
         </div>
         <Footer />
       </div>
+      {openModal && <CredentialsModal setOpenModal={setOpenModal} />}
     </>
   );
 }
