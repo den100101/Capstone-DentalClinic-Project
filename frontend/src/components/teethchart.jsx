@@ -1,7 +1,7 @@
 import "../styles/teethChart.css";
 import TeethModal from "./teethmodal";
-import UpdateTeethModal from "./UpdateTeethModal";
-import ToothPopover from "./ToothPopover";
+import UpdateTeethModal from "./updateteethmodal";
+import ToothPopover from "./toothpopover";
 import { useState, useEffect } from "react";
 
 function TeethChart({ selectedPatient, toothRecords, refreshRecords }) {
