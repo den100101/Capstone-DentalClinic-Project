@@ -11,6 +11,7 @@ dist/
 .venv/
 venv/
 env/
+backend/seed.py
 
 # ---------- Node / Frontend ----------
 node_modules/
