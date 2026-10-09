@@ -1,4 +1,4 @@
-import "../styles/toothPopover.css";
+import "../styles/toothpopover.css";
 
 function ToothPopover({ tooth, record, onUpdate, onDelete }) {
   return (
