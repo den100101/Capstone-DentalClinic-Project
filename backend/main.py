@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from config import app,db,mail
 from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification,Payment,PatientSignature
 from datetime import datetime, date
+from werkzeug.security import check_password_hash
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Message
@@ -20,29 +21,32 @@ limiter = Limiter(app=app,key_func=get_remote_address)
 @limiter.limit("10 per minute")
 @limiter.limit("50 per day")
 def verify_user():
-    data = request.json
+    data = request.get_json()
 
     if not data:
-        return jsonify({"message" : "User not found!"}), 400
-    
+        return jsonify({"message": "User not found!"}), 400
+
     if "user_name" not in data or "password" not in data:
-        return jsonify({"message" : "Username and password are required"}), 400
-    
-    user = User.query.filter_by(user_name=data["user_name"]).first()
+        return jsonify({
+            "message": "Username and password are required"
+        }), 400
+
+    user = User.query.filter_by(
+        user_name=data["user_name"]
+    ).first()
 
     if not user:
-        return jsonify({"message" : "Invalid username"}), 401
-    
-    if user.password != data["password"]:
-        return jsonify({"message" : "Invalid password"}), 401
-    
-    session["user_id"] = user.id
-    
-    return jsonify({
-        "message" : "Login Sucessful",
-        "user" : user.to_json()
-    }),200
+        return jsonify({"message": "Invalid username"}), 401
 
+    if not check_password_hash(user.password, data["password"]):
+        return jsonify({"message": "Invalid password"}), 401
+
+    session["user_id"] = user.id
+
+    return jsonify({
+        "message": "Login Successful",
+        "user": user.to_json()
+    }), 200
 
 @app.route("/check_session", methods=["GET"])
 def check_session():
