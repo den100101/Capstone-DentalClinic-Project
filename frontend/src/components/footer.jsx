@@ -4,152 +4,177 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <>
-      {/* CLINIC INFO */}
-      <div className="footer-container">
+      <footer className="footer-container">
+        {/* CLINIC INFORMATION */}
         <div className="footer-clinic-info">
           <div className="clinic-info-continer">
             <div>
               <img
                 src="/Images/MEDICICONRED.png"
-                alt="swiss-logo"
+                alt="Swiss Dental Clinic logo"
                 className="footer-swiss-logo"
               />
             </div>
+
             <div>
               <h1 className="clinic-name">Swiss Dental Clinic</h1>
             </div>
           </div>
+
           <div className="clinic-info-continer">
             <div>
               <img
                 src="/Images/location.png"
-                alt="location-logo"
+                alt="Location"
                 className="footer-info-logo"
               />
             </div>
+
             <div>
-              <h1 className="clinic-info">
+              <p className="clinic-info">
                 Ledesma Bldg 11 Jordan Street, Parañaque, Philippines, 1719
-              </h1>
+              </p>
             </div>
           </div>
+
           <div className="clinic-info-continer">
             <div>
               <img
                 src="/Images/PHONEICONRED.png"
-                alt="telephone-logo"
+                alt="Telephone"
                 className="footer-info-logo"
               />
             </div>
+
             <div>
-              <h1 className="clinic-info">(02) 828 4130</h1>
+              <p className="clinic-info">(02) 828 4130</p>
             </div>
           </div>
+
           <div className="clinic-info-continer">
             <div>
               <img
                 src="/Images/MAILICONRED.png"
-                alt="email-logo"
+                alt="Email"
                 className="footer-info-logo"
               />
             </div>
+
             <div>
-              <h1 className="clinic-info">analizaborras@yahoo.com</h1>
+              <p className="clinic-info">analizaborras@yahoo.com</p>
             </div>
           </div>
         </div>
-        {/* LINKS */}
-        <div className="footer-links">
+
+        {/* QUICK LINKS */}
+        <div className="footer-links-section">
           <div className="footer-link-header">
-            <h1>Quick Links</h1>
+            <h2>Quick Links</h2>
           </div>
-          <div className="footer-link">
-            <Link to={"/"} className="footer-link-a">
-              <p>Home</p>
+
+          <nav className="footer-links">
+            <Link to="/" className="footer-link-a">
+              Home
             </Link>
-          </div>
-          <div className="footer-link">
-            <Link to={"/about"} className="footer-link-a">
-              <p>About us</p>
+
+            <Link to="/about" className="footer-link-a">
+              About Us
             </Link>
-          </div>
-          <div className="footer-link">
-            <Link to={"/services"} className="footer-link-a">
-              <p>Services</p>
+
+            <Link to="/services" className="footer-link-a">
+              Services
             </Link>
-          </div>
-          <div className="footer-link">
-            <Link to={"/article"} className="footer-link-a">
-              <p>Article</p>
+
+            <Link to="/article" className="footer-link-a">
+              Article
             </Link>
-          </div>
-          <div className="footer-link">
-            <Link to={"/contactus"} className="footer-link-a">
-              <p>Contact us</p>
+
+            <Link to="/contactus" className="footer-link-a">
+              Contact Us
             </Link>
-          </div>
-          <div className="footer-link">
-            <Link to={"/appointment"} className="footer-link-a">
-              <p>Book Appointment</p>
+
+            <Link to="/appointment" className="footer-link-a">
+              Book Appointment
             </Link>
-          </div>
+          </nav>
         </div>
+
         {/* CLINIC SCHEDULE */}
         <div className="footer-clinic-sched">
           <div className="clinic-sched">
             <div>
-              <h1 className="clinic-sched-header">OPENING HOURS</h1>
+              <h2 className="clinic-sched-header">OPENING HOURS</h2>
             </div>
+
             <div className="sched-container">
-              <div>Mon-Fri</div>
-              <div>9:00 AM-6:00 PM</div>
+              <span>Mon-Fri</span>
+              <span>9:00 AM - 6:00 PM</span>
             </div>
+
             <div className="sched-container">
-              <div>Saturday</div>
-              <div>10:00 AM-4:00 PM</div>
+              <span>Saturday</span>
+              <span>10:00 AM - 4:00 PM</span>
             </div>
+
             <div className="sched-container sunday">
-              <div>Sunday</div>
-              <div>By Appointment Only</div>
+              <span>Sunday</span>
+              <span>By Appointment Only</span>
             </div>
           </div>
+
+          {/* SOCIAL MEDIA */}
           <div className="clinic-socials">
-            <div>
-              <a
-                href="https://www.facebook.com/swissdentalclinicph"
-                target="_self"
-              >
-                <img
-                  src="/Images/fblogo.jpg"
-                  alt="fblogo"
-                  className="social-logo"
-                />
-              </a>
-            </div>
-            <div>
-              <a href="https://www.instagram.com/swissdentalph/" target="_self">
-                <img
-                  src="/Images/social.png"
-                  alt="iglogo"
-                  className="social-logo"
-                />
-              </a>
-            </div>
-            <div>
-              <a href="https://www.threads.com/@swissdentalph" target="_self">
-                <img
-                  src="/Images/threads.png"
-                  alt="threads-logo"
-                  className="social-logo"
-                />
-              </a>
-            </div>
+            <a
+              href="https://www.facebook.com/swissdentalclinicph"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Swiss Dental Clinic on Facebook"
+            >
+              <img
+                src="/Images/fblogo.jpg"
+                alt="Facebook"
+                className="social-logo"
+              />
+            </a>
+
+            <a
+              href="https://www.instagram.com/swissdentalph/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Swiss Dental Clinic on Instagram"
+            >
+              <img
+                src="/Images/social.png"
+                alt="Instagram"
+                className="social-logo"
+              />
+            </a>
+
+            <a
+              href="https://www.threads.com/@swissdentalph"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Swiss Dental Clinic on Threads"
+            >
+              <img
+                src="/Images/threads.png"
+                alt="Threads"
+                className="social-logo"
+              />
+            </a>
           </div>
         </div>
-      </div>
-      <div>
-        &copy; 2026 Swiss Dental Clinic. All rights reserved.
-        <span>Privacy Policy</span>| <span>Terms of Service</span>
+      </footer>
+
+      {/* COPYRIGHT AND LEGAL LINKS */}
+      <div className="footer-bottom">
+        <p>&copy; 2026 Swiss Dental Clinic. All rights reserved.</p>
+
+        <div className="footer-bottom-links">
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <span className="footer-divider">|</span>
+          <Link to="/terms-of-service">Terms of Service</Link>
+        </div>
       </div>
     </>
   );

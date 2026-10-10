@@ -1,201 +1,382 @@
 @import url(./global.css);
 
+/* MAIN FOOTER */
 .footer-container {
   display: flex;
   justify-content: space-between;
-  gap: 10rem;
-  padding: 10rem;
+  align-items: flex-start;
+  gap: 6rem;
+  padding: 8rem 6rem;
   background-color: black;
+  box-sizing: border-box;
+  color: white;
 }
 
+/* CLINIC INFORMATION */
 .footer-clinic-info {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
+  gap: 3rem;
+  min-width: 0;
 }
 
 .clinic-info-continer {
   display: flex;
-  gap: 3rem;
   align-items: center;
+  gap: 2rem;
+  min-width: 0;
 }
+
 .clinic-name {
   color: rgb(199, 8, 8);
+  font-size: 2.5rem;
 }
+
 .clinic-info {
-  font-size: 1.5rem;
-  width: 40rem;
+  width: 30rem;
+  max-width: 100%;
+  margin: 0;
   color: white;
-  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
+
 .clinic-info:hover {
   text-decoration: underline;
 }
+
 .footer-info-logo {
-  width: 100%;
-  max-width: 5rem;
+  display: block;
+  width: 4rem;
+  max-width: 100%;
 }
 
 .footer-swiss-logo {
-  width: 100%;
-  max-width: 10rem;
+  display: block;
+  width: 8rem;
+  max-width: 100%;
+}
+
+/* QUICK LINKS */
+.footer-links-section {
+  min-width: 0;
 }
 
 .footer-link-header {
+  margin-bottom: 2rem;
+  color: white;
   font-size: 1.5rem;
+}
+
+.footer-link-header h2 {
+  margin: 0;
 }
 
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  margin-top: 3.8rem;
-  color: white;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 
-.footer-link {
-  font-size: 2rem;
-  cursor: pointer;
-}
 .footer-link-a {
   color: white;
+  font-size: 1.7rem;
+  text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
-.footer-link:hover {
+.footer-link-a:hover {
   text-decoration: underline;
 }
+
+/* CLINIC SCHEDULE */
 .footer-clinic-sched {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
+  gap: 4rem;
+  min-width: 0;
 }
+
 .clinic-sched {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 4rem;
 }
+
 .clinic-sched-header {
-  font-size: 3rem;
+  margin: 0;
   color: white;
+  font-size: 2.5rem;
 }
+
 .sched-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 10rem;
-  font-size: 2rem;
+  align-items: flex-start;
+  gap: 3rem;
   color: white;
+  font-size: 1.6rem;
 }
+
 .sched-container.sunday {
   color: rgb(199, 8, 8);
 }
 
+/* SOCIAL MEDIA */
 .clinic-socials {
   display: flex;
-  gap: 5rem;
+  align-items: center;
+  gap: 3rem;
+}
+
+.clinic-socials a {
+  display: inline-flex;
+  align-items: center;
 }
 
 .social-logo {
-  width: 100%;
-  max-width: 5rem;
+  display: block;
+  width: 4rem;
+  max-width: 100%;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-@media (max-width: 1500px) {
-  html {
-    font-size: 53%;
-  }
+.social-logo:hover {
+  transform: scale(1.1);
 }
 
-@media (max-width: 1200px) {
-  html {
-    font-size: 50%;
-  }
-  .sched-container {
-    gap: 5rem;
-  }
+/* COPYRIGHT */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 2rem 6rem;
+  background-color: black;
+  border-top: 1px solid #333;
+  color: white;
+  font-size: 1.4rem;
+  box-sizing: border-box;
 }
 
-@media (max-width: 1000px) {
-  html {
-    font-size: 40%;
-  }
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-bottom-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-bottom-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-divider {
+  color: #888;
+}
+
+/* SMALL LAPTOP */
+@media (max-width: 1350px) {
   .footer-container {
-    justify-content: center;
-    gap: 8rem;
-  }
-  .clinic-info {
-    width: 20rem;
-  }
-  .sched-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 700px) {
-  html {
-    font-size: 35%;
-  }
-  .footer-container {
-    justify-content: center;
-    gap: 8rem;
-  }
-  .clinic-info {
-    width: 20rem;
-  }
-  .sched-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 400px) {
-  html {
-    font-size: 40%;
-  }
-  .footer-container {
-    justify-content: center;
     gap: 4rem;
-    padding: 10rem 2rem;
+    padding: 7rem 4rem;
   }
-  .footer-info-logo {
-    max-width: 3rem;
+
+  .clinic-info {
+    width: 25rem;
   }
+
+  .sched-container {
+    gap: 2rem;
+  }
+}
+
+/* TABLET */
+@media (max-width: 1000px) {
+  .footer-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5rem 4rem;
+    padding: 6rem 4rem;
+  }
+
+  .footer-clinic-info {
+    grid-column: 1 / -1;
+  }
+
+  .clinic-info {
+    width: 100%;
+    max-width: 40rem;
+  }
+
+  .footer-links-section {
+    grid-column: 1;
+  }
+
+  .footer-clinic-sched {
+    grid-column: 2;
+  }
+
+  .sched-container {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+  }
+
+  .footer-bottom {
+    padding: 2rem 4rem;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4rem;
+    padding: 5rem 2.5rem;
+  }
+
+  .footer-clinic-info {
+    gap: 2.5rem;
+  }
+
+  .clinic-info-continer {
+    gap: 1.5rem;
+  }
+
+  .clinic-name {
+    font-size: 2.2rem;
+  }
+
   .footer-swiss-logo {
-    max-width: 5rem;
+    width: 6rem;
   }
+
+  .footer-info-logo {
+    width: 3rem;
+  }
+
+  .clinic-info {
+    width: 100%;
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .footer-link-header {
+    font-size: 1.5rem;
+  }
+
+  .footer-links {
+    gap: 1.5rem;
+  }
+
+  .footer-link-a {
+    font-size: 1.6rem;
+  }
+
+  .footer-clinic-sched {
+    gap: 3rem;
+  }
+
+  .clinic-sched {
+    gap: 1.8rem;
+  }
+
+  .clinic-sched-header {
+    font-size: 2.2rem;
+  }
+
+  .sched-container {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .clinic-socials {
+    gap: 2.5rem;
+  }
+
+  .social-logo {
+    width: 3.5rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 2.5rem;
+    font-size: 1.3rem;
+  }
+
+  .footer-bottom-links {
+    gap: 1rem;
+  }
+}
+
+/* SMALL MOBILE: 380px AND BELOW */
+@media (max-width: 380px) {
+  .footer-container {
+    padding: 4rem 2rem;
+    gap: 3.5rem;
+  }
+
   .clinic-info-continer {
     gap: 1rem;
   }
-  .footer-links p {
-    font-size: 1.3rem;
+
+  .clinic-name {
+    font-size: 1.9rem;
   }
-  .clinic-socials {
-    gap: 3rem;
+
+  .footer-swiss-logo {
+    width: 5rem;
   }
-  .social-logo {
-    max-width: 3rem;
+
+  .footer-info-logo {
+    width: 2.5rem;
   }
 
   .clinic-info {
-    width: 10rem;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+  }
+
+  .footer-link-a {
+    font-size: 1.5rem;
   }
 
   .clinic-sched-header {
     font-size: 2rem;
   }
-  .footer-link-header {
-    font-size: 1.4rem;
-  }
+
   .sched-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    gap: 0.8rem;
     font-size: 1.3rem;
+  }
+
+  .social-logo {
+    width: 3rem;
+  }
+
+  .footer-bottom {
+    padding: 2rem;
+  }
+
+  .footer-bottom-links {
+    gap: 0.8rem;
+    font-size: 1.2rem;
   }
 }
