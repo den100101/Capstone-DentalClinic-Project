@@ -3,7 +3,7 @@ import "../styles/footer.css";
 import "../styles/legal-modal.css";
 import { Link } from "react-router-dom";
 import PrivacyModal from "./privacymodal";
-import TermsModal from "./TermsModal";
+import TermsModal from "./termsmodal";
 
 function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
