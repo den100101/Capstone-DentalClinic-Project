@@ -1,17 +1,27 @@
 @import url(./global.css);
 
+/* =========================
+   LOGIN BACKGROUND
+========================= */
+
 .login-background {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
   background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
   z-index: 10000;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
+
+/* =========================
+   LOGIN CARD
+========================= */
 
 .login-card {
   display: flex;
@@ -19,41 +29,80 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  padding: 2rem 5rem;
+  width: 100%;
+  max-width: 650px;
+  max-height: 95%;
+  padding: 3rem 4rem;
   border-radius: 2rem;
   background-color: white;
-  animation: fadeUp 0.8s ease forwards;
+  box-sizing: border-box;
+  overflow-y: auto;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+.swiss-logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .login-swiss-logo {
+  display: block;
   width: 100%;
   max-width: 8rem;
+  height: auto;
 }
+
+/* =========================
+   LOGIN HEADER
+========================= */
 
 .login-header-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
+  width: 100%;
 }
 
 .login-header {
-  font-size: 2rem;
-}
-.login-header-p {
-  font-size: 1.8rem;
-  width: 50rem;
   text-align: center;
 }
 
+.login-header h1 {
+  margin: 0;
+  font-size: 2.8rem;
+}
+
+.login-header-p {
+  width: 100%;
+  max-width: 50rem;
+  font-size: 1.5rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.login-header-p p {
+  margin: 0;
+}
+
+/* =========================
+   LOGIN FORM
+========================= */
+
+.login-card form {
+  width: 100%;
+}
+
 .login-input-section {
-  margin-top: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  gap: 1rem;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .input-section {
@@ -61,37 +110,75 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.8rem;
+  width: 100%;
 }
 
 .login-labels {
-  font-size: 2rem;
-}
-.login-input {
-  width: 400px;
-  font-size: 2rem;
-  padding: 0.5rem 4rem;
-  border-radius: 1rem;
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
-.input-icon {
+.login-input {
   width: 100%;
-  max-width: 2rem;
+  min-width: 0;
+  padding: 1rem 4rem;
+  font-size: 1.6rem;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: rgb(199, 8, 8);
+  box-shadow: 0 0 0 2px rgba(199, 8, 8, 0.1);
+}
+
+/* =========================
+   INPUT ICONS
+========================= */
+
+.input-icon {
   position: absolute;
-  left: 3%;
-  top: 60%;
-  transform: translateY(-10%);
+  left: 1.2rem;
+  top: 4.1rem;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 .showpass-icon {
-  width: 100%;
-  max-width: 2rem;
   position: absolute;
-  left: 90%;
-  top: 85%;
-  transform: translateY(-90%);
+  right: 1.2rem;
+  top: 4.1rem;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
   cursor: pointer;
 }
+
+/* =========================
+   LOGIN MESSAGE
+========================= */
+
+.login-message {
+  min-height: 1rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: rgb(199, 8, 8);
+  overflow-wrap: anywhere;
+}
+
+.login-message p {
+  margin: 0;
+}
+
+/* =========================
+   LOGIN BUTTONS
+========================= */
 
 .login-buttons {
   display: flex;
@@ -99,88 +186,190 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin: 4rem auto;
+  width: 100%;
+  margin: 1.5rem auto 0;
 }
-.login-message {
-  text-align: center;
-  margin-top: 2rem;
-  font-size: 2rem;
+
+.login-buttons > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
+
+.modal-login-button,
+.close-login-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+  box-sizing: border-box;
+}
+
 .modal-login-button {
-  font-size: 1.5rem;
-  padding: 1rem 8rem;
   color: white;
   background-color: rgb(199, 8, 8);
   border: 1px solid rgb(199, 8, 8);
-  border-radius: 2rem;
-  cursor: pointer;
-  transition: 0.5s;
 }
 
 .close-login-button {
-  font-size: 1.5rem;
-  padding: 1rem 8rem;
   color: rgb(199, 8, 8);
-  background-color: rgb(255, 254, 254);
+  background-color: white;
   border: 1px solid rgb(199, 8, 8);
-  border-radius: 2rem;
-  cursor: pointer;
-  transition: 0.5s;
 }
 
 .modal-login-button:hover,
 .close-login-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.03);
 }
+
+.modal-login-button:hover {
+  background-color: rgb(160, 6, 6);
+}
+
+.close-login-button:hover {
+  color: white;
+  background-color: rgb(199, 8, 8);
+}
+
+/* =========================
+   ANIMATION
+========================= */
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(-50px);
+    transform: translateY(-30px);
   }
+
   to {
+    opacity: 1;
     transform: translateY(0);
   }
 }
 
-@media (max-width: 1500px) {
-  html {
-    font-size: 50%;
-  }
-}
-
-@media (max-width: 1300px) {
-  html {
-    font-size: 45%;
-  }
-}
+/* =========================
+   TABLETS
+========================= */
 
 @media (max-width: 1000px) {
-  html {
-    font-size: 40%;
+  .login-card {
+    max-width: 550px;
+    padding: 3rem;
+    gap: 1.5rem;
+  }
+
+  .login-header h1 {
+    font-size: 2.6rem;
+  }
+
+  .login-header-p {
+    font-size: 1.5rem;
   }
 }
 
+/* =========================
+   MOBILE
+========================= */
+
 @media (max-width: 700px) {
-  html {
-    font-size: 35%;
+  .login-background {
+    padding: 1.5rem;
   }
+
+  .login-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem 2rem;
+    gap: 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  .login-swiss-logo {
+    max-width: 7rem;
+  }
+
+  .login-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .login-header-p {
+    font-size: 1.4rem;
+  }
+
+  .login-labels {
+    font-size: 1.5rem;
+  }
+
   .login-input {
-    width: 300px;
-    font-size: 2rem;
-    padding: 0.5rem 4rem;
-    border-radius: 1rem;
+    padding: 1rem 3.8rem;
+    font-size: 1.5rem;
+  }
+
+  .input-icon,
+  .showpass-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    top: 54%;
+  }
+
+  .input-icon {
+    left: 1.1rem;
+  }
+
+  .showpass-icon {
+    right: 1.1rem;
+  }
+
+  .modal-login-button,
+  .close-login-button {
+    max-width: none;
+    font-size: 1.5rem;
   }
 }
 
-@media (max-width: 700px) {
-  html {
-    font-size: 35%;
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+  .login-background {
+    padding: 1rem;
   }
+
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .login-header-p {
+    font-size: 1.3rem;
+  }
+
   .login-input {
-    width: 200px;
-    font-size: 2rem;
-    padding: 0.5rem 4rem;
-    border-radius: 1rem;
+    padding: 1rem 3.5rem;
+  }
+}
+
+/* =========================
+   SHORT SCREENS
+========================= */
+
+@media (max-height: 600px) {
+  .login-background {
+    align-items: flex-start;
+  }
+
+  .login-card {
+    margin: auto 0;
+    max-height: none;
   }
 }
