@@ -26,6 +26,7 @@ class Patient(db.Model):
 )
 
     id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime,default=datetime.utcnow,nullable=False)
     name = db.Column(db.String(80), nullable=False, unique=False)
     email = db.Column(db.String(80), nullable=False, unique=False)
     birthdate = db.Column(db.Date, nullable=False, unique=False)
@@ -52,6 +53,7 @@ class Patient(db.Model):
     def to_json(self):
         return{
             "id" : self.id,
+            "created_at" : self.created_at,
             "name" : self.name,
             "email" : self.email,
             "birthdate" : self.birthdate.isoformat(),

@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from config import app,db,mail
 from models import User,Patient,Appointment,ToothRecord,AppointmentBalance,Notification,Payment,PatientSignature
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from werkzeug.security import check_password_hash
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -936,6 +936,120 @@ def delete_all_notifications():
 
 
 
+# DAILY REPORT ROUTE
+
+@app.route("/get_daily_report", methods=["GET"])
+def get_daily_report():
+    selected_date = request.args.get("date")
+
+    if not selected_date:
+        report_date = (
+            datetime.utcnow() + timedelta(hours=8)
+        ).date()
+    else:
+        try:
+            report_date = datetime.strptime(
+                selected_date, "%Y-%m-%d"
+            ).date()
+        except ValueError:
+            return jsonify({
+                "message": "Invalid date. Use YYYY-MM-DD."
+            }), 400
+
+    start_utc = datetime.combine(
+        report_date, datetime.min.time()
+    ) - timedelta(hours=8)
+
+    end_utc = start_utc + timedelta(days=1)
+    new_patients = Patient.query.filter(
+        Patient.created_at >= start_utc,
+        Patient.created_at < end_utc
+    ).order_by(
+        Patient.created_at.asc()
+    ).all()
+    
+    appointments = Appointment.query.filter_by(
+        appointment_date=report_date
+    ).order_by(
+        Appointment.appointment_time.asc()
+    ).all()
+
+    pending_count = sum(
+        1 for appointment in appointments
+        if appointment.status == "Pending"
+    )
+
+    confirmed_count = sum(
+        1 for appointment in appointments
+        if appointment.status == "Confirmed"
+    )
+
+    declined_count = sum(
+        1 for appointment in appointments
+        if appointment.status == "Declined"
+    )
+
+    payments = Payment.query.filter(
+        Payment.payment_date >= start_utc,
+        Payment.payment_date < end_utc
+    ).order_by(
+        Payment.payment_date.asc()
+    ).all()
+
+    total_revenue = sum(
+        payment.amount for payment in payments
+    )
+
+    
+    return jsonify({
+        "report_date": report_date.isoformat(),
+
+        "new_patients": {
+            "total": len(new_patients),
+            "details": [
+                {
+                    "id": patient.id,
+                    "name": patient.name,
+                    "email": patient.email,
+                    "created_at": (
+                        patient.created_at.isoformat()
+                        if patient.created_at
+                        else None
+                    )
+                }
+                for patient in new_patients
+            ]
+        },
+
+        "appointments": {
+            "total": len(appointments),
+            "pending": pending_count,
+            "confirmed": confirmed_count,
+            "declined": declined_count,
+            "details": [
+                appointment.to_json()
+                for appointment in appointments
+            ]
+        },
+
+        "payments": {
+            "transaction_count": len(payments),
+            "total_revenue": round(total_revenue, 2),
+            "details": [
+                {
+                    "payment_id": payment.id,
+                    "patient_id": payment.patient_id,
+                    "patient_name": payment.patient.name,
+                    "amount": payment.amount,
+                    "payment_date": (
+                        payment.payment_date.isoformat()
+                    )
+                }
+                for payment in payments
+            ]
+        }
+    }), 200
+    
 #MAIL ROUTE
 
 @app.route("/send_reminder_mail", methods=["POST"])

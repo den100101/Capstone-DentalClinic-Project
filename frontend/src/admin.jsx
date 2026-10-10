@@ -4,6 +4,7 @@ import Dashboard from "./components/dashboard";
 import PatientAppointments from "./components/patientAppointments";
 import Patients from "./components/patients";
 import Notifications from "./components/notifications";
+import GenerateReport from "./components/generate";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -75,8 +76,8 @@ function Admin({ setIsLoggedin }) {
   return (
     <>
       {/* =========================
-          TOP NAVIGATION
-      ========================= */}
+            TOP NAVIGATION
+        ========================= */}
 
       <div className="dashboard-nav">
         <div className="left-nav-section">
@@ -158,8 +159,8 @@ function Admin({ setIsLoggedin }) {
       </div>
 
       {/* =========================
-          SIDE NAVIGATION
-      ========================= */}
+            SIDE NAVIGATION
+        ========================= */}
 
       <div className="admin-panel-content-container">
         <img
@@ -299,8 +300,8 @@ function Admin({ setIsLoggedin }) {
         </div>
 
         {/* =========================
-            MAIN CONTENT
-        ========================= */}
+              MAIN CONTENT
+          ========================= */}
 
         <div>
           {activeComponent === "Dashboard" && <Dashboard />}
@@ -310,6 +311,7 @@ function Admin({ setIsLoggedin }) {
           )}
 
           {activeComponent === "Patients" && <Patients />}
+          {activeComponent === "DailyReport" && <GenerateReport />}
         </div>
       </div>
     </>
