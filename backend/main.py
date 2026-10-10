@@ -1050,6 +1050,29 @@ def get_daily_report():
         }
     }), 200
     
+
+@app.route("/update_patient_waiver/<int:patient_id>", methods=["PATCH"])
+def update_patient_waiver(patient_id):
+    patient = db.session.get(Patient, patient_id)
+
+    if not patient:
+        return jsonify({"message": "Patient not found"}), 404
+
+    data = request.get_json()
+
+    if not data or "waiver_signed" not in data:
+        return jsonify({"message": "Waiver status is required"}), 400
+
+    patient.waiver_signed = bool(data["waiver_signed"])
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Waiver status updated successfully",
+        "waiver_signed": patient.waiver_signed
+    }), 200
+
+    
 #MAIL ROUTE
 
 @app.route("/send_reminder_mail", methods=["POST"])

@@ -144,6 +144,64 @@
   font-weight: 500;
 }
 
+/* PHYSICAL WAIVER */
+
+.patient-waiver-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.patient-waiver-info {
+  min-width: 0;
+}
+
+.patient-waiver-info h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.patient-waiver-info p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.patient-waiver-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.patient-waiver-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: rgb(199, 8, 8);
+  cursor: pointer;
+}
+
+.patient-waiver-checkbox input:disabled {
+  cursor: wait;
+}
+
+/* STATUS CARDS */
+
 .patient-status-cards-container {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -258,6 +316,8 @@
   border-radius: 50%;
 }
 
+/* NAVIGATION */
+
 .patient-records-nav-container {
   display: flex;
   align-items: flex-end;
@@ -283,6 +343,8 @@
 .patient-record-nav.active {
   border-bottom: 3px solid rgb(199, 8, 8);
 }
+
+/* MEDICAL RECORDS */
 
 .patient-medical-records-container {
   display: grid;
@@ -364,6 +426,8 @@
   font-style: italic;
   padding: 1.5rem;
 }
+
+/* BALANCE MODIFIERS */
 
 .modifier-container {
   width: 100%;
@@ -461,6 +525,8 @@
   cursor: not-allowed;
 }
 
+/* PAYMENT SUMMARY */
+
 .payment-summary {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -485,6 +551,8 @@
   font-size: 1rem;
   color: #111827;
 }
+
+/* TABLET */
 
 @media (max-width: 1199px) {
   .patient-record-container {
@@ -516,6 +584,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* SMALL TABLET */
 
 @media (max-width: 1023px) {
   .patient-record-container {
@@ -570,6 +640,7 @@
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+
   .patient-balances-container {
     grid-template-columns: 1fr;
     gap: 1.25rem;
@@ -585,6 +656,8 @@
     min-width: 450px;
   }
 }
+
+/* MOBILE */
 
 @media (max-width: 767px) {
   .patient-record-container {
@@ -649,7 +722,20 @@
   .tooth-records-table {
     min-width: 500px;
   }
+
+  .patient-waiver-status {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .patient-waiver-checkbox {
+    align-self: flex-start;
+  }
 }
+
+/* SMALL MOBILE */
 
 @media (max-width: 480px) {
   .patient-record-container {
@@ -683,5 +769,17 @@
 
   .modifier-container {
     padding: 1rem;
+  }
+
+  .patient-waiver-info h2 {
+    font-size: 0.95rem;
+  }
+
+  .patient-waiver-info p {
+    font-size: 0.8rem;
+  }
+
+  .patient-waiver-checkbox {
+    font-size: 0.85rem;
   }
 }
