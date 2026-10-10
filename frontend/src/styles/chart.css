@@ -1,8 +1,12 @@
 @import url(./global.css);
 
 .chart {
-  width: 500px;
-  height: 350px;
+  width: 100%;
+  width: 400px;
+  height: 230px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
 }
 
 @media (max-width: 1000px) {

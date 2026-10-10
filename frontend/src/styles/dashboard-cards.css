@@ -1,23 +1,36 @@
 @import url(./global.css);
+
+/* =========================
+   DASHBOARD CARDS
+========================= */
+
 .dashboard-cards-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: center;
-  align-items: center;
-  gap: 10rem;
+  align-items: stretch;
+  gap: 2rem;
+  width: 95%;
+  max-width: 1700px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
+
 .dashboard-cards {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 1.5rem;
-  width: 260px;
+  width: 100%;
+  min-width: 0;
   height: 180px;
   padding: 2rem;
   border-radius: 18px;
   background: white;
   border: 1px solid #e5e7eb;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: 0.25s;
+  transition: transform 0.25s ease;
+  box-sizing: border-box;
 }
 
 .dashboard-cards:hover {
@@ -26,6 +39,7 @@
 
 .dashboard-cards h1 {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .dashboard-cards h1:nth-child(1) {
@@ -33,112 +47,139 @@
 }
 
 .dashboard-card-icons {
+  display: block;
   width: 100%;
   max-width: 5rem;
+  height: auto;
   background-color: rgb(243, 199, 199);
   padding: 1rem;
   border-radius: 1rem;
+  box-sizing: border-box;
 }
+
 .dashboard-number {
   font-size: 3.2rem;
   font-weight: 700;
   color: #111827;
+  margin: 0;
+  overflow-wrap: anywhere;
 }
+
+/* =========================
+   LARGE LAPTOPS
+========================= */
+
 @media (max-width: 1750px) {
   .dashboard-cards-container {
-    gap: 5rem;
+    gap: 2rem;
   }
 }
 
-@media (max-width: 1300px) {
-  html {
-    font-size: 50%;
-  }
+/* =========================
+   LAPTOPS
+========================= */
 
+@media (max-width: 1300px) {
   .dashboard-cards-container {
-    gap: 3rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 
   .dashboard-cards {
-    width: 240px;
+    height: 170px;
+    padding: 1.5rem;
+  }
+
+  .dashboard-number {
+    font-size: 2.8rem;
   }
 }
+
+/* =========================
+   TABLETS
+========================= */
 
 @media (max-width: 1100px) {
   .dashboard-cards-container {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2rem;
-    width: 100%;
+    width: 95%;
   }
 
   .dashboard-cards {
-    width: auto;
-    height: 180px;
+    height: 170px;
     padding: 2rem;
   }
+
+  .dashboard-card-icons {
+    max-width: 4.5rem;
+  }
+
+  .dashboard-number {
+    font-size: 2.8rem;
+  }
 }
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 750px) {
-  html {
-    font-size: 40%;
-  }
-
   .dashboard-cards-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .dashboard-cards {
     width: 100%;
-    max-width: 100%;
     min-width: 0;
     height: 160px;
-    padding: 2rem;
-    box-sizing: border-box;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .dashboard-cards h1 {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-card-icons {
+    max-width: 4rem;
+    padding: 0.8rem;
+  }
+
+  .dashboard-number {
+    font-size: 2.6rem;
   }
 }
 
-@media (max-width: 700px) {
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 450px) {
   .dashboard-cards-container {
+    grid-template-columns: 1fr;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
     gap: 1.5rem;
   }
 
   .dashboard-cards {
     width: 100%;
     max-width: none;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-}
-
-@media (max-width: 550px) {
-  html {
-    font-size: 35%;
-  }
-
-  .dashboard-cards-container {
-    width: 100%;
-    gap: 1.5rem;
-  }
-
-  .dashboard-cards {
-    width: 100%;
-    max-width: 340px;
-    min-width: 0;
-    height: 150px;
+    height: 140px;
     padding: 1.5rem;
-    box-sizing: border-box;
+  }
+
+  .dashboard-cards h1 {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-card-icons {
+    max-width: 3.8rem;
   }
 
   .dashboard-number {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
 }
