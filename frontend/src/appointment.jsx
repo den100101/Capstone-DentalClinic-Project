@@ -360,11 +360,13 @@ function Appointment() {
                 <div className="data-regulation-container">
                   <div className="data-encrypt">
                     <div className="privacy-consent">
-                      {privacyAgreed ? (
-                        <input type="checkbox" id="privacy" required checked />
-                      ) : (
-                        <input type="checkbox" id="privacy" required />
-                      )}
+                      <input
+                        type="checkbox"
+                        id="privacy"
+                        required
+                        checked={privacyAgreed}
+                        onChange={(e) => setPrivacyAgreed(e.target.checked)}
+                      />
 
                       <label htmlFor="privacy">
                         I agree to the Privacy Policy.

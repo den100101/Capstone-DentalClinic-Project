@@ -1,68 +1,94 @@
-@import url(./appointment.css);
+@import url(./global.css);
 
 .appointment-container {
   margin-top: 110px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10rem;
+  padding: 5rem;
+  width: 100%;
+  box-sizing: border-box;
   background-color: rgb(199, 8, 8);
 }
 
 .appointment-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 5rem;
+  gap: 4rem;
   background-color: white;
   border-radius: 2rem;
   padding: 5rem;
+  width: 100%;
+  max-width: 120rem;
+  box-sizing: border-box;
   animation: fadeUp 0.8s ease forwards;
 }
+
 .clinic-brand {
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .swiss-brand-logo {
-  width: 100%;
-  max-width: 50px;
+  display: block;
+  width: 5rem;
+  height: auto;
 }
+
 .clinic-brand-name {
   font-size: 1.5rem;
   color: rgb(199, 8, 8);
 }
+
+.clinic-brand-name h1 {
+  margin: 0;
+}
+
 .appointment-desc {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
 }
+
 .appointment-desc-header {
   font-size: 2rem;
 }
+
+.appointment-desc-header h1 {
+  margin: 0;
+}
+
 .appointment-desc-p {
   font-size: 2rem;
-  width: 80rem;
+  line-height: 1.7;
+  width: 100%;
+  max-width: 100rem;
 }
+
+.appointment-desc-p p {
+  margin: 0;
+}
+
 .appointment-form {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 3rem;
 }
+
 .left-form,
 .right-form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
+  min-width: 0;
 }
 
 .customer-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
+  min-width: 0;
 }
 
 .grouped-inputs {
@@ -70,233 +96,319 @@
   gap: 2rem;
 }
 
+.grouped-inputs > .customer-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .labels {
   font-size: 1.5rem;
 }
 
 .inputs {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background-color: rgb(248, 247, 247);
   border: 1px solid rgb(221, 221, 221);
-  padding: 1rem;
+  padding: 1.2rem;
   border-radius: 1rem;
-  width: 400px;
+  font-family: inherit;
+  font-size: 1.5rem;
 }
+
 .inputs.short {
-  width: 200px;
+  width: 100%;
+}
+
+.inputs:focus {
+  outline: 2px solid rgba(199, 8, 8, 0.25);
+  border-color: rgb(199, 8, 8);
 }
 
 .submit-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 2rem;
-  margin-top: 50px;
+  margin-top: 4rem;
 }
+
 .data-regulation-container {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 2rem;
 }
 
+.data-encrypt {
+  max-width: 100%;
+}
+
 .privacy-consent {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+}
+
+.privacy-consent input {
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .terms-policy-container {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  gap: 18px;
-
-  margin-top: 18px;
+  flex-wrap: wrap;
+  gap: 1.8rem;
+  margin-top: 1.8rem;
 }
 
 .terms,
 .private {
   border: none;
-
   background: transparent;
-
   color: rgb(199, 8, 8);
-
-  font-size: 13px;
+  font-size: 1.3rem;
   font-weight: 500;
-
   cursor: pointer;
-
   padding: 0;
-
   transition: color 0.2s ease;
 }
 
 .terms:hover,
 .private:hover {
   color: rgb(165, 6, 6);
-
   text-decoration: underline;
 }
 
 .terms:focus,
 .private:focus {
-  outline: none;
+  outline: 2px solid rgba(199, 8, 8, 0.4);
+  outline-offset: 3px;
 }
 
 .terms::after {
   content: "|";
-
   color: #bdbdbd;
-
-  margin-left: 18px;
-
+  margin-left: 1.8rem;
   text-decoration: none;
 }
 
 .submit-button {
-  font-size: 2rem;
-  padding: 1rem 6rem;
+  font-size: 1.8rem;
+  padding: 1.2rem 4rem;
   border-radius: 1rem;
   border: none;
   color: white;
   background-color: rgb(4, 124, 223);
   cursor: pointer;
-  transition: 0.5s;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
+
 .submit-button:hover {
-  transform: scale(1.1);
+  background-color: rgb(3, 105, 190);
+  transform: translateY(-2px);
 }
 
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translate(50px);
+    transform: translateY(30px);
   }
+
   to {
+    opacity: 1;
     transform: translateY(0);
   }
 }
 
-@media (max-width: 1500px) {
-  html {
-    font-size: 50%;
-  }
-  .appointment-desc-p {
-    font-size: 2rem;
-    width: 100rem;
-  }
-}
-
-@media (max-width: 1300px) {
-  html {
-    font-size: 45%;
-  }
-  .appointment-desc-p {
-    font-size: 2rem;
-    width: 110rem;
-  }
-}
-
+/* Smaller desktops and tablets */
 @media (max-width: 1000px) {
-  html {
-    font-size: 45%;
-  }
-  .appointment-desc-p {
-    font-size: 2rem;
-    width: 80rem;
-  }
-
-  .inputs {
-    background-color: rgb(248, 247, 247);
-    border: 1px solid rgb(221, 221, 221);
-    padding: 1rem;
-    border-radius: 1rem;
-    width: 300px;
-  }
-  .inputs.short {
-    width: 130px;
-  }
-}
-
-@media (max-width: 700px) {
-  html {
-    font-size: 40%;
-  }
-  .appointment-desc-p {
-    font-size: 2rem;
-    width: 70rem;
-  }
-
-  .inputs {
-    background-color: rgb(248, 247, 247);
-    border: 1px solid rgb(221, 221, 221);
-    padding: 1rem;
-    border-radius: 1rem;
-    width: 200px;
-  }
-  .inputs.short {
-    width: 130px;
-  }
-}
-
-@media (max-width: 560px) {
-  html {
-    font-size: 35%;
-  }
   .appointment-container {
-    margin-top: 60px;
+    padding: 4rem;
   }
-  .appointment-desc {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
+
+  .appointment-card {
+    padding: 4rem;
   }
-  .appointment-desc-header {
-    font-size: 2rem;
-    text-align: center;
-  }
-  .appointment-desc-p {
-    font-size: 2rem;
-    text-align: center;
-    width: 30rem;
-  }
+
   .appointment-form {
-    display: flex;
-    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .grouped-inputs {
+    gap: 1.5rem;
+  }
+}
+
+/* Tablets and smaller screens */
+@media (max-width: 750px) {
+  .appointment-container {
+    padding: 3rem;
+  }
+
+  .appointment-card {
+    padding: 3rem;
     gap: 3rem;
   }
 
-  .inputs {
-    background-color: rgb(248, 247, 247);
-    border: 1px solid rgb(221, 221, 221);
-    padding: 1rem;
-    border-radius: 1rem;
-    width: 250px;
+  .appointment-form {
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
-  .inputs.short {
-    width: 120px;
+
+  .appointment-desc-p {
+    max-width: 100%;
   }
+
+  .grouped-inputs {
+    gap: 2rem;
+  }
+
   .submit-section {
-    gap: 0rem;
+    align-items: flex-start;
   }
-  .submit-button {
-    font-size: 2rem;
-    padding: 1rem 4rem;
-    border-radius: 1rem;
-    border: none;
-    color: white;
-    background-color: rgb(4, 124, 223);
-    cursor: pointer;
-    transition: 0.5s;
+}
+
+/* Mobile phones */
+@media (max-width: 560px) {
+  .appointment-container {
+    margin-top: 70px;
+    padding: 2rem 1.5rem;
   }
-  .data-encrypt {
+
+  .appointment-card {
+    padding: 2.5rem 2rem;
+    border-radius: 1.5rem;
+    gap: 3rem;
+  }
+
+  .clinic-brand {
+    gap: 1.5rem;
+  }
+
+  .swiss-brand-logo {
+    width: 4rem;
+  }
+
+  .clinic-brand-name {
     font-size: 1.3rem;
-    width: 20rem;
+  }
+
+  .appointment-desc {
+    gap: 1.5rem;
+  }
+
+  .appointment-desc-header {
+    font-size: 1.7rem;
+    line-height: 1.4;
+  }
+
+  .appointment-desc-p {
+    font-size: 1.7rem;
+    line-height: 1.7;
+  }
+
+  .appointment-form {
+    gap: 2.5rem;
+  }
+
+  .left-form,
+  .right-form {
+    gap: 2rem;
+  }
+
+  .grouped-inputs {
+    gap: 1.2rem;
+  }
+
+  .labels {
+    font-size: 1.5rem;
+  }
+
+  .inputs {
+    padding: 1.1rem;
+    font-size: 1.5rem;
+  }
+
+  .submit-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .privacy-consent {
+    justify-content: flex-start;
+    font-size: 1.4rem;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    font-size: 1.7rem;
+  }
+
+  .terms-policy-container {
+    justify-content: flex-start;
+    gap: 1.5rem;
+  }
+
+  .terms,
+  .private {
+    font-size: 1.3rem;
+  }
+
+  .terms::after {
+    margin-left: 1.5rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .appointment-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .appointment-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .appointment-desc-header {
+    font-size: 1.5rem;
+  }
+
+  .appointment-desc-p {
+    font-size: 1.6rem;
+  }
+
+  .grouped-inputs {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .inputs,
+  .inputs.short {
+    width: 100%;
+  }
+
+  .terms-policy-container {
+    gap: 1rem;
+  }
+
+  .terms,
+  .private {
+    font-size: 1.2rem;
+  }
+
+  .terms::after {
+    margin-left: 1rem;
   }
 }
