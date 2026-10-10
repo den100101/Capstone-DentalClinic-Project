@@ -98,50 +98,177 @@
     font-size: 58%;
   }
 }
+@media (max-width: 1400px) {
+  .hero-description-container {
+    left: 7%;
+    right: 7%;
+    top: 25%;
+    gap: 2.5rem;
+  }
 
-@media (max-width: 1350px) {
-  html {
-    font-size: 56%;
-  }
-}
-@media (max-width: 1000px) {
-  html {
-    font-size: 50%;
-  }
-}
-@media (max-width: 700px) {
-  html {
-    font-size: 45%;
-  }
   .hero-header-statement {
-    color: white;
-    font-size: 4rem;
-    width: 60rem;
+    width: 100%;
+    max-width: 70rem;
+    font-size: 3rem;
   }
 
   .hero-p {
-    font-size: 2.5rem;
-    color: aliceblue;
-    width: 50rem;
-  }
-}
-@media (max-width: 500px) {
-  html {
-    font-size: 40%;
-  }
-  .hero-header-statement {
-    color: white;
-    font-size: 3.5rem;
-    width: 50rem;
+    width: 100%;
+    max-width: 65rem;
+    font-size: 2.2rem;
   }
 
-  .hero-p {
-    font-size: 2rem;
-    color: aliceblue;
-    width: 40rem;
+  .hero-buttons {
+    gap: 2rem;
+    margin-top: 2rem;
   }
+
   .hero-appointment-button,
   .hero-learn-button {
+    padding: 1.3rem 4rem;
+    font-size: 1.7rem;
+  }
+}
+
+/* TABLET */
+@media (max-width: 1000px) {
+  .hero-container,
+  .hero-background-blur {
+    min-height: 75rem;
+    height: 100;
+  }
+
+  .hero-description-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    padding: 15rem 6rem 10rem;
+    gap: 3rem;
+  }
+
+  .hero-header {
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 1.8rem;
+    padding: 1rem 3rem;
+  }
+
+  .hero-header-statement {
+    width: 100%;
+    max-width: 75rem;
+    font-size: 4rem;
+  }
+
+  .hero-p {
+    width: 100%;
+    max-width: 65rem;
+    font-size: 2rem;
+    line-height: 1.6;
+  }
+
+  .hero-buttons {
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .hero-appointment-button,
+  .hero-learn-button {
+    display: inline-block;
+    padding: 1.5rem 3rem;
+    font-size: 1.8rem;
+    text-align: center;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .hero-container,
+  .hero-background-blur {
+    min-height: 60rem;
+    height: auto;
+  }
+
+  .hero-description-container {
+    padding: 10rem 2rem 6rem;
+    gap: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hero-header {
+    font-size: 1.3rem;
+    padding: 0.8rem 1.5rem;
+    text-align: center;
+  }
+
+  .hero-header-statement {
+    width: 100%;
+    font-size: 2.8rem;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+  }
+
+  .hero-header-statement h1 {
+    margin: 0;
+  }
+
+  .hero-p {
+    width: 100%;
     font-size: 1.5rem;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 1.2rem;
+  }
+
+  .hero-buttons > div {
+    width: 100%;
+  }
+
+  .hero-appointment-button,
+  .hero-learn-button {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.2rem 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+}
+
+/* EXTRA SMALL MOBILE: 380px and below */
+@media (max-width: 380px) {
+  .hero-description-container {
+    padding: 9rem 5rem 5rem;
+    gap: 1.5rem;
+  }
+
+  .hero-header {
+    font-size: 1.2rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .hero-header-statement {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-p {
+    font-size: 1.4rem;
+    line-height: 1.5;
+  }
+
+  .hero-appointment-button,
+  .hero-learn-button {
+    font-size: 1.4rem;
+    padding: 1.1rem 0.8rem;
   }
 }
