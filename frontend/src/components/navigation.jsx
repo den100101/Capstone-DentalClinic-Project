@@ -118,6 +118,15 @@ function Navigation({ isLoggedin, setIsLoggedin }) {
                 Contact Us
               </Link>
             </li>
+            <li>
+              <Link
+                to="/appointment"
+                className="mobile-link-a"
+                onClick={closeNav}
+              >
+                Book Appointment
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
