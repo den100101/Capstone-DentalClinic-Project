@@ -148,6 +148,19 @@
   transform: scale(1.1);
 }
 
+.footer-bottom-links button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.footer-bottom-links button:hover {
+  text-decoration: underline;
+}
+
 /* COPYRIGHT */
 .footer-bottom {
   display: flex;

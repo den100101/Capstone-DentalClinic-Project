@@ -1,7 +1,15 @@
+import { useState } from "react";
 import "../styles/footer.css";
+import "../styles/legal-modal.css";
 import { Link } from "react-router-dom";
+import PrivacyModal from "./PrivacyModal";
+import TermsModal from "./TermsModal";
 
 function Footer() {
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+
   return (
     <>
       <footer className="footer-container">
@@ -29,7 +37,6 @@ function Footer() {
                 className="footer-info-logo"
               />
             </div>
-
             <div>
               <p className="clinic-info">
                 Ledesma Bldg 11 Jordan Street, Parañaque, Philippines, 1719
@@ -45,7 +52,6 @@ function Footer() {
                 className="footer-info-logo"
               />
             </div>
-
             <div>
               <p className="clinic-info">(02) 828 4130</p>
             </div>
@@ -59,7 +65,6 @@ function Footer() {
                 className="footer-info-logo"
               />
             </div>
-
             <div>
               <p className="clinic-info">analizaborras@yahoo.com</p>
             </div>
@@ -76,23 +81,18 @@ function Footer() {
             <Link to="/" className="footer-link-a">
               Home
             </Link>
-
             <Link to="/about" className="footer-link-a">
               About Us
             </Link>
-
             <Link to="/services" className="footer-link-a">
               Services
             </Link>
-
             <Link to="/article" className="footer-link-a">
               Article
             </Link>
-
             <Link to="/contactus" className="footer-link-a">
               Contact Us
             </Link>
-
             <Link to="/appointment" className="footer-link-a">
               Book Appointment
             </Link>
@@ -102,9 +102,7 @@ function Footer() {
         {/* CLINIC SCHEDULE */}
         <div className="footer-clinic-sched">
           <div className="clinic-sched">
-            <div>
-              <h2 className="clinic-sched-header">OPENING HOURS</h2>
-            </div>
+            <h2 className="clinic-sched-header">OPENING HOURS</h2>
 
             <div className="sched-container">
               <span>Mon-Fri</span>
@@ -128,7 +126,7 @@ function Footer() {
               href="https://www.facebook.com/swissdentalclinicph"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Swiss Dental Clinic on Facebook"
+              aria-label="Facebook"
             >
               <img
                 src="/Images/fblogo.jpg"
@@ -141,7 +139,7 @@ function Footer() {
               href="https://www.instagram.com/swissdentalph/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Swiss Dental Clinic on Instagram"
+              aria-label="Instagram"
             >
               <img
                 src="/Images/social.png"
@@ -154,7 +152,7 @@ function Footer() {
               href="https://www.threads.com/@swissdentalph"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Swiss Dental Clinic on Threads"
+              aria-label="Threads"
             >
               <img
                 src="/Images/threads.png"
@@ -171,11 +169,28 @@ function Footer() {
         <p>&copy; 2026 Swiss Dental Clinic. All rights reserved.</p>
 
         <div className="footer-bottom-links">
-          <Link to="/privacy-policy">Privacy Policy</Link>
+          <button type="button" onClick={() => setIsPrivacyOpen(true)}>
+            Privacy Policy
+          </button>
+
           <span className="footer-divider">|</span>
-          <Link to="/terms-of-service">Terms of Service</Link>
+
+          <button type="button" onClick={() => setIsTermsOpen(true)}>
+            Terms of Service
+          </button>
         </div>
       </div>
+
+      {/* PRIVACY POLICY MODAL */}
+      <PrivacyModal
+        isOpen={isPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
+        agreed={agreed}
+        setAgreed={setAgreed}
+      />
+
+      {/* TERMS OF USE MODAL */}
+      <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
     </>
   );
 }
