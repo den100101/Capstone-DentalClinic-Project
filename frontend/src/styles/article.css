@@ -3,20 +3,21 @@
 .article-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 10rem;
   margin-top: 120px;
+  padding: 0 4rem;
   width: 100%;
+  box-sizing: border-box;
   animation: fadeUp 0.8s ease forwards;
 }
 
 .article-header {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
-  width: 130rem;
+  width: 100%;
+  max-width: 130rem;
 }
 
 .article-header-1 {
@@ -25,50 +26,70 @@
   border: 1px solid rgb(199, 8, 8);
   border-radius: 2rem;
   background-color: rgb(255, 184, 184);
-  width: 200px;
+  width: fit-content;
   text-align: center;
-  padding: 0.3rem 0rem;
+  padding: 0.8rem 2rem;
+}
+
+.article-header-1 p,
+.article-header-3 p,
+.dentist-name p,
+.dentist-role p,
+.article-timestamp-content p {
+  margin: 0;
 }
 
 .article-header-2 {
   font-size: 2.7rem;
-  width: 140rem;
+  width: 100%;
 }
+
+.article-header-2 h1 {
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
 .article-header-3 {
   font-size: 2.5rem;
   color: rgb(141, 142, 143);
-  width: 130rem;
+  width: 100%;
 }
 
 .dentist-profile {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 30rem;
+  gap: 3rem;
+  width: 100%;
+  max-width: 130rem;
+  box-sizing: border-box;
   border-top: 1px solid rgb(141, 142, 143);
   border-bottom: 1px solid rgb(141, 142, 143);
-  padding: 5rem;
+  padding: 3rem 0;
 }
 
 .profile-container {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
   gap: 2rem;
+  min-width: 0;
 }
 
 .article-dentist-pic {
-  width: 100%;
-  max-width: 10rem;
+  display: block;
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
   border-radius: 50%;
 }
+
 .dentist-profile-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
 }
+
 .dentist-name {
   font-size: 1.8rem;
   font-weight: 600;
@@ -78,16 +99,19 @@
   font-size: 1.5rem;
   color: rgb(141, 142, 143);
 }
+
 .article-timestamp-container {
   display: flex;
+  align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 2rem;
 }
+
 .article-timestamp {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .article-timestamp-content {
@@ -96,106 +120,130 @@
 }
 
 .dentist-profile-icons {
-  width: 100%;
-  max-width: 3rem;
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
 }
 
 .article-contents {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 10rem;
+  align-items: center;
+  gap: 8rem;
+  width: 100%;
+  max-width: 110rem;
 }
 
 .article-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 3rem;
+  width: 100%;
 }
-.article-content-1-header {
+
+.article-content-1-header,
+.article-content-2-header,
+.article-content-3-header {
   background-color: rgb(255, 184, 184);
   color: rgb(199, 8, 8);
   border-left: 3px solid rgb(199, 8, 8);
-  padding: 1rem;
-  width: 60rem;
+  padding: 1.5rem 2rem;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
   font-size: 1.5rem;
 }
+
+.article-content-1-header h1,
+.article-content-2-header h1,
+.article-content-3-header h1 {
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
 .article-contents-p {
   font-size: 2rem;
-  width: 130rem;
+  line-height: 1.8;
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+.article-contents-p p {
+  margin: 0;
 }
 
 .article-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
   background-color: rgb(248, 247, 247);
   border-left: 5px solid rgb(199, 8, 8);
-  width: 110rem;
-  padding: 5rem 5rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4rem;
 }
+
 .article-card-content {
   font-size: 3rem;
   font-weight: 300;
   font-style: italic;
-  width: 100rem;
+  line-height: 1.6;
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+.article-card-content p {
+  margin: 0;
 }
 
 .article-dentist-name {
   color: rgb(199, 8, 8);
+  font-size: 1.4rem;
+  overflow-wrap: break-word;
 }
 
-.article-content-2-header {
-  background-color: rgb(255, 184, 184);
-  color: rgb(199, 8, 8);
-  border-left: 3px solid rgb(199, 8, 8);
-  padding: 1rem;
-  width: 100rem;
-  font-size: 1.5rem;
+.article-dentist-name h1 {
+  margin: 0;
 }
 
 .article-contents-p ul {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 1rem;
-  margin-left: 100px;
-  width: 80rem;
+  padding-left: 4rem;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .article-contents-p ul li {
   list-style: disc;
 }
 
-li::marker {
+.article-contents-p ul li::marker {
   color: rgb(199, 8, 8);
 }
+
 .weight {
   font-weight: 600;
 }
 
-.article-content-3-header {
-  background-color: rgb(255, 184, 184);
-  color: rgb(199, 8, 8);
-  border-left: 3px solid rgb(199, 8, 8);
-  padding: 1rem;
-  width: 45rem;
-  font-size: 1.5rem;
-}
 .article-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   margin-bottom: 10rem;
 }
 
 .article-clinic-pic {
+  display: block;
   width: 100%;
   max-width: 100rem;
-  text-align: center;
+  height: auto;
   border-radius: 2rem;
-  box-shadow: 0px 0px 0px 0px black;
+  box-shadow: 0 0 0 0 black;
 }
 
 @keyframes fadeUp {
@@ -203,154 +251,188 @@ li::marker {
     opacity: 0;
     transform: translateY(50px);
   }
+
   to {
+    opacity: 1;
     transform: translateY(0);
   }
 }
 
-@media (max-width: 1500px) {
-  html {
-    font-size: 50%;
-  }
-}
-
-@media (max-width: 1300px) {
-  html {
-    font-size: 45%;
-  }
-}
-
+/* Tablets and smaller laptops */
 @media (max-width: 1000px) {
-  html {
-    font-size: 40%;
-  }
-}
-
-@media (max-width: 850px) {
-  html {
-    font-size: 35%;
-  }
-  .article-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2rem;
-    width: 100rem;
-  }
-  .article-header-1 {
-    font-size: 2.3rem;
-    width: 200px;
-  }
-  .article-header-2 {
-    font-size: 2.3rem;
-    width: 100rem;
-  }
-  .article-header-3 {
-    font-size: 2.2rem;
-    width: 100rem;
-  }
-
-  .article-contents-p {
-    font-size: 2rem;
-    width: 100rem;
-  }
-  .article-clinic-pic {
-    max-width: 80rem;
-  }
-}
-
-@media (max-width: 650px) {
-  html {
-    font-size: 25%;
-  }
   .article-container {
-    margin-top: 80px;
+    gap: 7rem;
+    padding: 0 3rem;
   }
-  .article-header {
-    width: 100rem;
-  }
-  .article-header-1 {
-    font-size: 2.3rem;
-    width: 200px;
-  }
+
   .article-header-2 {
-    font-size: 2.3rem;
-    width: 100rem;
+    font-size: 2.5rem;
   }
+
   .article-header-3 {
     font-size: 2.2rem;
-    width: 100rem;
-  }
-  .article-card {
-    width: 90rem;
-  }
-  .article-card-content {
-    width: 80rem;
-  }
-  .article-contents-p ul {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-    margin-left: 30px;
-    width: 80rem;
-  }
-
-  .article-contents-p {
-    font-size: 2rem;
-    width: 100rem;
-  }
-  .article-clinic-pic {
-    max-width: 70rem;
-  }
-}
-
-@media (max-width: 500px) {
-  html {
-    font-size: 25%;
-  }
-  .article-header {
-    width: 80rem;
-  }
-  .article-header-2 {
-    font-size: 2.3rem;
-    width: 70rem;
-  }
-  .article-header-3 {
-    font-size: 2.3rem;
-    width: 70rem;
   }
 
   .dentist-profile {
-    gap: 20rem;
-    padding: 5rem;
-  }
-  .article-contents-p {
-    font-size: 2rem;
-    width: 90rem;
+    align-items: flex-start;
+    gap: 3rem;
   }
 
-  .article-content-2-header {
-    width: 70rem;
+  .article-contents {
+    gap: 6rem;
   }
+
   .article-card {
-    width: 80rem;
+    padding: 3rem;
   }
+
   .article-card-content {
-    width: 70rem;
+    font-size: 2.5rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 650px) {
+  .article-container {
+    margin-top: 90px;
+    padding: 0 2rem;
+    gap: 5rem;
+  }
+
+  .article-header {
+    gap: 1.5rem;
+  }
+
+  .article-header-1 {
+    font-size: 1.6rem;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .article-header-2 {
+    font-size: 2.2rem;
+    line-height: 1.35;
+  }
+
+  .article-header-3 {
+    font-size: 1.8rem;
+    line-height: 1.7;
+  }
+
+  .dentist-profile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2.5rem 0;
+  }
+
+  .profile-container {
+    gap: 1.5rem;
+  }
+
+  .article-dentist-pic {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .dentist-name {
+    font-size: 1.8rem;
+  }
+
+  .dentist-role {
+    font-size: 1.5rem;
+  }
+
+  .article-timestamp-container {
+    justify-content: flex-start;
+    gap: 1.5rem 2rem;
+  }
+
+  .article-timestamp {
+    gap: 0.8rem;
+  }
+
+  .dentist-profile-icons {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .article-timestamp-content {
+    font-size: 1.4rem;
+  }
+
+  .article-contents {
+    gap: 5rem;
+  }
+
+  .article-content {
+    gap: 2rem;
+  }
+
+  .article-content-1-header,
+  .article-content-2-header,
+  .article-content-3-header {
+    font-size: 1.5rem;
+    padding: 1.2rem 1.5rem;
+    width: 100%;
   }
 
   .article-contents-p {
-    font-size: 2rem;
-    width: 80rem;
+    font-size: 1.8rem;
+    line-height: 1.8;
   }
 
   .article-contents-p ul {
-    display: flex;
+    padding-left: 2.5rem;
+  }
+
+  .article-card {
+    padding: 2.5rem 2rem;
+  }
+
+  .article-card-content {
+    font-size: 2rem;
+    line-height: 1.7;
+  }
+
+  .article-dentist-name {
+    font-size: 1.2rem;
+  }
+
+  .article-clinic-pic {
+    border-radius: 1.5rem;
+  }
+
+  .article-image-container {
+    margin-bottom: 5rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .article-container {
+    margin-top: 80px;
+    padding: 0 1.5rem;
+    gap: 4rem;
+  }
+
+  .article-header-2 {
+    font-size: 2rem;
+  }
+
+  .article-header-3 {
+    font-size: 1.7rem;
+  }
+
+  .article-timestamp-container {
     flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-    margin-left: 10px;
-    width: 70rem;
+    align-items: flex-start;
+  }
+
+  .article-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .article-card-content {
+    font-size: 1.8rem;
   }
 }
