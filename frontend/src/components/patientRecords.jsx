@@ -33,6 +33,8 @@ function PatientRecord({ patient }) {
   const [nextTime, setNextTime] = useState("");
   const [nextBalance, setNextBalance] = useState("");
   const [mainBalance, setMainBalance] = useState("");
+  const [requiredPayment, setRequiredPayment] = useState("");
+  const [updatingRequiredPayment, setUpdatingRequiredPayment] = useState(false);
 
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [loadingBudget, setLoadingBudget] = useState(false);
@@ -124,6 +126,7 @@ function PatientRecord({ patient }) {
         setMainBalance(data.balance ?? "");
         setNextBalance(data.next_balance ?? "");
         setNextDate(data.next_appointment_date ?? "");
+        setRequiredPayment(data.required_payment_before_signing ?? "");
 
         if (data.next_appointment_time) {
           const savedTime = String(data.next_appointment_time).slice(0, 5);
@@ -144,6 +147,7 @@ function PatientRecord({ patient }) {
         setNextBalance("");
         setNextDate("");
         setNextTime("");
+        setRequiredPayment("");
       }
     } catch (error) {
       console.log(error);
@@ -153,34 +157,38 @@ function PatientRecord({ patient }) {
   }
 
   async function getPatientBudget() {
-    if (!patient) return;
+      if (!patient) return;
 
-    setLoadingBudget(true);
+      setLoadingBudget(true);
 
-    try {
-      const response = await fetch(
-        `${API_URL}/get_patient_budget/${patient.id}`,
-        {
-          credentials: "include",
-        },
-      );
+      try {
+        const response = await fetch(
+          `${API_URL}/get_patient_budget/${patient.id}`,
+          {
+            credentials: "include",
+          },
+        );
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        setBudget({
-          balance: data.balance ?? 0,
-          total_paid: data.total_paid ?? 0,
-          remaining: data.remaining ?? 0,
-          payments: data.payments || [],
-        });
+        if (response.ok) {
+          setBudget({
+            balance: data.balance ?? 0,
+            total_paid: data.total_paid ?? 0,
+            remaining: data.remaining ?? 0,
+            payments: data.payments || [],
+            required_payment_before_signing:
+              data.required_payment_before_signing ?? 0,
+            signing_payment_satisfied:
+              data.signing_payment_satisfied ?? false,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch patient budget:", error);
+      } finally {
+        setLoadingBudget(false);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingBudget(false);
-    }
-  }
+}
 
   useEffect(() => {
     getToothRecords();
@@ -277,6 +285,65 @@ function PatientRecord({ patient }) {
       setUpdating(false);
     }
   }
+
+  async function updateRequiredPayment() {
+  if (requiredPayment === "" || !Number.isFinite(Number(requiredPayment))) {
+    alert("Please enter a valid required payment amount.");
+    return;
+  }
+
+  const amount = Number(requiredPayment);
+
+  if (amount < 0) {
+    alert("The required payment cannot be negative.");
+    return;
+  }
+
+  setUpdatingRequiredPayment(true);
+
+  try {
+    const response = await fetch(
+      `${API_URL}/update_required_payment_before_signing/${patient.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          required_payment_before_signing: amount,
+        }),
+      },
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setRequiredPayment(data.required_payment_before_signing);
+
+      setAppointmentBalance((previous) =>
+        previous
+          ? {
+              ...previous,
+              required_payment_before_signing:
+                data.required_payment_before_signing,
+            }
+          : previous,
+      );
+
+      await getPatientBudget();
+
+      alert("Required payment before signing updated successfully.");
+    } else {
+      alert(data.message || "Failed to update required payment.");
+    }
+  } catch (error) {
+    console.error("Failed to update required payment:", error);
+    alert("Something went wrong while updating the required payment.");
+  } finally {
+    setUpdatingRequiredPayment(false);
+  }
+}
 
   async function updateNextAppointment() {
     if (!nextDate) {
@@ -442,44 +509,63 @@ function PatientRecord({ patient }) {
     });
   }
 
+  
   async function handleSaveSignature(signature) {
-    if (!patient?.id) return;
+    if (!patient?.id || !appointmentBalance) return;
+
+    const confirmed = window.confirm(
+      `Record payment of ${formatCurrency(
+        appointmentBalance.next_balance
+      )} and save the patient's signature?`
+    );
+
+    if (!confirmed) return;
 
     setSavingSignature(true);
 
     try {
       const response = await fetch(
-        `${API_URL}/save_patient_signature/${patient.id}`,
+        `${API_URL}/pay_and_save_signature/${patient.id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify({
-            signature,
-          }),
-        },
+          body: JSON.stringify({ signature }),
+        }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Failed to save signature.");
+        alert(data.message || "Failed to process payment and signature.");
         return;
       }
 
+      setAppointmentBalance(data.appointment_balance);
+      setMainBalance(data.appointment_balance.balance);
+
       setShowSignature(false);
 
-      // Continue with payment after signature is saved
-      await payNextAppointment();
+      await getAppointmentBalance();
+      await getPatientBudget();
+
+      alert("Payment and signature saved successfully.");
     } catch (error) {
-      console.error(error);
-      alert("Failed to save signature.");
+      console.error(
+        "Failed to process payment and signature:",
+        error
+      );
+
+      alert(
+        "Unable to confirm the result. Please refresh the patient record and check the payment history before trying again."
+      );
     } finally {
       setSavingSignature(false);
     }
   }
+
 
   return (
     <>
@@ -701,7 +787,7 @@ function PatientRecord({ patient }) {
         <div className="patient-balances-container">
           {/* LEFT - BUDGET */}
           <div className="patient-balances-left">
-            <PatientBudget
+           <PatientBudget
               patient={patient}
               API_URL={API_URL}
               budget={budget}
@@ -710,6 +796,10 @@ function PatientRecord({ patient }) {
               updating={updating}
               updateMainBalance={updateMainBalance}
               loading={loadingBudget}
+              requiredPayment={requiredPayment}
+              setRequiredPayment={setRequiredPayment}
+              updatingRequiredPayment={updatingRequiredPayment}
+              updateRequiredPayment={updateRequiredPayment}
             />
           </div>
 

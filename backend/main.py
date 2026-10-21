@@ -583,6 +583,72 @@ def update_main_balance(patient_id):
     }), 200
     
 
+@app.route(
+    "/update_required_payment_before_signing/<int:patient_id>",
+    methods=["PATCH"]
+)
+def update_required_payment_before_signing(patient_id):
+    data = request.get_json()
+
+    if not data or "required_payment_before_signing" not in data:
+        return jsonify({
+            "message": "Required payment amount is missing"
+        }), 400
+
+    try:
+        amount = float(data["required_payment_before_signing"])
+
+        if not __import__("math").isfinite(amount) or amount < 0:
+            return jsonify({
+                "message": "Amount must be a valid non-negative number"
+            }), 400
+
+        amount = round(amount, 2)
+
+    except (ValueError, TypeError):
+        return jsonify({
+            "message": "Invalid payment amount"
+        }), 400
+
+    patient = db.session.get(Patient, patient_id)
+
+    if not patient:
+        return jsonify({
+            "message": "Patient not found"
+        }), 404
+
+    appointment_balance = AppointmentBalance.query.filter_by(
+        patient_id=patient_id
+    ).first()
+
+    if not appointment_balance:
+        appointment_balance = AppointmentBalance(
+            patient_id=patient_id,
+            balance=0.0,
+            next_balance=0.0,
+            estimated_treatment_cost=0.0,
+            required_payment_before_signing=amount,
+            isPaid="unpaid"
+        )
+        db.session.add(appointment_balance)
+    else:
+        appointment_balance.required_payment_before_signing = amount
+
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        app.logger.exception("Failed to update signing payment requirement")
+        return jsonify({
+            "message": "Failed to update required payment"
+        }), 500
+
+    return jsonify({
+        "message": "Required payment before signing updated successfully",
+        "required_payment_before_signing":
+            appointment_balance.required_payment_before_signing
+    }), 200
+
 
 @app.route("/update_estimated_treatment_cost/<int:patient_id>", methods=["PATCH"])
 def update_estimated_treatment_cost(patient_id):
@@ -635,9 +701,9 @@ def update_estimated_treatment_cost(patient_id):
     }), 200
     
     
+
 @app.route("/get_patient_budget/<int:patient_id>", methods=["GET"])
 def get_patient_budget(patient_id):
-
     patient = db.session.get(Patient, patient_id)
 
     if not patient:
@@ -654,6 +720,8 @@ def get_patient_budget(patient_id):
             "balance": 0,
             "total_paid": 0,
             "remaining": 0,
+            "required_payment_before_signing": 0,
+            "signing_payment_satisfied": False,
             "payments": []
         }), 200
 
@@ -664,29 +732,37 @@ def get_patient_budget(patient_id):
     ).all()
 
     total_paid = sum(
-        payment.amount for payment in payments
+        float(payment.amount or 0)
+        for payment in payments
     )
 
-    balance = appointment_balance.balance
+    balance = float(appointment_balance.balance or 0)
+    required_payment = float(
+        appointment_balance.required_payment_before_signing or 0
+    )
 
-    remaining = balance - total_paid
-
-    if remaining < 0:
-        remaining = 0
+    remaining = max(balance - total_paid, 0)
 
     return jsonify({
         "balance": balance,
         "total_paid": total_paid,
         "remaining": remaining,
+        "required_payment_before_signing": required_payment,
+        "signing_payment_satisfied": total_paid >= required_payment,
         "payments": [
             {
                 "id": payment.id,
                 "amount": payment.amount,
-                "payment_date": payment.payment_date.isoformat()
+                "payment_date": (
+                    payment.payment_date.isoformat()
+                    if payment.payment_date
+                    else None
+                )
             }
             for payment in payments
         ]
     }), 200
+
     
 
 @app.route("/update_next_appointment/<int:patient_id>", methods=["PATCH"])
@@ -834,9 +910,9 @@ def get_monthly_revenue():
     }), 200
     
     
+
 @app.route("/save_patient_signature/<int:patient_id>", methods=["POST"])
 def save_patient_signature(patient_id):
-
     patient = db.session.get(Patient, patient_id)
 
     if not patient:
@@ -844,8 +920,7 @@ def save_patient_signature(patient_id):
             "message": "Patient not found"
         }), 404
 
-    data = request.get_json()
-
+    data = request.get_json(silent=True) or {}
     signature = data.get("signature")
 
     if not signature:
@@ -853,18 +928,175 @@ def save_patient_signature(patient_id):
             "message": "Signature is required"
         }), 400
 
-    new_signature = PatientSignature(
-        patient_id=patient_id,
-        signature=signature
+    appointment_balance = AppointmentBalance.query.filter_by(
+        patient_id=patient_id
+    ).first()
+
+    if not appointment_balance:
+        return jsonify({
+            "message": "Patient payment information was not found"
+        }), 400
+
+    required_payment = float(
+        appointment_balance.required_payment_before_signing or 0
     )
 
-    db.session.add(new_signature)
-    db.session.commit()
+    total_paid = db.session.query(
+        db.func.coalesce(db.func.sum(Payment.amount), 0)
+    ).filter(
+        Payment.patient_id == patient_id
+    ).scalar()
 
-    return jsonify({
-        "message": "Signature saved successfully",
-        "signature_id": new_signature.id
-    }), 201
+    total_paid = float(total_paid or 0)
+
+    if total_paid < required_payment:
+        return jsonify({
+            "message": (
+                f"Payment requirement not met. "
+                f"The patient must have paid at least "
+                f"₱{required_payment:,.2f} before signing. "
+                f"Total paid: ₱{total_paid:,.2f}."
+            ),
+            "required_payment_before_signing": required_payment,
+            "total_paid": total_paid,
+            "signing_payment_satisfied": False
+        }), 400
+
+    try:
+        new_signature = PatientSignature(
+            patient_id=patient_id,
+            signature=signature
+        )
+
+        db.session.add(new_signature)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Signature saved successfully",
+            "signature_id": new_signature.id,
+            "signing_payment_satisfied": True
+        }), 201
+
+    except Exception:
+        db.session.rollback()
+        app.logger.exception("Failed to save patient signature")
+
+        return jsonify({
+            "message": "Failed to save patient signature"
+        }), 500
+
+@app.route("/pay_and_save_signature/<int:patient_id>", methods=["POST"])
+def pay_and_save_signature(patient_id):
+    data = request.get_json(silent=True) or {}
+    signature = data.get("signature")
+
+    if not signature:
+        return jsonify({
+            "message": "Signature is required"
+        }), 400
+
+    try:
+        patient = db.session.get(Patient, patient_id)
+
+        if not patient:
+            return jsonify({
+                "message": "Patient not found"
+            }), 404
+
+        appointment_balance = (
+            AppointmentBalance.query
+            .filter_by(patient_id=patient_id)
+            .with_for_update()
+            .first()
+        )
+
+        if not appointment_balance:
+            return jsonify({
+                "message": "Appointment balance not found"
+            }), 404
+
+        if appointment_balance.isPaid == "paid":
+            return jsonify({
+                "message": "Next appointment has already been paid"
+            }), 400
+
+        next_balance = float(
+            appointment_balance.next_balance or 0
+        )
+        main_balance = float(
+            appointment_balance.balance or 0
+        )
+        required_payment = float(
+            appointment_balance.required_payment_before_signing or 0
+        )
+
+        if next_balance <= 0:
+            return jsonify({
+                "message": "There is no balance to pay"
+            }), 400
+
+        if main_balance < next_balance:
+            return jsonify({
+                "message": (
+                    "Main balance is lower than the next appointment balance"
+                )
+            }), 400
+
+        existing_paid = db.session.query(
+            db.func.coalesce(db.func.sum(Payment.amount), 0)
+        ).filter(
+            Payment.patient_id == patient_id
+        ).scalar()
+
+        projected_total_paid = float(existing_paid or 0) + next_balance
+
+        if projected_total_paid < required_payment:
+            return jsonify({
+                "message": (
+                    f"Payment requirement not met. "
+                    f"Required: ₱{required_payment:,.2f}. "
+                    f"Total after this payment: "
+                    f"₱{projected_total_paid:,.2f}."
+                ),
+                "required_payment_before_signing": required_payment,
+                "projected_total_paid": projected_total_paid
+            }), 400
+
+        payment = Payment(
+            patient_id=patient_id,
+            amount=next_balance
+        )
+        db.session.add(payment)
+        appointment_balance.balance = main_balance - next_balance
+        appointment_balance.isPaid = "paid"
+        new_signature = PatientSignature(
+            patient_id=patient_id,
+            signature=signature
+        )
+        db.session.add(new_signature)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Payment and signature saved successfully",
+            "payment_id": payment.id,
+            "signature_id": new_signature.id,
+            "appointment_balance": appointment_balance.to_json()
+        }), 200
+
+    except Exception:
+        db.session.rollback()
+        app.logger.exception(
+            "Failed to process payment and signature for patient %s",
+            patient_id
+        )
+
+        return jsonify({
+            "message": (
+                "Payment and signature could not be saved. "
+                "No changes were committed; please try again."
+            )
+        }), 500
+
     
     
 #NOTIFICATION ROUTES

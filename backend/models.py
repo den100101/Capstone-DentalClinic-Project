@@ -154,6 +154,12 @@ class AppointmentBalance(db.Model):
     default=0.0,
     nullable=False
         )
+    
+    required_payment_before_signing = db.Column(
+    db.Float,
+        default=0.0,
+        nullable=False
+    )
 
     isPaid = db.Column(
         db.String(20),
@@ -186,6 +192,7 @@ class AppointmentBalance(db.Model):
             "balance": self.balance,
             "next_balance": self.next_balance,
             "estimated_treatment_cost": self.estimated_treatment_cost,
+            "required_payment_before_signing": self.required_payment_before_signing,
             "isPaid": self.isPaid
         }
 
