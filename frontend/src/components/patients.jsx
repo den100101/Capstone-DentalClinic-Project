@@ -17,7 +17,7 @@ function Patients() {
           method: "GET",
           credentials: "include",
         }),
-        fetch(`${API_URL}/get_confirmed_appointments`, {
+        fetch(`${API_URL}/get_appointments`, {
           method: "GET",
           credentials: "include",
         }),
@@ -33,9 +33,11 @@ function Patients() {
 
       const allPatients = patientsData.patients || [];
 
-      // No confirmed appointments means no patients to display.
+      // Keep patients whose visit was completed (signed) in the list too.
       const confirmedAppointments = appointmentsResponse.ok
-        ? appointmentsData.confirmed_appointments || []
+        ? (appointmentsData.appointments || []).filter((appointment) =>
+            ["Confirmed", "Completed"].includes(appointment.status),
+          )
         : [];
 
       // Collect patient IDs from confirmed appointments.

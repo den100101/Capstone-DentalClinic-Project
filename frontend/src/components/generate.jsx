@@ -294,6 +294,10 @@ export default function GenerateReport() {
               <span className="report-status-summary-item declined-summary">
                 Declined: {report.appointments.declined ?? 0}
               </span>
+
+              <span className="report-status-summary-item completed-summary">
+                Completed: {report.appointments.completed ?? 0}
+              </span>
             </div>
 
             {appointments.length === 0 ? (

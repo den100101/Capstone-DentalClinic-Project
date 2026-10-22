@@ -1,17 +1,18 @@
 import { useRef, useState } from "react";
 import "../styles/patientSignature.css";
 
-function PatientSignature({ onSave, onCancel }) {
+function PatientSignature({ note, onSave, onCancel }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [hasSignature, setHasSignature] = useState(false);
 
   function getCanvasPosition(event) {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
 
     return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
+      x: (event.clientX - rect.left) * (canvas.width / rect.width),
+      y: (event.clientY - rect.top) * (canvas.height / rect.height),
     };
   }
 
@@ -20,10 +21,13 @@ function PatientSignature({ onSave, onCancel }) {
     const ctx = canvas.getContext("2d");
     const { x, y } = getCanvasPosition(event);
 
+    canvas.setPointerCapture?.(event.pointerId);
+
     ctx.beginPath();
     ctx.moveTo(x, y);
 
     setIsDrawing(true);
+    setHasSignature(true);
   }
 
   function draw(event) {
@@ -33,6 +37,10 @@ function PatientSignature({ onSave, onCancel }) {
     const ctx = canvas.getContext("2d");
     const { x, y } = getCanvasPosition(event);
 
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
     ctx.lineTo(x, y);
     ctx.stroke();
   }
@@ -40,10 +48,7 @@ function PatientSignature({ onSave, onCancel }) {
   function stopDrawing() {
     if (!isDrawing) return;
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    ctx.closePath();
+    canvasRef.current.getContext("2d").closePath();
     setIsDrawing(false);
   }
 
@@ -52,12 +57,16 @@ function PatientSignature({ onSave, onCancel }) {
     const ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setHasSignature(false);
   }
 
   function saveSignature() {
-    const canvas = canvasRef.current;
+    if (!hasSignature) {
+      alert("Please provide the patient's signature.");
+      return;
+    }
 
-    const signature = canvas.toDataURL("image/png");
+    const signature = canvasRef.current.toDataURL("image/png");
 
     onSave(signature);
   }
@@ -68,8 +77,8 @@ function PatientSignature({ onSave, onCancel }) {
         <h2>Patient Signature</h2>
 
         <p>
-          Please sign below to acknowledge the completed treatment session and
-          payment.
+          Ask the patient to sign below.
+          {note ? ` ${note}` : ""}
         </p>
 
         <div className="patient-signature-canvas-container">
@@ -80,7 +89,9 @@ function PatientSignature({ onSave, onCancel }) {
             onPointerDown={startDrawing}
             onPointerMove={draw}
             onPointerUp={stopDrawing}
+            onPointerCancel={stopDrawing}
             onPointerLeave={stopDrawing}
+            style={{ touchAction: "none" }}
           />
         </div>
 

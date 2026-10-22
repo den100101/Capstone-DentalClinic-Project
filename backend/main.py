@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Message
+from sqlalchemy import inspect, text
 import re
 
 load_dotenv()
@@ -73,68 +74,84 @@ def logout():
 
 
 #PATIENT ROUTES
-@app.route("/new_patients",methods=["POST"])
-def new_patients():
-    data = request.get_json()
 
-    if (
-        not data.get("name") or 
-        not data.get("email") or
-        not data.get("birthdate") or
-        not data.get("age") or
-        not data.get("gender") or
-        not data.get("contact_num") or
-        not data.get("address") or
-        not data.get("weight") or
-        not data.get("height") 
-    ):
-        return jsonify({"message" : "missing fields"})
-    
+@app.route("/new_patients", methods=["POST"])
+def new_patients():
+    data = request.get_json(silent=True) or {}
+
+    required_fields = [
+        "name", "email", "birthdate", "age", "gender",
+        "contact_num", "address", "weight", "height"
+    ]
+
+    missing_fields = [
+        field for field in required_fields
+        if data.get(field) is None or str(data.get(field)).strip() == ""
+    ]
+
+    if missing_fields:
+        return jsonify({
+            "message": "Please complete all required patient fields.",
+            "missing_fields": missing_fields
+        }), 400
+
     contact_num = str(data["contact_num"]).strip()
 
-   
     if not re.fullmatch(r"\+?[\d\s\-()]+", contact_num):
-        print("INVALID CONTACT NUMBER")
-        return jsonify({"message": "contact num contains invalid characters"}), 400
-    
+        return jsonify({
+            "message": "Contact number contains invalid characters."
+        }), 400
+
     try:
+        birthdate = datetime.strptime(
+            str(data["birthdate"]), "%Y-%m-%d"
+        ).date()
 
         existing_patient = Patient.query.filter_by(
-        name=data["name"],
-        birthdate=data["birthdate"],
-        email=data["email"]
-         ).first()
+            name=str(data["name"]).strip(),
+            birthdate=birthdate,
+            email=str(data["email"]).strip()
+        ).first()
 
         if existing_patient:
             return jsonify({
-                "message": "You already have an appointment."
-            }), 409
-            
+                "message": "Existing patient found.",
+                "patient": existing_patient.to_json(),
+                "existing_patient": True
+            }), 200
+
         new_patient = Patient(
-            name = data["name"],
-            email = data["email"],
-            birthdate = data["birthdate"],
-            age = data["age"],
-            gender = data["gender"],
-            contact_num = contact_num,
-            address= data["address"],
-            weight = data["weight"],
-            height = data["height"]
+            name=str(data["name"]).strip(),
+            email=str(data["email"]).strip(),
+            birthdate=birthdate,
+            age=data["age"],
+            gender=data["gender"],
+            contact_num=contact_num,
+            address=data["address"],
+            weight=data["weight"],
+            height=data["height"]
         )
-    
 
         db.session.add(new_patient)
         db.session.commit()
 
         return jsonify({
-        "message" : "Patient Created",
-        "patient" : new_patient.to_json()
-    }), 201
+            "message": "Patient created successfully.",
+            "patient": new_patient.to_json()
+        }), 201
 
-    except Exception as e:
+    except ValueError:
         db.session.rollback()
-        print(e)
-        return jsonify({"error" : str(e)}), 500
+        return jsonify({
+            "message": "Invalid birthdate. Use YYYY-MM-DD."
+        }), 400
+
+    except Exception:
+        db.session.rollback()
+        app.logger.exception("Failed to register patient")
+        return jsonify({
+            "message": "Failed to register patient."
+        }), 500
 
 
 @app.route("/get_patients", methods=["GET"])
@@ -186,7 +203,7 @@ def get_todays_appointments():
         Appointment.query
         .filter(
             Appointment.appointment_date == today,
-            Appointment.status == "Confirmed"  
+            Appointment.status.in_(["Confirmed", "Completed"])
         )
         .order_by(Appointment.appointment_time.asc())
         .all()
@@ -201,7 +218,7 @@ def get_todays_appointments():
 def get_taken_times(appointment_date):
     appointments = Appointment.query.filter(
         Appointment.appointment_date == appointment_date,
-        Appointment.status.in_(["Pending", "Confirmed"])
+        Appointment.status.in_(["Pending", "Confirmed", "Completed"])
     ).all()
 
     return jsonify({
@@ -214,73 +231,102 @@ def get_taken_times(appointment_date):
 
 #APPOINTMENT ROUTES
 
+
 @app.route("/new_appointment", methods=["POST"])
 def new_appointment():
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
 
-    if (
-        not data.get("patient_id") or
-        not data.get("appointment_date") or
-        not data.get("appointment_time") or
-        not data.get("reason_for_visit") or
-        not data.get("status")
+    required_fields = [
+        "patient_id",
+        "appointment_date",
+        "appointment_time",
+        "reason_for_visit"
+    ]
+
+    if any(
+        data.get(field) is None or str(data.get(field)).strip() == ""
+        for field in required_fields
     ):
-        return jsonify({"message": "Fields missing"}), 400
-    
-    patient = Patient.query.get(data["patient_id"])
+        return jsonify({
+            "message": "Patient, date, time, and reason are required."
+        }), 400
+
+    patient = db.session.get(Patient, data["patient_id"])
 
     if not patient:
-        return jsonify({"message" : "Patient not found"}),404
-    
+        return jsonify({"message": "Patient not found."}), 404
+
     try:
         appointment_date = datetime.strptime(
-            data["appointment_date"], "%Y-%m-%d"
+            str(data["appointment_date"]), "%Y-%m-%d"
         ).date()
 
         appointment_time = datetime.strptime(
-            data["appointment_time"], "%H:%M"
+            str(data["appointment_time"]), "%H:%M"
         ).time()
-    except ValueError:
-        return jsonify({"message" : "Invalid date or time format."}), 400
-    
-    existing = Appointment.query.filter(
-    Appointment.appointment_date == appointment_date,
-    Appointment.appointment_time == appointment_time,
-    Appointment.status.in_(["Pending", "Confirmed"])
-    ).first()
 
-    if existing:
+    except (ValueError, TypeError):
         return jsonify({
-            "message": "This time slot is already booked."
-        }), 409
-    
-    new_appointment = Appointment(
-        patient_id = data["patient_id"],
-        appointment_date = appointment_date,
-        appointment_time = appointment_time,
-        reason_for_visit = data["reason_for_visit"],
-        status = data["status"]
-    )
+            "message": "Invalid appointment date or time."
+        }), 400
+
+    reason = str(data["reason_for_visit"]).strip()
+
+    if len(reason) > 80:
+        return jsonify({
+            "message": "Reason for visit cannot exceed 80 characters."
+        }), 400
+
+    # Public registration must create a Pending request.
+    status = "Pending"
+
+    try:
+        # Prevent duplicate active bookings for the same slot.
+        existing = Appointment.query.filter(
+            Appointment.appointment_date == appointment_date,
+            Appointment.appointment_time == appointment_time,
+            Appointment.status.in_(["Pending", "Confirmed", "Completed"])
+        ).first()
+
+        if existing:
+            return jsonify({
+                "message": "This time slot is already booked."
+            }), 409
+
+        appointment = Appointment(
+            patient_id=patient.id,
+            appointment_date=appointment_date,
+            appointment_time=appointment_time,
+            reason_for_visit=reason,
+            status=status
+        )
+
+        db.session.add(appointment)
+        db.session.flush()
+
+        notification = Notification(
+            message=f"{patient.name} requested an appointment.",
+            notification_type="appointment",
+            appointment_id=appointment.id,
+            is_read=False
+        )
+
+        db.session.add(notification)
+        db.session.commit()
+
+        return jsonify({
+            "message": "Appointment request submitted successfully.",
+            "appointment": appointment.to_json()
+        }), 201
+
+    except Exception:
+        db.session.rollback()
+        app.logger.exception("Failed to create appointment")
+        return jsonify({
+            "message": "Failed to submit appointment request."
+        }), 500
 
 
-    db.session.add(new_appointment)
-    db.session.commit()
-    
-
-    notification = Notification(
-        message=f"{patient.name} requested an appointment.",
-        notification_type="appointment",
-    appointment_id=new_appointment.id,
-    is_read=False
-    )
-    
-    db.session.add(notification)
-    db.session.commit()
-
-    return jsonify({
-        "message" : "Appointment Created",
-        "appointment" : new_appointment.to_json()
-    }),201
 
 @app.route("/delete_appointment/<int:id>", methods=["DELETE"])
 def delete_appointment(id):
@@ -296,22 +342,53 @@ def delete_appointment(id):
     return jsonify({"message" : "Appointment deleted succesfully"}),200
 
 
+
 @app.route("/get_appointments", methods=["GET"])
 def get_appointments():
-    patient = request.args.get("patient", "").strip()
+    patient_id = request.args.get("patient_id", type=int)
+    patient_name = request.args.get("patient", "").strip()
 
-    query = Appointment.query.join(Patient)
+    query = Appointment.query
 
-    if patient:
-        query = query.filter(Patient.name.ilike(f"%{patient}%"))
+    if patient_id is not None:
+        query = query.filter(Appointment.patient_id == patient_id)
+
+    elif patient_name:
+        query = query.join(Patient).filter(
+            Patient.name.ilike(f"%{patient_name}%")
+        )
 
     appointments = query.order_by(
         Appointment.appointment_date.asc(),
         Appointment.appointment_time.asc()
     ).all()
 
+    # What was paid at each visit, for the Payment column in Appointment History.
+    paid_by_appointment = {
+        appointment_id: float(total)
+        for appointment_id, total in (
+            db.session.query(
+                Payment.appointment_id,
+                db.func.sum(Payment.amount)
+            )
+            .filter(
+                Payment.appointment_id.in_(
+                    [appointment.id for appointment in appointments]
+                )
+            )
+            .group_by(Payment.appointment_id)
+            .all()
+        )
+    }
+
     return jsonify({
-        "appointments": [appointment.to_json() for appointment in appointments],
+        "appointments": [
+            {
+                **appointment.to_json(),
+                "payment_amount": paid_by_appointment.get(appointment.id)
+            }
+            for appointment in appointments
+        ],
         "appointment_total": len(appointments)
     }), 200
 
@@ -634,6 +711,10 @@ def update_required_payment_before_signing(patient_id):
     else:
         appointment_balance.required_payment_before_signing = amount
 
+    # A newly set visit payment stays unpaid until the patient signs.
+    if amount > 0:
+        appointment_balance.isPaid = "unpaid"
+
     try:
         db.session.commit()
     except Exception:
@@ -702,14 +783,13 @@ def update_estimated_treatment_cost(patient_id):
     
     
 
+
 @app.route("/get_patient_budget/<int:patient_id>", methods=["GET"])
 def get_patient_budget(patient_id):
     patient = db.session.get(Patient, patient_id)
 
     if not patient:
-        return jsonify({
-            "message": "Patient not found"
-        }), 404
+        return jsonify({"message": "Patient not found"}), 404
 
     appointment_balance = AppointmentBalance.query.filter_by(
         patient_id=patient_id
@@ -720,6 +800,7 @@ def get_patient_budget(patient_id):
             "balance": 0,
             "total_paid": 0,
             "remaining": 0,
+            "required_payment": 0,
             "required_payment_before_signing": 0,
             "signing_payment_satisfied": False,
             "payments": []
@@ -727,9 +808,7 @@ def get_patient_budget(patient_id):
 
     payments = Payment.query.filter_by(
         patient_id=patient_id
-    ).order_by(
-        Payment.payment_date.desc()
-    ).all()
+    ).order_by(Payment.payment_date.desc()).all()
 
     total_paid = sum(
         float(payment.amount or 0)
@@ -741,12 +820,11 @@ def get_patient_budget(patient_id):
         appointment_balance.required_payment_before_signing or 0
     )
 
-    remaining = max(balance - total_paid, 0)
-
     return jsonify({
         "balance": balance,
-        "total_paid": total_paid,
-        "remaining": remaining,
+        "total_paid": round(total_paid, 2),
+        "remaining": balance,
+        "required_payment": required_payment,
         "required_payment_before_signing": required_payment,
         "signing_payment_satisfied": total_paid >= required_payment,
         "payments": [
@@ -755,20 +833,21 @@ def get_patient_budget(patient_id):
                 "amount": payment.amount,
                 "payment_date": (
                     payment.payment_date.isoformat()
-                    if payment.payment_date
-                    else None
+                    if payment.payment_date else None
                 )
             }
             for payment in payments
         ]
     }), 200
 
-    
 
 @app.route("/update_next_appointment/<int:patient_id>", methods=["PATCH"])
 def update_next_appointment(patient_id):
+    data = request.get_json(silent=True) or {}
 
-    data = request.get_json()
+    patient = db.session.get(Patient, patient_id)
+    if not patient:
+        return jsonify({"message": "Patient not found"}), 404
 
     required_fields = [
         "next_appointment_date",
@@ -784,21 +863,21 @@ def update_next_appointment(patient_id):
 
     try:
         appointment_date = datetime.strptime(
-            data["next_appointment_date"],
-            "%Y-%m-%d"
+            data["next_appointment_date"], "%Y-%m-%d"
         ).date()
 
         appointment_time = datetime.strptime(
-            data["next_appointment_time"],
-            "%H:%M"
+            data["next_appointment_time"], "%H:%M"
         ).time()
 
         next_balance = float(data["next_balance"])
 
-        if next_balance < 0:
+        if not __import__("math").isfinite(next_balance) or next_balance < 0:
             return jsonify({
-                "message": "Next balance cannot be negative"
+                "message": "Next balance must be a valid non-negative amount"
             }), 400
+
+        next_balance = round(next_balance, 2)
 
     except (ValueError, TypeError):
         return jsonify({
@@ -810,79 +889,37 @@ def update_next_appointment(patient_id):
     ).first()
 
     if not appointment_balance:
-
         appointment_balance = AppointmentBalance(
             patient_id=patient_id,
             next_appointment_date=appointment_date,
             next_appointment_time=appointment_time,
             balance=0.0,
             next_balance=next_balance,
+            required_payment_before_signing=0.0,
             isPaid="unpaid"
         )
-
         db.session.add(appointment_balance)
-
     else:
-
         appointment_balance.next_appointment_date = appointment_date
         appointment_balance.next_appointment_time = appointment_time
         appointment_balance.next_balance = next_balance
-
-        # New appointment means payment is unpaid again
         appointment_balance.isPaid = "unpaid"
 
-    db.session.commit()
-
-    return jsonify({
-        "message": "Next appointment updated successfully",
-        "appointment_balance": appointment_balance.to_json()
-    }), 200
-
-@app.route("/pay_next_appointment/<int:patient_id>", methods=["PATCH"])
-def pay_next_appointment(patient_id):
-
-    appointment_balance = AppointmentBalance.query.filter_by(
-        patient_id=patient_id
-    ).first()
-
-    if not appointment_balance:
+    try:
+        db.session.commit()
         return jsonify({
-            "message": "Appointment balance not found"
-        }), 404
-
-    if appointment_balance.isPaid == "paid":
+            "message": "Next appointment updated successfully",
+            "appointment_balance": appointment_balance.to_json()
+        }), 200
+    except Exception:
+        db.session.rollback()
+        app.logger.exception("Failed to update next appointment")
         return jsonify({
-            "message": "Next appointment has already been paid"
-        }), 400
+            "message": "Failed to update next appointment"
+        }), 500
 
-    if appointment_balance.next_balance <= 0:
-        return jsonify({
-            "message": "There is no balance to pay"
-        }), 400
 
-    if appointment_balance.balance < appointment_balance.next_balance:
-        return jsonify({
-            "message": "Main balance is lower than the next appointment balance"
-        }), 400
-        
-    payment = Payment(
-        patient_id=patient_id,
-        amount=appointment_balance.next_balance
-    )
 
-    db.session.add(payment)
-
-    # Update appointment balance
-    appointment_balance.balance -= appointment_balance.next_balance
-    appointment_balance.isPaid = "paid"
-
-    db.session.commit()
-
-    return jsonify({
-        "message": "Next appointment marked as paid",
-        "appointment_balance": appointment_balance.to_json()
-    }), 200
- 
 @app.route("/get_monthly_revenue", methods=["GET"])
 def get_monthly_revenue():
     today = datetime.now()
@@ -909,8 +946,6 @@ def get_monthly_revenue():
         "monthly_revenue": revenue or 0
     }), 200
     
-    
-
 @app.route("/save_patient_signature/<int:patient_id>", methods=["POST"])
 def save_patient_signature(patient_id):
     patient = db.session.get(Patient, patient_id)
@@ -928,40 +963,6 @@ def save_patient_signature(patient_id):
             "message": "Signature is required"
         }), 400
 
-    appointment_balance = AppointmentBalance.query.filter_by(
-        patient_id=patient_id
-    ).first()
-
-    if not appointment_balance:
-        return jsonify({
-            "message": "Patient payment information was not found"
-        }), 400
-
-    required_payment = float(
-        appointment_balance.required_payment_before_signing or 0
-    )
-
-    total_paid = db.session.query(
-        db.func.coalesce(db.func.sum(Payment.amount), 0)
-    ).filter(
-        Payment.patient_id == patient_id
-    ).scalar()
-
-    total_paid = float(total_paid or 0)
-
-    if total_paid < required_payment:
-        return jsonify({
-            "message": (
-                f"Payment requirement not met. "
-                f"The patient must have paid at least "
-                f"₱{required_payment:,.2f} before signing. "
-                f"Total paid: ₱{total_paid:,.2f}."
-            ),
-            "required_payment_before_signing": required_payment,
-            "total_paid": total_paid,
-            "signing_payment_satisfied": False
-        }), 400
-
     try:
         new_signature = PatientSignature(
             patient_id=patient_id,
@@ -972,36 +973,70 @@ def save_patient_signature(patient_id):
         db.session.commit()
 
         return jsonify({
-            "message": "Signature saved successfully",
-            "signature_id": new_signature.id,
-            "signing_payment_satisfied": True
+            "message": "Patient signature saved successfully",
+            "signature_id": new_signature.id
         }), 201
 
     except Exception:
         db.session.rollback()
-        app.logger.exception("Failed to save patient signature")
+
+        app.logger.exception(
+            "Failed to save patient signature for patient %s",
+            patient_id
+        )
 
         return jsonify({
             "message": "Failed to save patient signature"
         }), 500
 
-@app.route("/pay_and_save_signature/<int:patient_id>", methods=["POST"])
-def pay_and_save_signature(patient_id):
+
+
+@app.route(
+    "/sign_and_complete_appointment/<int:patient_id>",
+    methods=["POST"]
+)
+def sign_and_complete_appointment(patient_id):
     data = request.get_json(silent=True) or {}
     signature = data.get("signature")
 
     if not signature:
-        return jsonify({
-            "message": "Signature is required"
-        }), 400
+        return jsonify({"message": "Signature is required."}), 400
 
     try:
-        patient = db.session.get(Patient, patient_id)
+        appointment_id = int(data.get("appointment_id"))
+    except (ValueError, TypeError):
+        return jsonify({
+            "message": "Please select the appointment to complete."
+        }), 400
 
-        if not patient:
+    patient = db.session.get(Patient, patient_id)
+
+    if not patient:
+        return jsonify({"message": "Patient not found."}), 404
+
+    try:
+        # Complete the exact appointment the frontend selected.
+        appointment = (
+            Appointment.query
+            .filter_by(id=appointment_id, patient_id=patient_id)
+            .with_for_update()
+            .first()
+        )
+
+        if not appointment:
             return jsonify({
-                "message": "Patient not found"
+                "message": "Appointment not found for this patient."
             }), 404
+
+        # The clinic confirms the appointment in Pending Appointments first.
+        if appointment.status != "Confirmed":
+            return jsonify({
+                "message": (
+                    "Only appointments confirmed by the clinic can be "
+                    "signed. This appointment is "
+                    f"{appointment.status.lower()}."
+                )
+            }), 409
 
         appointment_balance = (
             AppointmentBalance.query
@@ -1012,93 +1047,93 @@ def pay_and_save_signature(patient_id):
 
         if not appointment_balance:
             return jsonify({
-                "message": "Appointment balance not found"
+                "message": (
+                    "Patient budget was not found. "
+                    "Please set up the patient's budget first."
+                )
             }), 404
 
-        if appointment_balance.isPaid == "paid":
-            return jsonify({
-                "message": "Next appointment has already been paid"
-            }), 400
+        main_balance = round(float(appointment_balance.balance or 0), 2)
 
-        next_balance = float(
-            appointment_balance.next_balance or 0
-        )
-        main_balance = float(
-            appointment_balance.balance or 0
-        )
-        required_payment = float(
-            appointment_balance.required_payment_before_signing or 0
+        # The payment the admin set for this visit.
+        amount_due = round(
+            float(appointment_balance.required_payment_before_signing or 0),
+            2
         )
 
-        if next_balance <= 0:
-            return jsonify({
-                "message": "There is no balance to pay"
-            }), 400
-
-        if main_balance < next_balance:
+        if amount_due <= 0:
             return jsonify({
                 "message": (
-                    "Main balance is lower than the next appointment balance"
+                    "Set the payment for this visit in Required Payment "
+                    "Before Signing before the patient signs."
                 )
             }), 400
 
-        existing_paid = db.session.query(
-            db.func.coalesce(db.func.sum(Payment.amount), 0)
-        ).filter(
-            Payment.patient_id == patient_id
-        ).scalar()
-
-        projected_total_paid = float(existing_paid or 0) + next_balance
-
-        if projected_total_paid < required_payment:
+        if amount_due > main_balance:
             return jsonify({
                 "message": (
-                    f"Payment requirement not met. "
-                    f"Required: ₱{required_payment:,.2f}. "
-                    f"Total after this payment: "
-                    f"₱{projected_total_paid:,.2f}."
-                ),
-                "required_payment_before_signing": required_payment,
-                "projected_total_paid": projected_total_paid
+                    f"The payment for this visit (₱{amount_due:,.2f}) is "
+                    f"more than the main balance (₱{main_balance:,.2f})."
+                )
             }), 400
 
         payment = Payment(
             patient_id=patient_id,
-            amount=next_balance
+            appointment_id=appointment.id,
+            amount=amount_due
         )
         db.session.add(payment)
-        appointment_balance.balance = main_balance - next_balance
+
+        # Take this visit's payment off the main balance. The admin sets
+        # the payment again for the next visit.
+        appointment_balance.balance = round(main_balance - amount_due, 2)
+        appointment_balance.required_payment_before_signing = 0.0
         appointment_balance.isPaid = "paid"
+
+        appointment.status = "Completed"
+
+        # Save the signature and notification in the same transaction.
         new_signature = PatientSignature(
             patient_id=patient_id,
             signature=signature
         )
         db.session.add(new_signature)
+        db.session.flush()
+
+        notification = Notification(
+            message=(
+                f"{patient.name} signed and paid ₱{amount_due:,.2f}."
+            ),
+            notification_type="appointment",
+            appointment_id=appointment.id,
+            is_read=False
+        )
+        db.session.add(notification)
+
         db.session.commit()
 
         return jsonify({
-            "message": "Payment and signature saved successfully",
-            "payment_id": payment.id,
+            "message": "Signature saved, payment recorded, and appointment completed.",
             "signature_id": new_signature.id,
+            "payment_id": payment.id,
+            "amount_paid": amount_due,
+            "appointment": appointment.to_json(),
             "appointment_balance": appointment_balance.to_json()
         }), 200
 
     except Exception:
         db.session.rollback()
         app.logger.exception(
-            "Failed to process payment and signature for patient %s",
+            "Failed to sign and complete appointment for patient %s",
             patient_id
         )
-
         return jsonify({
             "message": (
-                "Payment and signature could not be saved. "
-                "No changes were committed; please try again."
+                "Unable to save the signature and record the payment."
             )
         }), 500
 
-    
-    
+
 #NOTIFICATION ROUTES
 @app.route("/read_notification/<int:id>", methods=["PATCH"])
 def read_notification(id):
@@ -1221,6 +1256,11 @@ def get_daily_report():
         if appointment.status == "Declined"
     )
 
+    completed_count = sum(
+        1 for appointment in appointments
+        if appointment.status == "Completed"
+    )
+
     payments = Payment.query.filter(
         Payment.payment_date >= start_utc,
         Payment.payment_date < end_utc
@@ -1258,6 +1298,7 @@ def get_daily_report():
             "pending": pending_count,
             "confirmed": confirmed_count,
             "declined": declined_count,
+            "completed": completed_count,
             "details": [
                 appointment.to_json()
                 for appointment in appointments
@@ -1439,8 +1480,29 @@ def send_declined_email():
 
     return {"message" : "Email sent succesfully"}
 
+def add_payment_appointment_column():
+    # db.create_all() doesn't add new columns to tables that already exist,
+    # so add payment.appointment_id to databases created before it existed.
+    payment_table = Payment.__table__.name
+
+    columns = {
+        column["name"]
+        for column in inspect(db.engine).get_columns(payment_table)
+    }
+
+    if "appointment_id" in columns:
+        return
+
+    with db.engine.begin() as connection:
+        connection.execute(text(
+            f"ALTER TABLE {payment_table} "
+            "ADD COLUMN appointment_id INTEGER NULL"
+        ))
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    
+        add_payment_appointment_column()
+
     app.run(debug=True)

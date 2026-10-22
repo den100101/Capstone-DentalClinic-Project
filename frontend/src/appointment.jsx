@@ -50,6 +50,7 @@ function Appointment() {
     e.preventDefault();
 
     try {
+      // 1. Create the patient first.
       const patientResponse = await fetch(`${API_URL}/new_patients`, {
         method: "POST",
         headers: {
@@ -72,35 +73,60 @@ function Appointment() {
 
       if (!patientResponse.ok) {
         setAppointmentStatus(
-          patientData.message || "Failed to create appointment!",
+          patientData.message || "Failed to register patient.",
         );
+        setOpenStatus(true);
+        return;
       }
 
+      // Make sure the backend returned the new or existing patient's ID.
+      const patientId = patientData.patient?.id;
+
+      if (!patientId) {
+        setAppointmentStatus(
+          "Patient registration succeeded, but no patient ID was returned.",
+        );
+        setOpenStatus(true);
+        return;
+      }
+
+      // 2. Create the registration appointment.
       const appointmentResponse = await fetch(`${API_URL}/new_appointment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          patient_id: patientData.patient.id,
+          patient_id: patientId,
           appointment_date: appointmentDate,
           appointment_time: appointmentTime,
-          reason_for_visit: reasonForVisit,
-          status,
+          reason_for_visit: reasonForVisit.trim(),
+          status: "Pending",
         }),
       });
 
       const appointmentData = await appointmentResponse.json();
 
       if (!appointmentResponse.ok) {
+        setAppointmentStatus(
+          appointmentData.message || "Failed to submit appointment.",
+        );
         setOpenStatus(true);
-        setAppointmentStatus(appointmentData.message);
+        return;
       }
+
+      // 3. Show success only after both requests succeed.
+      setAppointmentStatus(
+        "Appointment request submitted successfully! The clinic will contact you to confirm your schedule.",
+      );
       setOpenStatus(true);
-      setAppointmentStatus("Appointment submitted successfully!");
     } catch (error) {
+      console.error("Appointment registration failed:", error);
+
+      setAppointmentStatus(
+        "Unable to submit your appointment. Please check your connection and try again.",
+      );
       setOpenStatus(true);
-      setAppointmentStatus(error.message);
     }
   }
 

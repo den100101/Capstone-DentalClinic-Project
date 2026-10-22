@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "../styles/PatientBudget.css";
 
 function PatientBudget({
@@ -7,8 +8,6 @@ function PatientBudget({
   updating,
   updateMainBalance,
   loading,
-
-  // NEW: Required payment before signing
   requiredPayment,
   setRequiredPayment,
   updatingRequiredPayment,
@@ -59,13 +58,13 @@ function PatientBudget({
           </div>
         </div>
 
-        {/* NEW: REQUIRED PAYMENT BEFORE SIGNING */}
+        {/* REQUIRED PAYMENT BEFORE SIGNING */}
         <div className="patient-budget-main-balance">
           <h3>Required Payment Before Signing</h3>
 
           <p>
-            Set the minimum amount the patient must have paid before signing
-            the required document.
+            Set how much the patient pays for this visit. It is recorded when
+            the patient signs, then resets to ₱0.00 for the next visit.
           </p>
 
           <div className="patient-budget-edit">
@@ -106,28 +105,6 @@ function PatientBudget({
             <h3>Remaining</h3>
             <p>{formatCurrency(budget.remaining)}</p>
           </div>
-        </div>
-
-        {/* PAYMENT REQUIREMENT STATUS */}
-        <div className="patient-budget-main-balance">
-          <h3>Signing Payment Status</h3>
-
-          <p>
-            Paid: {formatCurrency(budget.total_paid)}
-          </p>
-
-          <p>
-            Required:{" "}
-            {formatCurrency(
-              budget.required_payment_before_signing ?? requiredPayment
-            )}
-          </p>
-
-          <p>
-            {budget.signing_payment_satisfied
-              ? "Payment requirement satisfied."
-              : "Payment requirement not yet satisfied."}
-          </p>
         </div>
       </div>
     </div>

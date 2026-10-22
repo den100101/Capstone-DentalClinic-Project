@@ -10,13 +10,15 @@ function PatientAppointmentHistory({
   setNextDate,
   nextTime,
   setNextTime,
+  nextReason,
+  setNextReason,
 }) {
   function formatAppointmentDate(date) {
-    if (!date) {
-      return "—";
-    }
+    if (!date) return "—";
 
     const appointmentDate = new Date(`${date}T00:00:00`);
+
+    if (Number.isNaN(appointmentDate.getTime())) return "—";
 
     return appointmentDate.toLocaleDateString("en-US", {
       month: "short",
@@ -26,10 +28,6 @@ function PatientAppointmentHistory({
   }
 
   function formatPayment(amount) {
-    if (amount === null || amount === undefined || amount === "") {
-      return "₱0.00";
-    }
-
     return `₱${Number(amount).toLocaleString("en-PH", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
@@ -38,7 +36,6 @@ function PatientAppointmentHistory({
 
   return (
     <div className="patient-appointment-history-container">
-      {/* APPOINTMENT HISTORY */}
       <div className="appointment-history-section">
         <h2>Appointment History</h2>
 
@@ -63,7 +60,11 @@ function PatientAppointmentHistory({
                     </td>
                     <td>{appointment.appointment_time || "—"}</td>
                     <td>{appointment.reason_for_visit || "—"}</td>
-                    <td>—</td>
+                    <td>
+                      {appointment.payment_amount != null
+                        ? formatPayment(appointment.payment_amount)
+                        : "—"}
+                    </td>
                     <td>
                       <span
                         className={`appointment-history-status ${String(
@@ -87,7 +88,6 @@ function PatientAppointmentHistory({
         </div>
       </div>
 
-      {/* NEXT APPOINTMENT */}
       <div className="next-appointment-history-section">
         <h2>Next Appointment</h2>
 
@@ -99,7 +99,7 @@ function PatientAppointmentHistory({
               type="date"
               id="historyNextDate"
               value={nextDate}
-              onChange={(e) => setNextDate(e.target.value)}
+              onChange={(event) => setNextDate(event.target.value)}
             />
           </div>
 
@@ -109,7 +109,7 @@ function PatientAppointmentHistory({
             <select
               id="historyNextTime"
               value={nextTime}
-              onChange={(e) => setNextTime(e.target.value)}
+              onChange={(event) => setNextTime(event.target.value)}
             >
               <option value="">Select a Time</option>
 
@@ -120,7 +120,26 @@ function PatientAppointmentHistory({
               ))}
             </select>
           </div>
+
+          <div className="next-appointment-history-field">
+            <label htmlFor="historyNextReason">Reason for Visit</label>
+
+            <textarea
+              id="historyNextReason"
+              value={nextReason}
+              onChange={(event) => setNextReason(event.target.value)}
+              placeholder="Enter the reason for the dental visit"
+              rows={3}
+              maxLength={500}
+            />
+          </div>
         </div>
+
+        <p>
+          This only saves the next appointment date shown on the patient's
+          record. To sign for a visit in the Balances tab, the appointment must
+          first be confirmed in Pending Appointments.
+        </p>
 
         <div className="next-appointment-history-actions">
           <button
@@ -138,7 +157,7 @@ function PatientAppointmentHistory({
             disabled={updating}
             className="next-appointment-history-update"
           >
-            {updating ? "Updating..." : "Update Appointment"}
+            {updating ? "Updating..." : "Update Appointment Details"}
           </button>
         </div>
       </div>

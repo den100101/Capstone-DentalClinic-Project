@@ -399,6 +399,12 @@
   color: #b20d0d;
 }
 
+.completed-summary {
+  border-color: #bfd4f2;
+  background: #eef5ff;
+  color: #1e40af;
+}
+
 /* ================================
    TABLES
 ================================ */
@@ -491,6 +497,11 @@
 .status-declined {
   background: #f8d7da;
   color: #721c24;
+}
+
+.status-completed {
+  background: #dbeafe;
+  color: #1e40af;
 }
 
 .status-unknown {

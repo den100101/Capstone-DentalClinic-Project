@@ -27,9 +27,12 @@ function PatientRecord({ patient }) {
     total_paid: 0,
     remaining: 0,
     payments: [],
+    required_payment_before_signing: 0,
+    signing_payment_satisfied: false,
   });
 
   const [nextDate, setNextDate] = useState("");
+  const [nextReason, setNextReason] = useState("");
   const [nextTime, setNextTime] = useState("");
   const [nextBalance, setNextBalance] = useState("");
   const [mainBalance, setMainBalance] = useState("");
@@ -54,13 +57,13 @@ function PatientRecord({ patient }) {
     { value: "19:00", label: "07:00 PM" },
   ];
 
-  // Sync waiver status when the selected patient changes
+  // Sync waiver status when the selected patient changes.
   useEffect(() => {
     setWaiverSigned(Boolean(patient?.waiver_signed));
   }, [patient?.id, patient?.waiver_signed]);
 
   async function getToothRecords() {
-    if (!patient) return;
+    if (!patient?.id) return;
 
     try {
       const response = await fetch(
@@ -76,18 +79,16 @@ function PatientRecord({ patient }) {
         setToothRecords(data.tooth_records || []);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Failed to fetch tooth records:", error);
     }
   }
 
   async function getAppointments() {
-    if (!patient) return;
+    if (!patient?.id) return;
 
     try {
       const response = await fetch(
-        `${API_URL}/get_appointments?patient=${encodeURIComponent(
-          patient.name,
-        )}`,
+        `${API_URL}/get_appointments?patient_id=${patient.id}`,
         {
           credentials: "include",
         },
@@ -101,13 +102,13 @@ function PatientRecord({ patient }) {
         setAppointments([]);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Failed to fetch appointments:", error);
       setAppointments([]);
     }
   }
 
   async function getAppointmentBalance() {
-    if (!patient) return;
+    if (!patient?.id) return;
 
     setLoadingBalance(true);
 
@@ -150,56 +151,77 @@ function PatientRecord({ patient }) {
         setRequiredPayment("");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Failed to fetch appointment balance:", error);
     } finally {
       setLoadingBalance(false);
     }
   }
 
   async function getPatientBudget() {
-      if (!patient) return;
+    if (!patient?.id) return;
 
-      setLoadingBudget(true);
+    setLoadingBudget(true);
 
-      try {
-        const response = await fetch(
-          `${API_URL}/get_patient_budget/${patient.id}`,
-          {
-            credentials: "include",
-          },
+    try {
+      const response = await fetch(
+        `${API_URL}/get_patient_budget/${patient.id}`,
+        {
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setBudget({
+          balance: Number(data.balance ?? 0),
+          total_paid: Number(data.total_paid ?? 0),
+          remaining: Number(data.remaining ?? 0),
+          payments: data.payments || [],
+          required_payment_before_signing: Number(
+            data.required_payment_before_signing ?? 0,
+          ),
+          signing_payment_satisfied: data.signing_payment_satisfied ?? false,
+        });
+
+        // Keep the main balance synchronized with the backend.
+        setMainBalance(String(data.balance ?? 0));
+
+        setAppointmentBalance((previous) =>
+          previous
+            ? {
+                ...previous,
+                balance: Number(data.balance ?? previous.balance ?? 0),
+                required_payment_before_signing: Number(
+                  data.required_payment_before_signing ??
+                    previous.required_payment_before_signing ??
+                    0,
+                ),
+              }
+            : previous,
         );
 
-        const data = await response.json();
-
-        if (response.ok) {
-          setBudget({
-            balance: data.balance ?? 0,
-            total_paid: data.total_paid ?? 0,
-            remaining: data.remaining ?? 0,
-            payments: data.payments || [],
-            required_payment_before_signing:
-              data.required_payment_before_signing ?? 0,
-            signing_payment_satisfied:
-              data.signing_payment_satisfied ?? false,
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch patient budget:", error);
-      } finally {
-        setLoadingBudget(false);
+        setRequiredPayment(data.required_payment_before_signing ?? "");
       }
-}
+    } catch (error) {
+      console.error("Failed to fetch patient budget:", error);
+    } finally {
+      setLoadingBudget(false);
+    }
+  }
 
   useEffect(() => {
+    if (!patient?.id) return;
+
     getToothRecords();
     getAppointments();
     getAppointmentBalance();
     getPatientBudget();
   }, [patient?.id]);
 
-  // Update physical waiver status
+  // Update physical waiver status.
   async function updateWaiverStatus(checked) {
-    if (!patient || updatingWaiver) return;
+    if (!patient?.id || updatingWaiver) return;
 
     const previousStatus = waiverSigned;
 
@@ -224,12 +246,13 @@ function PatientRecord({ patient }) {
       const data = await response.json();
 
       if (response.ok) {
-        setWaiverSigned(
+        const savedStatus =
           data.waiver_signed !== undefined
             ? Boolean(data.waiver_signed)
-            : checked,
-        );
-        patient.waiver_signed = checked;
+            : checked;
+
+        setWaiverSigned(savedStatus);
+        patient.waiver_signed = savedStatus;
       } else {
         setWaiverSigned(previousStatus);
         alert(data.message || "Failed to update waiver status.");
@@ -244,8 +267,15 @@ function PatientRecord({ patient }) {
   }
 
   async function updateMainBalance() {
-    if (mainBalance === "") {
-      alert("Please enter the main balance.");
+    if (!patient?.id) return;
+
+    if (mainBalance === "" || !Number.isFinite(Number(mainBalance))) {
+      alert("Please enter a valid main balance.");
+      return;
+    }
+
+    if (Number(mainBalance) < 0) {
+      alert("The main balance cannot be negative.");
       return;
     }
 
@@ -268,18 +298,19 @@ function PatientRecord({ patient }) {
 
       const data = await response.json();
 
-      if (response.ok) {
-        setAppointmentBalance(data.appointment_balance);
-        setMainBalance(data.appointment_balance.balance);
-
-        await getPatientBudget();
-
-        alert("Main balance updated successfully.");
-      } else {
+      if (!response.ok) {
         alert(data.message || "Failed to update balance.");
+        return;
       }
+
+      setAppointmentBalance(data.appointment_balance);
+      setMainBalance(String(data.appointment_balance.balance ?? 0));
+
+      await getPatientBudget();
+
+      alert("Main balance updated successfully.");
     } catch (error) {
-      console.log(error);
+      console.error("Failed to update main balance:", error);
       alert("Something went wrong.");
     } finally {
       setUpdating(false);
@@ -287,65 +318,66 @@ function PatientRecord({ patient }) {
   }
 
   async function updateRequiredPayment() {
-  if (requiredPayment === "" || !Number.isFinite(Number(requiredPayment))) {
-    alert("Please enter a valid required payment amount.");
-    return;
-  }
+    if (!patient?.id || updatingRequiredPayment) return;
 
-  const amount = Number(requiredPayment);
+    const amount = Number(requiredPayment);
 
-  if (amount < 0) {
-    alert("The required payment cannot be negative.");
-    return;
-  }
+    if (requiredPayment === "" || !Number.isFinite(amount) || amount < 0) {
+      alert("Please enter a valid required payment amount.");
+      return;
+    }
 
-  setUpdatingRequiredPayment(true);
+    setUpdatingRequiredPayment(true);
 
-  try {
-    const response = await fetch(
-      `${API_URL}/update_required_payment_before_signing/${patient.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await fetch(
+        `${API_URL}/update_required_payment_before_signing/${patient.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            required_payment_before_signing: amount,
+          }),
         },
-        credentials: "include",
-        body: JSON.stringify({
-          required_payment_before_signing: amount,
-        }),
-      },
-    );
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setRequiredPayment(data.required_payment_before_signing);
+      if (!response.ok) {
+        alert(data.message || "Failed to update required payment.");
+        return;
+      }
+
+      // Update only the signing requirement.
+      // Do not overwrite the next appointment's separate balance.
+      setRequiredPayment(amount);
 
       setAppointmentBalance((previous) =>
         previous
           ? {
               ...previous,
-              required_payment_before_signing:
-                data.required_payment_before_signing,
+              required_payment_before_signing: amount,
             }
           : previous,
       );
 
-      await getPatientBudget();
+      await Promise.all([getAppointmentBalance(), getPatientBudget()]);
 
-      alert("Required payment before signing updated successfully.");
-    } else {
-      alert(data.message || "Failed to update required payment.");
+      alert("Required payment updated successfully.");
+    } catch (error) {
+      console.error("Failed to update required payment:", error);
+      alert("Unable to update required payment.");
+    } finally {
+      setUpdatingRequiredPayment(false);
     }
-  } catch (error) {
-    console.error("Failed to update required payment:", error);
-    alert("Something went wrong while updating the required payment.");
-  } finally {
-    setUpdatingRequiredPayment(false);
   }
-}
 
   async function updateNextAppointment() {
+    if (!patient?.id) return;
+
     if (!nextDate) {
       alert("Please select an appointment date.");
       return;
@@ -356,8 +388,12 @@ function PatientRecord({ patient }) {
       return;
     }
 
-    if (nextBalance === "") {
-      alert("Please enter the next appointment balance.");
+    if (
+      nextBalance === "" ||
+      !Number.isFinite(Number(nextBalance)) ||
+      Number(nextBalance) < 0
+    ) {
+      alert("Please enter a valid next appointment balance.");
       return;
     }
 
@@ -382,62 +418,20 @@ function PatientRecord({ patient }) {
 
       const data = await response.json();
 
-      if (response.ok) {
-        setAppointmentBalance(data.appointment_balance);
-        setNextDate(data.appointment_balance.next_appointment_date);
-        setNextBalance(data.appointment_balance.next_balance);
-
-        await getPatientBudget();
-
-        alert("Next appointment updated successfully.");
-      } else {
+      if (!response.ok) {
         alert(data.message || "Failed to update next appointment.");
+        return;
       }
+
+      setAppointmentBalance(data.appointment_balance);
+      setNextDate(data.appointment_balance.next_appointment_date ?? "");
+      setNextBalance(data.appointment_balance.next_balance ?? "");
+
+      await getPatientBudget();
+
+      alert("Next appointment updated successfully.");
     } catch (error) {
-      console.log(error);
-      alert("Something went wrong.");
-    } finally {
-      setUpdating(false);
-    }
-  }
-
-  async function payNextAppointment() {
-    if (!appointmentBalance) return;
-    if (appointmentBalance.isPaid === "paid") return;
-
-    const confirmed = window.confirm(
-      `Mark ₱${Number(
-        appointmentBalance.next_balance,
-      ).toLocaleString()} as paid?`,
-    );
-
-    if (!confirmed) return;
-
-    setUpdating(true);
-
-    try {
-      const response = await fetch(
-        `${API_URL}/pay_next_appointment/${patient.id}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-        },
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setAppointmentBalance(data.appointment_balance);
-        setMainBalance(data.appointment_balance.balance);
-
-        await getPatientBudget();
-
-        alert("Next appointment payment recorded successfully.");
-      } else {
-        alert(data.message || "Failed to process payment.");
-      }
-    } catch (error) {
-      console.log(error);
+      console.error("Failed to update next appointment:", error);
       alert("Something went wrong.");
     } finally {
       setUpdating(false);
@@ -475,9 +469,7 @@ function PatientRecord({ patient }) {
   }
 
   function formatAppointmentDate(date) {
-    if (!date) {
-      return "No appointment";
-    }
+    if (!date) return "No appointment";
 
     const appointmentDate = new Date(`${date}T00:00:00`);
 
@@ -502,70 +494,129 @@ function PatientRecord({ patient }) {
   function formatPaymentDate(date) {
     if (!date) return "—";
 
-    return new Date(date).toLocaleDateString("en-US", {
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) return "—";
+
+    return parsedDate.toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
     });
   }
 
-  
+  // appointment_time comes back as "hh:mm AM/PM", so convert it to 24-hour
+  // time first; otherwise "02:00 PM" sorts before "10:00 AM".
+  function getAppointmentSortKey(appointment) {
+    const [, hours = "0", minutes = "00", period = ""] =
+      /(\d{1,2}):(\d{2})\s*(AM|PM)?/i.exec(
+        String(appointment.appointment_time || ""),
+      ) || [];
+
+    let hour = Number(hours);
+
+    if (period) {
+      hour = (hour % 12) + (period.toUpperCase() === "PM" ? 12 : 0);
+    }
+
+    return `${appointment.appointment_date || ""} ${String(hour).padStart(
+      2,
+      "0",
+    )}:${minutes}`;
+  }
+
+  // The visit being signed: the earliest appointment the clinic confirmed.
+  const appointmentToSign =
+    appointments
+      .filter(
+        (appointment) =>
+          String(appointment.status).toLowerCase() === "confirmed",
+      )
+      .sort((a, b) =>
+        getAppointmentSortKey(a).localeCompare(getAppointmentSortKey(b)),
+      )[0] || null;
+
+  // The payment the admin set for this visit. It is recorded when the
+  // patient signs.
+  const amountDue = Number(budget.required_payment_before_signing || 0);
+
+  function openSignature() {
+    if (!appointmentToSign) {
+      alert(
+        "There is no confirmed appointment to sign. Confirm the patient's appointment in Pending Appointments first.",
+      );
+      return;
+    }
+
+    if (amountDue <= 0) {
+      alert(
+        "Set the payment for this visit in Required Payment Before Signing first.",
+      );
+      return;
+    }
+
+    setShowSignature(true);
+  }
+
   async function handleSaveSignature(signature) {
-    if (!patient?.id || !appointmentBalance) return;
+    if (!patient?.id || !appointmentToSign || savingSignature) return;
 
-    const confirmed = window.confirm(
-      `Record payment of ${formatCurrency(
-        appointmentBalance.next_balance
-      )} and save the patient's signature?`
-    );
-
-    if (!confirmed) return;
+    if (!signature) {
+      alert("Please provide the patient's signature.");
+      return;
+    }
 
     setSavingSignature(true);
 
     try {
       const response = await fetch(
-        `${API_URL}/pay_and_save_signature/${patient.id}`,
+        `${API_URL}/sign_and_complete_appointment/${patient.id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify({ signature }),
-        }
+          body: JSON.stringify({
+            signature,
+            appointment_id: appointmentToSign.id,
+          }),
+        },
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Failed to process payment and signature.");
+        alert(
+          data.message ||
+            "Failed to save the signature and record the payment.",
+        );
         return;
       }
 
-      setAppointmentBalance(data.appointment_balance);
-      setMainBalance(data.appointment_balance.balance);
-
       setShowSignature(false);
 
-      await getAppointmentBalance();
-      await getPatientBudget();
-
-      alert("Payment and signature saved successfully.");
-    } catch (error) {
-      console.error(
-        "Failed to process payment and signature:",
-        error
-      );
+      await Promise.all([
+        getAppointments(),
+        getAppointmentBalance(),
+        getPatientBudget(),
+      ]);
 
       alert(
-        "Unable to confirm the result. Please refresh the patient record and check the payment history before trying again."
+        `Signature saved and ${formatCurrency(
+          data.amount_paid,
+        )} recorded. The appointment is now completed.`,
+      );
+    } catch (error) {
+      console.error("Failed to sign and complete appointment:", error);
+
+      alert(
+        "Unable to confirm the result. Refresh the patient record and check the payment history before trying again.",
       );
     } finally {
       setSavingSignature(false);
     }
   }
-
 
   return (
     <>
@@ -606,7 +657,7 @@ function PatientRecord({ patient }) {
               <div className="patient-status-icon-container next-appointment">
                 <img
                   src="/Images/schedule-blue.png"
-                  alt="patient-card-icons"
+                  alt="Schedule"
                   className="patient-record-icons"
                 />
               </div>
@@ -624,15 +675,14 @@ function PatientRecord({ patient }) {
                 </div>
 
                 <div className="card-support-detail">
-                  Next payment:{" "}
-                  {formatCurrency(appointmentBalance?.next_balance ?? 0)}
+                  Next payment: {formatCurrency(amountDue)}
                 </div>
               </div>
 
               <div className="patient-status-icon-container balance">
                 <img
                   src="/Images/warning-danger.png"
-                  alt="patient-card-icons"
+                  alt="Balance warning"
                   className="patient-record-icons"
                 />
               </div>
@@ -649,7 +699,7 @@ function PatientRecord({ patient }) {
               <div className="patient-status-icon-container">
                 <img
                   src="/Images/dental-filling.png"
-                  alt="patient-card-icons"
+                  alt="Dental status"
                   className="patient-record-icons"
                 />
               </div>
@@ -696,7 +746,7 @@ function PatientRecord({ patient }) {
         {/* MEDICAL HISTORY */}
         {selectedNav === "Medical" && (
           <div className="patient-medical-records-container">
-            {/* PHYSICAL WAIVER - ONLY IN MEDICAL HISTORY */}
+            {/* PHYSICAL WAIVER */}
             <div className="patient-waiver-status">
               <div className="patient-waiver-info">
                 <h2>Physical Waiver</h2>
@@ -779,6 +829,8 @@ function PatientRecord({ patient }) {
           setNextDate={setNextDate}
           nextTime={nextTime}
           setNextTime={setNextTime}
+          nextReason={nextReason}
+          setNextReason={setNextReason}
         />
       )}
 
@@ -787,7 +839,7 @@ function PatientRecord({ patient }) {
         <div className="patient-balances-container">
           {/* LEFT - BUDGET */}
           <div className="patient-balances-left">
-           <PatientBudget
+            <PatientBudget
               patient={patient}
               API_URL={API_URL}
               budget={budget}
@@ -800,6 +852,7 @@ function PatientRecord({ patient }) {
               setRequiredPayment={setRequiredPayment}
               updatingRequiredPayment={updatingRequiredPayment}
               updateRequiredPayment={updateRequiredPayment}
+              patientId={patient.id}
             />
           </div>
 
@@ -845,10 +898,10 @@ function PatientRecord({ patient }) {
 
               <div className="payment-summary">
                 <div>
-                  <span>Amount Due</span>
-                  <strong>
-                    {formatCurrency(appointmentBalance?.next_balance ?? 0)}
-                  </strong>
+                  <div>
+                    <span>Amount Due</span>
+                    <strong>{formatCurrency(amountDue)}</strong>
+                  </div>
                 </div>
 
                 <div>
@@ -862,20 +915,15 @@ function PatientRecord({ patient }) {
               <div className="modifier-actions">
                 <button
                   type="button"
-                  onClick={() => setShowSignature(true)}
+                  onClick={openSignature}
                   disabled={
                     updating ||
                     savingSignature ||
-                    !appointmentBalance ||
-                    appointmentBalance.isPaid === "paid" ||
-                    Number(appointmentBalance.next_balance) <= 0
+                    loadingBalance ||
+                    loadingBudget
                   }
                 >
-                  {appointmentBalance?.isPaid === "paid"
-                    ? "Paid ✓"
-                    : updating || savingSignature
-                      ? "Processing..."
-                      : "Mark as Paid"}
+                  {savingSignature ? "Saving..." : "Sign & Record Payment"}
                 </button>
               </div>
             </div>
@@ -886,6 +934,15 @@ function PatientRecord({ patient }) {
       {/* SIGNATURE MODAL */}
       {showSignature && (
         <PatientSignature
+          note={
+            appointmentToSign
+              ? `Signing records a payment of ${formatCurrency(
+                  amountDue,
+                )} and completes the appointment on ${formatAppointmentDate(
+                  appointmentToSign.appointment_date,
+                )} at ${appointmentToSign.appointment_time}.`
+              : ""
+          }
           onSave={handleSaveSignature}
           onCancel={() => setShowSignature(false)}
         />

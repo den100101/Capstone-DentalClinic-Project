@@ -199,6 +199,12 @@ class AppointmentBalance(db.Model):
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"), nullable=False)
+    # The visit this payment was made for (empty for older payments).
+    appointment_id = db.Column(
+        db.Integer,
+        db.ForeignKey("appointments.id", ondelete="SET NULL"),
+        nullable=True
+    )
     amount = db.Column(db.Float, nullable=False)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -208,6 +214,7 @@ class Payment(db.Model):
         return {
             "id": self.id,
             "patient_id": self.patient_id,
+            "appointment_id": self.appointment_id,
             "amount": self.amount,
             "payment_date": self.payment_date.isoformat()
         }
