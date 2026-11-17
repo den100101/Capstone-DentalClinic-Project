@@ -95,6 +95,8 @@ def new_patients():
             "missing_fields": missing_fields
         }), 400
 
+    name = " ".join(str(data["name"]).strip().split())
+    email = str(data["email"]).strip()
     contact_num = str(data["contact_num"]).strip()
 
     if not re.fullmatch(r"\+?[\d\s\-()]+", contact_num):
@@ -102,27 +104,45 @@ def new_patients():
             "message": "Contact number contains invalid characters."
         }), 400
 
+    normalized_contact = re.sub(r"\D", "", contact_num)
+    normalized_name = name.casefold()
+
+    if not normalized_contact:
+        return jsonify({
+            "message": "Please provide a valid contact number."
+        }), 400
+
     try:
         birthdate = datetime.strptime(
             str(data["birthdate"]), "%Y-%m-%d"
         ).date()
+        
+        possible_duplicates = Patient.query.filter(
+            db.func.lower(db.func.trim(Patient.name)) == normalized_name
+        ).all()
 
-        existing_patient = Patient.query.filter_by(
-            name=str(data["name"]).strip(),
-            birthdate=birthdate,
-            email=str(data["email"]).strip()
-        ).first()
+        existing_patient = next(
+            (
+                patient for patient in possible_duplicates
+                if re.sub(r"\D", "", str(patient.contact_num or ""))
+                == normalized_contact
+            ),
+            None
+        )
 
         if existing_patient:
             return jsonify({
-                "message": "Existing patient found.",
+                "message": (
+                    "This patient is already registered. "
+                    "Please proceed using the existing patient record."
+                ),
                 "patient": existing_patient.to_json(),
                 "existing_patient": True
             }), 200
 
         new_patient = Patient(
-            name=str(data["name"]).strip(),
-            email=str(data["email"]).strip(),
+            name=name,
+            email=email,
             birthdate=birthdate,
             age=data["age"],
             gender=data["gender"],
@@ -137,7 +157,8 @@ def new_patients():
 
         return jsonify({
             "message": "Patient created successfully.",
-            "patient": new_patient.to_json()
+            "patient": new_patient.to_json(),
+            "existing_patient": False
         }), 201
 
     except ValueError:
@@ -152,6 +173,7 @@ def new_patients():
         return jsonify({
             "message": "Failed to register patient."
         }), 500
+
 
 
 @app.route("/get_patients", methods=["GET"])
