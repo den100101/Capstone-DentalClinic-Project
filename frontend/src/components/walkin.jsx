@@ -225,11 +225,11 @@ function Walkin({ closeModal }) {
         );
       }
 
-      const patientId = patientData.patient?.id;
+      const bookingToken = patientData.booking_token;
 
-      if (!patientId) {
+      if (!bookingToken) {
         throw new Error(
-          "The patient was created, but the patient ID was not returned.",
+          "The patient was created, but the secure booking token was not returned.",
         );
       }
 
@@ -241,11 +241,10 @@ function Walkin({ closeModal }) {
         },
         credentials: "include",
         body: JSON.stringify({
-          patient_id: patientId,
+          booking_token: bookingToken,
           appointment_date: appointmentDate,
           appointment_time: appointmentTime,
           reason_for_visit: reasonForVisit,
-          status,
         }),
       });
 
