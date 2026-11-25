@@ -28,7 +28,6 @@ PUBLIC_ENDPOINTS = {
     "new_patients",
     "new_appointment",
     "get_taken_times",
-    "send_mail",  # Public contact form.
 }
 
 @app.before_request
