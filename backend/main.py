@@ -94,7 +94,9 @@ def verify_user():
     if not check_password_hash(user.password, data["password"]):
         return jsonify({"message": "Invalid password"}), 401
 
-    session.clear()\n    session["user_id"] = user.id\n    session.permanent = True
+    session.clear()
+    session["user_id"] = user.id
+    session.permanent = True
 
     return jsonify({
         "message": "Login Successful",
