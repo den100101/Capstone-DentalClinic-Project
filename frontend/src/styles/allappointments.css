@@ -8,8 +8,10 @@
   display: flex;
   flex-direction: column;
 }
+
 .all-appointment-table {
   width: 100%;
+  min-width: 900px;
   border: 1px solid #ddd;
   border-collapse: collapse;
   border-spacing: 0;
@@ -22,6 +24,7 @@
 .all-appointment-table thead th:last-child {
   border-top-right-radius: 10px;
 }
+
 .all-appointment-table thead {
   background-color: rgb(199, 8, 8);
   font-size: 2rem;
@@ -35,6 +38,7 @@
   border-bottom: 1px solid #ddd;
   text-align: left;
 }
+
 .all-appointment-table td {
   font-size: 2rem;
 }
@@ -54,7 +58,7 @@
 }
 
 .all-appointment-buttons:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .all-appointment-buttons.confirm {
@@ -89,12 +93,17 @@
   cursor: pointer;
 }
 
+.pagination-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .pagination-pages {
   font-size: 1.5rem;
   color: white;
 }
 
-/* ================== 1500px ================== */
+/* LAPTOPS */
 @media (max-width: 1500px) {
   .all-appointment-table thead {
     font-size: 1.8rem;
@@ -111,15 +120,14 @@
   }
 }
 
-/* ========================= */
-
 @media (max-width: 1200px) {
   .all-appointment-table-container {
     width: 100%;
   }
 
   .all-appointment-table {
-    width: 200px;
+    width: 100%;
+    min-width: 900px;
   }
 
   .all-appointment-table thead {
@@ -142,8 +150,6 @@
     padding: 0.5rem 0.8rem;
   }
 }
-
-/* ========================= */
 
 @media (max-width: 992px) {
   .all-appointment-table {
@@ -175,8 +181,6 @@
   }
 }
 
-/* ========================= */
-
 @media (max-width: 768px) {
   .all-appointment-table {
     min-width: 800px;
@@ -206,8 +210,6 @@
     font-size: 1rem;
   }
 }
-
-/* ========================= */
 
 @media (max-width: 500px) {
   .all-appointment-table {
@@ -247,5 +249,11 @@
 
   .pagination-pages {
     font-size: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .all-appointment-buttons {
+    transition: none;
   }
 }
