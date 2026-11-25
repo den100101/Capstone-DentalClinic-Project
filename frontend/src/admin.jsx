@@ -303,7 +303,7 @@ function Admin({ setIsLoggedin }) {
               MAIN CONTENT
           ========================= */}
 
-        <div>
+        <main className="admin-main-content">
           {activeComponent === "Dashboard" && <Dashboard />}
 
           {activeComponent === "Appointments" && (
@@ -312,7 +312,7 @@ function Admin({ setIsLoggedin }) {
 
           {activeComponent === "Patients" && <Patients />}
           {activeComponent === "DailyReport" && <GenerateReport />}
-        </div>
+        </main>
       </div>
     </>
   );
