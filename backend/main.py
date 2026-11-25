@@ -1,4 +1,5 @@
 from flask import request, jsonify, session
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 import os
 from dotenv import load_dotenv
 from config import app,db,mail
@@ -13,8 +14,59 @@ import re
 
 load_dotenv()
 
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+# config.py validates SECRET_KEY and configures the session cookie and CORS.
 limiter = Limiter(app=app,key_func=get_remote_address)
+
+booking_serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+BOOKING_TOKEN_SALT = "swiss-public-appointment-booking"
+
+# Only these endpoints are intentionally available without an admin session.
+PUBLIC_ENDPOINTS = {
+    "verify_user",
+    "check_session",
+    "logout",
+    "new_patients",
+    "new_appointment",
+    "get_taken_times",
+    "send_mail",  # Public contact form.
+}
+
+@app.before_request
+def protect_admin_api_and_check_request_origin():
+    # A credentialed browser request must originate from the configured frontend.
+    if request.method in {"POST", "PUT", "PATCH", "DELETE"}:
+        origin = request.headers.get("Origin")
+        allowed_origins = app.config.get("CORS_ORIGINS", [])
+        if origin not in allowed_origins:
+            return jsonify({"message": "Request origin is not allowed."}), 403
+
+    if request.endpoint is None or request.endpoint in PUBLIC_ENDPOINTS:
+        return None
+
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"message": "Authentication required."}), 401
+
+    user = db.session.get(User, user_id)
+    if user is None:
+        session.clear()
+        return jsonify({"message": "Authentication required."}), 401
+
+    return None
+
+def issue_booking_token(patient_id):
+    return booking_serializer.dumps(
+        {"patient_id": patient_id},
+        salt=BOOKING_TOKEN_SALT
+    )
+
+def resolve_booking_token(token):
+    payload = booking_serializer.loads(
+        token,
+        salt=BOOKING_TOKEN_SALT,
+        max_age=900
+    )
+    return payload.get("patient_id")
 
 # LOGIN ROUTES
 
@@ -42,7 +94,7 @@ def verify_user():
     if not check_password_hash(user.password, data["password"]):
         return jsonify({"message": "Invalid password"}), 401
 
-    session["user_id"] = user.id
+    session.clear()\n    session["user_id"] = user.id\n    session.permanent = True
 
     return jsonify({
         "message": "Login Successful",
@@ -136,7 +188,7 @@ def new_patients():
                     "This patient is already registered. "
                     "Please proceed using the existing patient record."
                 ),
-                "patient": existing_patient.to_json(),
+                "booking_token": issue_booking_token(existing_patient.id),
                 "existing_patient": True
             }), 200
 
@@ -157,7 +209,7 @@ def new_patients():
 
         return jsonify({
             "message": "Patient created successfully.",
-            "patient": new_patient.to_json(),
+            "booking_token": issue_booking_token(new_patient.id),
             "existing_patient": False
         }), 201
 
@@ -259,7 +311,7 @@ def new_appointment():
     data = request.get_json(silent=True) or {}
 
     required_fields = [
-        "patient_id",
+        "booking_token",
         "appointment_date",
         "appointment_time",
         "reason_for_visit"
@@ -273,7 +325,17 @@ def new_appointment():
             "message": "Patient, date, time, and reason are required."
         }), 400
 
-    patient = db.session.get(Patient, data["patient_id"])
+    try:
+        patient_id = resolve_booking_token(str(data["booking_token"]))
+    except (BadSignature, SignatureExpired, TypeError, AttributeError):
+        return jsonify({
+            "message": "Your registration session expired. Please submit the patient form again."
+        }), 400
+
+    if not isinstance(patient_id, int):
+        return jsonify({"message": "Invalid appointment registration token."}), 400
+
+    patient = db.session.get(Patient, patient_id)
 
     if not patient:
         return jsonify({"message": "Patient not found."}), 404
