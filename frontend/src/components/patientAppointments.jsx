@@ -28,6 +28,9 @@ function PatientAppointments({ selectedPatient }) {
     }
     const response = await fetch(
       `${API_URL}/search_patients?q=${encodeURIComponent(value)}`,
+      {
+        credentials: "include",
+      },
     );
     const data = await response.json();
     setResults(data);

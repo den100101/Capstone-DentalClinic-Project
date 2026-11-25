@@ -79,29 +79,26 @@ function Appointment() {
         return;
       }
 
-      // Make sure the backend returned the new or existing patient's ID.
-      const patientId = patientData.patient?.id;
-
-      if (!patientId) {
+      // The backend returns a short-lived signed token, not the patient's database ID.
+      if (!patientData.booking_token) {
         setAppointmentStatus(
-          "Patient registration succeeded, but no patient ID was returned.",
+          "Patient registration succeeded, but the booking token was not returned. Please try again.",
         );
         setOpenStatus(true);
         return;
       }
 
-      // 2. Create the registration appointment.
+      // 2. Create the registration appointment using the signed booking token.
       const appointmentResponse = await fetch(`${API_URL}/new_appointment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          patient_id: patientId,
+          booking_token: patientData.booking_token,
           appointment_date: appointmentDate,
           appointment_time: appointmentTime,
           reason_for_visit: reasonForVisit.trim(),
-          status: "Pending",
         }),
       });
 
