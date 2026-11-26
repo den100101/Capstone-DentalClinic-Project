@@ -19,6 +19,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"{os.getenv('DB_NAME')}")
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 280,
+    "pool_size": 5,
+    "max_overflow": 5,
+    "pool_timeout": 30,
+}
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
