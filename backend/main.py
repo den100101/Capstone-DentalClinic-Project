@@ -9,6 +9,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_mail import Message
 from sqlalchemy import inspect, text
+from sqlalchemy.orm import joinedload
 import re
 
 load_dotenv()
@@ -207,6 +208,7 @@ def search_patients():
 
     appointments = (
         Appointment.query
+        .options(joinedload(Appointment.patient))
         .join(Patient)
         .filter(Patient.name.ilike(f"%{query}%"))
         .all()
@@ -223,6 +225,7 @@ def get_todays_appointments():
 
     appointments = (
         Appointment.query
+        .options(joinedload(Appointment.patient))
         .filter(
             Appointment.appointment_date == today,
             Appointment.status.in_(["Confirmed", "Completed"])
@@ -238,7 +241,9 @@ def get_todays_appointments():
 
 @app.route("/get_taken_times/<appointment_date>", methods=["GET"])
 def get_taken_times(appointment_date):
-    appointments = Appointment.query.filter(
+    appointments = Appointment.query.options(
+        joinedload(Appointment.patient)
+    ).filter(
         Appointment.appointment_date == appointment_date,
         Appointment.status.in_(["Pending", "Confirmed", "Completed"])
     ).all()
@@ -370,7 +375,7 @@ def get_appointments():
     patient_id = request.args.get("patient_id", type=int)
     patient_name = request.args.get("patient", "").strip()
 
-    query = Appointment.query
+    query = Appointment.query.options(joinedload(Appointment.patient))
 
     if patient_id is not None:
         query = query.filter(Appointment.patient_id == patient_id)
@@ -438,7 +443,12 @@ def confirm_appointment(id):
 
 @app.route("/get_confirmed_appointments", methods=["GET"])
 def get_confirmed_appointments():
-    confirmed_appointments = Appointment.query.filter_by(status="Confirmed").all()
+    confirmed_appointments = (
+        Appointment.query
+        .options(joinedload(Appointment.patient))
+        .filter_by(status="Confirmed")
+        .all()
+    )
 
     if not confirmed_appointments:
         return jsonify({"message": "No confirmed appointments found!"}), 404
@@ -452,7 +462,12 @@ def get_confirmed_appointments():
 
 @app.route("/get_pending_appointments", methods=["GET"])
 def get_pending_appointments():
-    pending_appointments = Appointment.query.filter_by(status="Pending").all()
+    pending_appointments = (
+        Appointment.query
+        .options(joinedload(Appointment.patient))
+        .filter_by(status="Pending")
+        .all()
+    )
 
     return jsonify({
         "pending_appointments": [
@@ -484,7 +499,12 @@ def decline_appointments(id):
 
 @app.route("/get_declined_appointments", methods=["GET"])
 def get_declined_appointments():
-    declined_appointments = Appointment.query.filter_by(status="Declined").all()
+    declined_appointments = (
+        Appointment.query
+        .options(joinedload(Appointment.patient))
+        .filter_by(status="Declined")
+        .all()
+    )
 
     return jsonify({
         "declined_appointment": [
@@ -1257,7 +1277,9 @@ def get_daily_report():
         Patient.created_at.asc()
     ).all()
     
-    appointments = Appointment.query.filter_by(
+    appointments = Appointment.query.options(
+        joinedload(Appointment.patient)
+    ).filter_by(
         appointment_date=report_date
     ).order_by(
         Appointment.appointment_time.asc()
