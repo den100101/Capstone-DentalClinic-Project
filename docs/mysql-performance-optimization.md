@@ -16,8 +16,7 @@ The SQLAlchemy models define indexes for:
 - Appointment date, status, and time lookups.
 - Appointment lists filtered by status and patient.
 - Patient creation timestamps used by daily reports.
-- Payment lookup by appointment and payment date.
-- Notification read status.
+- Payment date filtering for daily revenue reports.
 
 These model declarations apply automatically to newly created tables. They do not automatically add indexes to existing Aiven tables.
 
