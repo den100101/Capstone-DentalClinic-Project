@@ -25,16 +25,9 @@ ON appointments (patient_id, appointment_date);
 CREATE INDEX ix_patients_created_at
 ON patients (created_at);
 
--- Payment history and daily revenue report.
-CREATE INDEX ix_payment_appointment_id
-ON payment (appointment_id);
-
+-- Daily payment/revenue report.
 CREATE INDEX ix_payment_payment_date
 ON payment (payment_date);
-
--- Unread notification lookup.
-CREATE INDEX ix_notifications_is_read
-ON notifications (is_read);
 
 -- Verify index creation after running the statements.
 SELECT TABLE_NAME, INDEX_NAME, COLUMN_NAME, SEQ_IN_INDEX
@@ -45,8 +38,6 @@ WHERE TABLE_SCHEMA = DATABASE()
     'ix_appointments_status_date',
     'ix_appointments_patient_date',
     'ix_patients_created_at',
-    'ix_payment_appointment_id',
-    'ix_payment_payment_date',
-    'ix_notifications_is_read'
+    'ix_payment_payment_date'
   )
 ORDER BY TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX;
