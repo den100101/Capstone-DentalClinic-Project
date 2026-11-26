@@ -204,7 +204,6 @@ class AppointmentBalance(db.Model):
 
 class Payment(db.Model):
     __table_args__ = (
-        db.Index("ix_payment_appointment_id", "appointment_id"),
         db.Index("ix_payment_payment_date", "payment_date"),
     )
 
@@ -242,7 +241,7 @@ class Notification(db.Model):
         db.ForeignKey("appointments.id"),
         nullable=True
     )
-    is_read = db.Column(db.Boolean, default=False, index=True)
+    is_read = db.Column(db.Boolean, default=False)
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow,
