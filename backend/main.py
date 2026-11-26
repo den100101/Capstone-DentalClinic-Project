@@ -1305,7 +1305,9 @@ def get_daily_report():
         if appointment.status == "Completed"
     )
 
-    payments = Payment.query.filter(
+    payments = Payment.query.options(
+        joinedload(Payment.patient)
+    ).filter(
         Payment.payment_date >= start_utc,
         Payment.payment_date < end_utc
     ).order_by(
