@@ -26,7 +26,7 @@ class Patient(db.Model):
 )
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime,default=datetime.utcnow,nullable=False)
+    created_at = db.Column(db.DateTime,default=datetime.utcnow,nullable=False,index=True)
     name = db.Column(db.String(80), nullable=False, unique=False)
     email = db.Column(db.String(80), nullable=False, unique=False)
     birthdate = db.Column(db.Date, nullable=False, unique=False)
@@ -68,6 +68,12 @@ class Patient(db.Model):
 
 class Appointment(db.Model):
     __tablename__ = 'appointments'
+
+    __table_args__ = (
+        db.Index("ix_appointments_date_status_time", "appointment_date", "status", "appointment_time"),
+        db.Index("ix_appointments_status_date", "status", "appointment_date"),
+        db.Index("ix_appointments_patient_date", "patient_id", "appointment_date"),
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"), nullable=False, unique=False)
@@ -197,6 +203,10 @@ class AppointmentBalance(db.Model):
         }
 
 class Payment(db.Model):
+    __table_args__ = (
+        db.Index("ix_payment_payment_date", "payment_date"),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"), nullable=False)
     # The visit this payment was made for (empty for older payments).
