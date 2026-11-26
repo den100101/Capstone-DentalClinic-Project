@@ -8,26 +8,26 @@ SHOW TABLES;
 
 -- 2. Check for appointment slots with more than one appointment.
 -- Confirm the table and column names first.
-SELECT date, time, COUNT(*) AS appointment_count
-FROM appointment
-GROUP BY date, time
+SELECT appointment_date, appointment_time, COUNT(*) AS appointment_count
+FROM appointments
+GROUP BY appointment_date, appointment_time
 HAVING COUNT(*) > 1;
 
 -- 3. Check for patients with repeated name, birth date, and email combinations.
 SELECT name, birthdate, email, COUNT(*) AS record_count
-FROM patient
+FROM patients
 GROUP BY name, birthdate, email
 HAVING COUNT(*) > 1;
 
 -- 4. Check for appointments whose patient record is missing.
 SELECT a.id, a.patient_id
-FROM appointment AS a
-LEFT JOIN patient AS p ON p.id = a.patient_id
+FROM appointments AS a
+LEFT JOIN patients AS p ON p.id = a.patient_id
 WHERE p.id IS NULL;
 
 -- 5. Check for tooth records whose patient record is missing.
 SELECT t.id, t.patient_id
-FROM tooth_record AS t
+FROM tooth_records AS t
 LEFT JOIN patient AS p ON p.id = t.patient_id
 WHERE p.id IS NULL;
 
