@@ -23,7 +23,7 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_pre_ping": True,
     "pool_recycle": 280,
     "pool_size": 5,
-    "max_overflow": 5,
+    "max_overflow": 2,
     "pool_timeout": 30,
 }
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
